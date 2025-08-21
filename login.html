@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Admin - RW 16</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      /* CSS tambahan khusus untuk halaman login */
+      .login-container {
+        max-width: 400px;
+        margin: 5rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      .login-container h1 {
+        margin-bottom: 1.5rem;
+      }
+      .login-container input {
+        width: 100%;
+        padding: 0.8rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .login-container button {
+        width: 100%;
+        padding: 0.8rem;
+        border: none;
+        background-color: var(--primary-green);
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      #error-message {
+        color: red;
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="login-container">
+        <h1>Login Admin RW 16</h1>
+        <form id="login-form">
+          <input type="email" id="email" placeholder="Email" required />
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+        <p id="error-message"></p>
+        <a href="register.html" style="margin-top: 1rem; display: block"
+          >Belum punya akun? Daftar di sini</a
+        >
+      </div>
+    </main>
+
+    <script src="auth.js" type="module"></script>
+  </body>
+</html>

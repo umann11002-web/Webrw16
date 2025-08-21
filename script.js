@@ -62,10 +62,11 @@ async function tampilkanBerita() {
 // === FUNGSI UNTUK HAMBURGER MENU (KODE LAMA) ===
 const hamburgerMenu = document.getElementById("hamburger-menu");
 const navbar = document.querySelector(".navbar");
-
-hamburgerMenu.addEventListener("click", () => {
-  navbar.classList.toggle("active");
-});
+if (hamburgerMenu) {
+  hamburgerMenu.addEventListener("click", () => {
+    navbar.classList.toggle("active");
+  });
+}
 
 // Panggil fungsi untuk menampilkan berita saat halaman pertama kali dimuat
 document.addEventListener("DOMContentLoaded", tampilkanBerita);
