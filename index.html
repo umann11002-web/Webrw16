@@ -63,39 +63,7 @@
 
       <section class="berita-utama">
         <h2>Berita Utama <a href="#" class="lihat-semua">Lihat Semua >></a></h2>
-        <div class="berita-grid">
-          <article class="kartu-berita">
-            <img src="images/bansos.jpeg" alt="Gambar Karnaval" />
-            <div class="konten-kartu">
-              <span class="tanggal">30 Agustus 2025</span>
-              <h3>
-                Karnaval kemerdekaan RW 16 untuk semangat dan mengenang jasa
-                pahlawan
-              </h3>
-            </div>
-          </article>
-          <article class="kartu-berita">
-            <img src="images/17.jpg" alt="Gambar Pesta Rakyat" />
-            <div class="konten-kartu">
-              <span class="tanggal">19 Agustus 2025</span>
-              <h3>Pesta Rakyat dan Karnaval Kemerdekaan 17 Agustus 2025</h3>
-            </div>
-          </article>
-          <article class="kartu-berita">
-            <img src="images/posyandu.jpg" alt="Gambar Posyandu" />
-            <div class="konten-kartu">
-              <span class="tanggal">4 September 2025</span>
-              <h3>Pos pelayanan terpadu (Posyandu) di kantor RW 16</h3>
-            </div>
-          </article>
-          <article class="kartu-berita">
-            <img src="images/futsal.jpg" alt="Gambar Futsal" />
-            <div class="konten-kartu">
-              <span class="tanggal">4 September 2025</span>
-              <h3>Turnamen futsal untuk warga RW 16 dan masyarakat umum</h3>
-            </div>
-          </article>
-        </div>
+        <div class="berita-grid" id="berita-container"></div>
       </section>
     </main>
 
@@ -113,5 +81,25 @@
     </footer>
 
     <script src="script.js"></script>
+
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBD4ypi0bq71tJfDdyqgdLL3A_RSye9Q7I",
+        authDomain: "rw16cibabat-dbf87.firebaseapp.com",
+        projectId: "rw16cibabat-dbf87",
+        storageBucket: "rw16cibabat-dbf87.firebasestorage.app",
+        messagingSenderId: "744879659808",
+        appId: "1:744879659808:web:9d91c4bd2068260e189545",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+    </script>
   </body>
 </html>
