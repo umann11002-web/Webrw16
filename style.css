@@ -1,0 +1,294 @@
+/* Import Font dari Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+/* Variabel Warna & Reset CSS */
+:root {
+  --primary-green: #28a745;
+  --dark-text: #333;
+  --light-text: #666;
+  --bg-light: #f8f9fa;
+  --border-color: #eee;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: var(--bg-light);
+  color: var(--dark-text);
+}
+
+/* === HEADER & NAVIGASI === */
+header {
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem 5%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.logo img {
+  width: 40px;
+  margin-right: 10px;
+}
+
+.navbar {
+  display: none; /* Sembunyikan di HP */
+  flex-direction: column;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  background: white;
+  padding: 1rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar.active {
+  display: flex; /* Tampilkan jika menu di-klik */
+}
+
+.navbar a {
+  text-decoration: none;
+  color: var(--dark-text);
+  padding: 1rem 5%;
+  display: block;
+}
+
+.navbar a:hover {
+  background-color: var(--bg-light);
+}
+
+.hamburger {
+  display: block; /* Tampilkan di HP */
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* === KONTEN UTAMA === */
+main {
+  padding: 1.5rem 5%;
+}
+
+.hero {
+  text-align: center;
+  background: white;
+  padding: 2rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 5px solid var(--primary-green);
+  padding-left: 10px;
+}
+
+/* Bagian Tombol Informasi */
+.informasi {
+  margin-bottom: 2rem;
+}
+
+.info-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.info-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  gap: 0.5rem;
+  transition: transform 0.2s;
+}
+.info-btn:hover {
+  transform: translateY(-5px);
+}
+
+.info-btn i {
+  font-size: 2rem;
+}
+
+.penduduk {
+  background-color: #007bff;
+}
+.bansos {
+  background-color: #dc3545;
+}
+.struktur-rw {
+  background-color: #ffc107;
+  color: var(--dark-text);
+}
+.struktur-rt {
+  background-color: #17a2b8;
+}
+
+/* Bagian Berita Utama */
+.berita-utama {
+  margin-bottom: 2rem;
+}
+
+.berita-utama h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lihat-semua {
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: var(--primary-green);
+  font-weight: 400;
+}
+
+.berita-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* 1 kolom di HP */
+  gap: 1.5rem;
+}
+
+.kartu-berita {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s;
+}
+
+.kartu-berita:hover {
+  transform: translateY(-5px);
+}
+
+.kartu-berita img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.konten-kartu {
+  padding: 1rem;
+}
+
+.konten-kartu .tanggal {
+  display: inline-block;
+  background-color: var(--primary-green);
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.konten-kartu h3 {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* === FOOTER === */
+footer {
+  background-color: #343a40;
+  color: white;
+  padding: 2rem 5%;
+}
+
+.info-kantor {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nomor-rw {
+  font-size: 3rem;
+  font-weight: 700;
+  padding: 1rem;
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alamat h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.alamat p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #ccc;
+}
+
+/* #################################### */
+/* ###   ATURAN RESPONSIVE (SIHIR)  ### */
+/* #################################### */
+
+/* Tampilan untuk Tablet dan Laptop (lebar layar 768px ke atas) */
+@media (min-width: 768px) {
+  .hamburger {
+    display: none; /* Sembunyikan ikon hamburger */
+  }
+
+  .navbar {
+    display: flex; /* Tampilkan menu secara horizontal */
+    position: static;
+    flex-direction: row;
+    width: auto;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .navbar a {
+    padding: 0 1rem;
+  }
+
+  .info-buttons {
+    grid-template-columns: repeat(4, 1fr); /* 4 kolom */
+  }
+
+  .berita-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 kolom berita */
+  }
+}
+
+/* Tampilan untuk layar lebih besar lagi */
+@media (min-width: 1024px) {
+  .berita-grid {
+    grid-template-columns: repeat(4, 1fr); /* 4 kolom berita */
+  }
+}
