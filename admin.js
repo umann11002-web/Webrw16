@@ -60,8 +60,9 @@ async function tampilkanPengajuan() {
     tableBody.innerHTML = "";
 
     if (querySnapshot.empty) {
+      // Perbarui colspan menjadi 7 karena ada kolom baru
       tableBody.innerHTML =
-        '<tr><td colspan="6" style="text-align:center;">Belum ada pengajuan surat.</td></tr>';
+        '<tr><td colspan="7" style="text-align:center;">Belum ada pengajuan surat.</td></tr>';
       return;
     }
 
@@ -72,7 +73,7 @@ async function tampilkanPengajuan() {
         .toDate()
         .toLocaleDateString("id-ID");
 
-      // Logika untuk menampilkan tombol secara dinamis
+      // ... (logika untuk tombol tetap sama) ...
       let aksiAwalHTML = "";
       if (data.status === "Menunggu Persetujuan") {
         aksiAwalHTML = `
@@ -80,24 +81,26 @@ async function tampilkanPengajuan() {
                     <button class="action-btn btn-reject" data-id="${docId}">Tolak</button>
                 `;
       }
-
       let aksiLanjutanHTML = "";
-      // Tampilkan link persyaratan jika ada
       if (data.fileUrl) {
         aksiLanjutanHTML += `<a href="${data.fileUrl}" target="_blank">Lihat Syarat</a><br>`;
       } else {
         aksiLanjutanHTML += `<span>(Tanpa File)</span><br>`;
       }
-      // Tampilkan tombol "Selesai" jika sudah disetujui
       if (data.status === "Disetujui") {
         aksiLanjutanHTML += `<button class="action-btn btn-approve" data-id="${docId}" style="margin-top:5px;">Tandai Selesai</button>`;
       }
 
+      // Buat baris baru untuk tabel
       const row = `
                 <tr>
                     <td>${tanggal}</td>
                     <td>${data.userEmail}</td>
                     <td>${data.jenisSurat}</td>
+                    
+                    <!-- DATA BARU YANG DITAMPILKAN -->
+                    <td>${data.keperluan}</td>
+                    
                     <td>${data.status}</td>
                     <td>${aksiAwalHTML}</td>
                     <td>${aksiLanjutanHTML}</td>
@@ -109,7 +112,7 @@ async function tampilkanPengajuan() {
     addEventListenersToButtons();
   } catch (error) {
     console.error("Error mengambil data pengajuan: ", error);
-    tableBody.innerHTML = '<tr><td colspan="6">Gagal memuat data.</td></tr>';
+    tableBody.innerHTML = '<tr><td colspan="7">Gagal memuat data.</td></tr>';
   }
 }
 
