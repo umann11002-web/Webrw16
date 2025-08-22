@@ -158,5 +158,11 @@ if (logoutLinkNav) {
   });
 }
 
-// Panggil fungsi untuk menampilkan berita saat halaman pertama kali dimuat
-document.addEventListener("DOMContentLoaded", tampilkanBerita);
+// Panggil fungsi yang relevan saat halaman pertama kali dimuat
+document.addEventListener("DOMContentLoaded", () => {
+  // Cek apakah kita berada di halaman yang memiliki kontainer berita
+  if (document.getElementById("berita-container")) {
+    tampilkanBerita();
+  }
+  // Fungsi lain yang perlu dijalankan di semua halaman bisa ditambahkan di sini
+});
