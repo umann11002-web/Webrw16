@@ -72,10 +72,33 @@
           <a href="index.html">Home</a>
           <a href="#">Berita</a>
           <a href="layanan.html">Layanan</a>
-          <a href="riwayat.html">Riwayat Saya</a>
           <a href="#">Informasi</a>
-          <a href="#">Tentang Kami</a>
-          <a href="#">Galeri</a>
+
+          <!-- Dropdown untuk Tentang Kami -->
+          <div class="dropdown">
+            <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
+              >Tentang Kami <i class="fas fa-chevron-down"></i
+            ></a>
+            <div class="dropdown-menu" id="tentang-kami-menu">
+              <a href="#">Visi & Misi</a>
+              <a href="#">Struktur Organisasi</a>
+              <a href="#">Galeri</a>
+            </div>
+          </div>
+
+          <!-- Dropdown untuk Profil Pengguna (disembunyikan dulu) -->
+          <div class="dropdown" id="profil-dropdown" style="display: none">
+            <a href="#" class="dropdown-toggle" id="profil-toggle"
+              >Profil <i class="fas fa-chevron-down"></i
+            ></a>
+            <div class="dropdown-menu" id="profil-menu">
+              <a href="riwayat.html">Riwayat Saya</a>
+              <a href="#" id="logout-link-nav">Logout</a>
+            </div>
+          </div>
+
+          <!-- Tombol Login (untuk pengunjung) -->
+          <a href="login.html" id="login-button-nav">Login</a>
         </nav>
         <button class="hamburger" id="hamburger-menu">
           <i class="fas fa-bars"></i>
