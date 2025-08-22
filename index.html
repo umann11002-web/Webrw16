@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <link
+      rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
   </head>
@@ -62,8 +66,13 @@
       </section>
 
       <section class="berita-utama">
-        <h2>Berita Utama <a href="#" class="lihat-semua">Lihat Semua >></a></h2>
-        <div class="berita-grid" id="berita-container"></div>
+        <h2>Berita Utama</h2>
+        <div class="swiper mySwiper">
+          <div class="swiper-wrapper" id="berita-container"></div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-pagination"></div>
+        </div>
       </section>
     </main>
 
@@ -103,5 +112,6 @@
     </script>
 
     <script src="auth.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   </body>
 </html>

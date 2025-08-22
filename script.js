@@ -6,8 +6,7 @@ import {
   getDocs,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-// Konfigurasi Firebase dari HTML-mu (GANTI DENGAN PUNYAMU)
-// Cukup salin bagian 'const firebaseConfig = { ... };' dari index.html
+// Konfigurasi Firebase-mu (sudah disesuaikan)
 const firebaseConfig = {
   apiKey: "AIzaSyBD4ypi0bq71tJfDdyqgdLL3A_RSye9Q7I",
   authDomain: "rw16cibabat-dbf87.firebaseapp.com",
@@ -23,10 +22,8 @@ const db = getFirestore(app);
 
 // === FUNGSI UNTUK MENGAMBIL DAN MENAMPILKAN BERITA ===
 
-// 1. Ambil elemen kontainer berita dari HTML
 const beritaContainer = document.getElementById("berita-container");
 
-// 2. Fungsi utama untuk mengambil data dari Firestore
 async function tampilkanBerita() {
   try {
     // Ambil semua dokumen dari koleksi 'berita'
@@ -35,31 +32,81 @@ async function tampilkanBerita() {
     // Kosongkan kontainer sebelum diisi berita baru
     beritaContainer.innerHTML = "";
 
-    // 3. Looping untuk setiap dokumen (berita) yang ditemukan
+    // Looping untuk setiap dokumen (berita) yang ditemukan
     querySnapshot.forEach((doc) => {
-      const berita = doc.data(); // Ambil datanya (judul, tanggal, gambarUrl)
+      const berita = doc.data(); // Ambil datanya
 
-      // 4. Buat elemen HTML untuk setiap kartu berita
+      // Buat elemen HTML untuk setiap kartu berita
       const kartuHTML = `
-                <article class="kartu-berita">
-                    <img src="${berita.gambarUrl}" alt="Gambar Berita">
-                    <div class="konten-kartu">
-                        <span class="tanggal">${berita.tanggal}</span>
-                        <h3>${berita.judul}</h3>
-                    </div>
-                </article>
-            `;
+        <article class="kartu-berita">
+            <img src="${berita.gambarUrl}" alt="Gambar Berita">
+            <div class="konten-kartu">
+                <span class="tanggal">${berita.tanggal}</span>
+                <h3>${berita.judul}</h3>
+            </div>
+        </article>
+      `;
 
-      // 5. Masukkan kartu yang sudah jadi ke dalam kontainer
-      beritaContainer.innerHTML += kartuHTML;
+      // Buat div pembungkus untuk slide Swiper
+      const slideWrapper = document.createElement("div");
+      slideWrapper.className = "swiper-slide";
+      slideWrapper.innerHTML = kartuHTML;
+
+      // Masukkan slide yang sudah jadi ke dalam kontainer
+      beritaContainer.appendChild(slideWrapper);
     });
+
+    // Setelah semua berita berhasil dimuat, panggil fungsi untuk mengaktifkan slider
+    initializeSwiper();
   } catch (error) {
     console.error("Error mengambil data berita: ", error);
     beritaContainer.innerHTML = "<p>Gagal memuat berita. Coba lagi nanti.</p>";
   }
 }
 
-// === FUNGSI UNTUK HAMBURGER MENU (KODE LAMA) ===
+// === FUNGSI BARU UNTUK MENGAKTIFKAN SWIPER CAROUSEL ===
+function initializeSwiper() {
+  const swiper = new Swiper(".mySwiper", {
+    // Mengatur agar terlihat beberapa slide sekaligus
+    slidesPerView: 1,
+    spaceBetween: 30, // Jarak antar slide
+    loop: true, // Agar bisa berputar terus menerus
+
+    // Opsi untuk Autoplay
+    autoplay: {
+      delay: 3000, // Pindah setiap 3 detik
+      disableOnInteraction: false, // Tetap autoplay setelah di-swipe manual
+    },
+
+    // Opsi untuk Pagination (titik-titik di bawah)
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+
+    // Opsi untuk Navigation (tombol panah)
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+
+    // Pengaturan responsif untuk menyesuaikan jumlah slide di layar berbeda
+    breakpoints: {
+      // Jika lebar layar 640px atau lebih
+      640: {
+        slidesPerView: 2,
+        spaceBetween: 20,
+      },
+      // Jika lebar layar 1024px atau lebih
+      1024: {
+        slidesPerView: 3,
+        spaceBetween: 30,
+      },
+    },
+  });
+}
+
+// === FUNGSI UNTUK HAMBURGER MENU (TETAP SAMA) ===
 const hamburgerMenu = document.getElementById("hamburger-menu");
 const navbar = document.querySelector(".navbar");
 if (hamburgerMenu) {
