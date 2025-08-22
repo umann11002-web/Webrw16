@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Pengajuan - RW 16</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .form-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      .form-container h1 {
+        border: none;
+        padding-left: 0;
+      }
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .persyaratan-info {
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background-color: #f8f9fa;
+        border-left: 4px solid var(--primary-green);
+      }
+      .persyaratan-info p {
+        font-weight: 600;
+      }
+      .persyaratan-info ul {
+        list-style-position: inside;
+        padding-left: 0;
+      }
+      .submit-btn {
+        width: 100%;
+        padding: 0.8rem;
+        border: none;
+        background-color: var(--primary-green);
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      .submit-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+      #status-message {
+        margin-top: 1rem;
+        text-align: center;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Konten utama kita sembunyikan dulu sampai data siap -->
+    <main id="main-content" style="display: none">
+      <div class="form-container">
+        <h1 id="form-title">Memuat...</h1>
+
+        <!-- Info persyaratan akan diisi di sini -->
+        <div id="persyaratan-info" class="persyaratan-info"></div>
+
+        <form id="surat-form">
+          <div class="form-group">
+            <label for="keperluan">Keperluan</label>
+            <textarea
+              id="keperluan"
+              rows="3"
+              placeholder="Contoh: Untuk mendaftar beasiswa KIP Kuliah"
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="file-persyaratan"
+              >Upload File Persyaratan (jadikan 1 file PDF/JPG)</label
+            >
+            <input
+              type="file"
+              id="file-persyaratan"
+              accept=".pdf,.jpg,.jpeg,.png"
+            />
+            <small>Fitur upload akan diaktifkan nanti.</small>
+          </div>
+          <button type="submit" class="submit-btn" id="submit-btn">
+            Ajukan Surat
+          </button>
+        </form>
+        <p id="status-message"></p>
+      </div>
+    </main>
+
+    <!-- Indikator loading -->
+    <div id="loading-indicator" style="text-align: center; margin-top: 5rem">
+      <h2>Memuat Form...</h2>
+    </div>
+
+    <!-- Memuat skrip untuk halaman ini -->
+    <script src="form-handler.js" type="module"></script>
+  </body>
+</html>

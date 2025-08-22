@@ -1,17 +1,12 @@
 // Import fungsi yang kita butuhkan dari Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import {
-  getAuth,
-  onAuthStateChanged,
-} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-import {
   getFirestore,
   collection,
-  addDoc,
-  serverTimestamp,
+  getDocs,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-// Konfigurasi Firebase-mu (JANGAN LUPA GANTI)
+// Konfigurasi Firebase-mu
 const firebaseConfig = {
   apiKey: "AIzaSyBD4ypi0bq71tJfDdyqgdLL3A_RSye9Q7I",
   authDomain: "rw16cibabat-dbf87.firebaseapp.com",
@@ -23,88 +18,57 @@ const firebaseConfig = {
 
 // Inisialisasi Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Variabel untuk menyimpan data user yang login
-let currentUser = null;
+// Ambil elemen kontainer dari HTML
+const layananContainer = document.getElementById("layanan-grid-container");
 
-// === SATPAM DIGITAL (ROUTE GUARD) ===
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // Jika ADA user yang login...
-    console.log("User terverifikasi:", user.email);
-    currentUser = user; // Simpan data user yang sedang login
-  } else {
-    // Jika TIDAK ADA user yang login...
-    console.log("Tidak ada user, tendang ke halaman login!");
-    // Arahkan user kembali ke halaman login
-    window.location.href = "login.html";
-  }
-});
-
-// ######################################################
-// ### BAGIAN BARU: FUNGSI UNTUK MENGIRIM DATA FORM ###
-// ######################################################
-
-// Ambil elemen form dari HTML
-const suratForm = document.getElementById("surat-form");
-const statusMessage = document.getElementById("status-message");
-const submitButton = document.getElementById("submit-btn");
-
-// Tambahkan event listener saat form di-submit
-suratForm.addEventListener("submit", async (e) => {
-  e.preventDefault(); // Mencegah halaman refresh
-
-  // Pastikan ada user yang login sebelum mengirim
-  if (!currentUser) {
-    statusMessage.textContent =
-      "Error: Anda harus login untuk mengajukan surat.";
-    statusMessage.style.color = "red";
-    return;
-  }
-
-  // Ambil data dari setiap input di form
-  const jenisSurat = document.getElementById("jenis-surat").value;
-  const keperluan = document.getElementById("keperluan").value;
-  // const filePersyaratan = document.getElementById('file-persyaratan').files[0]; // Kita skip dulu
-
-  // Nonaktifkan tombol submit untuk mencegah klik ganda
-  submitButton.disabled = true;
-  submitButton.textContent = "Mengirim...";
-  statusMessage.textContent = "";
-
+// Fungsi utama untuk mengambil dan menampilkan daftar layanan
+async function tampilkanLayanan() {
   try {
-    // Siapkan data yang akan disimpan ke Firestore
-    const dataPengajuan = {
-      userId: currentUser.uid,
-      userEmail: currentUser.email,
-      jenisSurat: jenisSurat,
-      keperluan: keperluan,
-      status: "Menunggu Persetujuan", // Status awal
-      tanggalPengajuan: serverTimestamp(), // Tanggal & waktu saat ini
-      // fileUrl: '...' // Akan kita tambahkan nanti setelah fitur upload jadi
-    };
+    const querySnapshot = await getDocs(collection(db, "layanan"));
 
-    // Simpan data ke koleksi 'pengajuanSurat' di Firestore
-    const docRef = await addDoc(
-      collection(db, "pengajuanSurat"),
-      dataPengajuan
-    );
+    // Kosongkan kontainer sebelum diisi
+    layananContainer.innerHTML = "";
 
-    console.log("Dokumen berhasil ditulis dengan ID: ", docRef.id);
+    if (querySnapshot.empty) {
+      layananContainer.innerHTML =
+        "<p>Saat ini belum ada layanan yang tersedia.</p>";
+      return;
+    }
 
-    // Beri pesan sukses ke user
-    statusMessage.textContent = "Pengajuan surat berhasil dikirim!";
-    statusMessage.style.color = "green";
-    suratForm.reset(); // Kosongkan form setelah berhasil
+    // Looping untuk setiap dokumen (layanan) yang ditemukan
+    querySnapshot.forEach((doc) => {
+      const layanan = doc.data();
+      const layananId = doc.id; // Ini akan mengambil ID dokumen (misal: 'sktm')
+
+      // Membuat daftar persyaratan dari array
+      let persyaratanListHTML = "";
+      layanan.persyaratan.forEach((item) => {
+        persyaratanListHTML += `<li><i class="fas fa-file-alt"></i> ${item}</li>`;
+      });
+
+      // Membuat HTML untuk satu kartu layanan
+      const kartuHTML = `
+                <div class="kartu-layanan">
+                    <h3>${layanan.namaLayanan}</h3>
+                    <p>Persyaratan Dokumen:</p>
+                    <ul>
+                        ${persyaratanListHTML}
+                    </ul>
+                    <!-- Link ini akan mengarah ke halaman form dengan membawa ID layanan -->
+                    <a href="form.html?id=${layananId}" class="tombol-ajukan">Ajukan Surat</a>
+                </div>
+            `;
+      // Tambahkan kartu yang sudah jadi ke dalam kontainer
+      layananContainer.innerHTML += kartuHTML;
+    });
   } catch (error) {
-    console.error("Error menambahkan dokumen: ", error);
-    statusMessage.textContent = "Gagal mengirim pengajuan. Silakan coba lagi.";
-    statusMessage.style.color = "red";
-  } finally {
-    // Aktifkan kembali tombol submit apa pun hasilnya
-    submitButton.disabled = false;
-    submitButton.textContent = "Ajukan Surat";
+    console.error("Error mengambil data layanan: ", error);
+    layananContainer.innerHTML =
+      '<p style="color: red;">Gagal memuat daftar layanan. Silakan coba lagi nanti.</p>';
   }
-});
+}
+
+// Panggil fungsi saat halaman selesai dimuat
+document.addEventListener("DOMContentLoaded", tampilkanLayanan);
