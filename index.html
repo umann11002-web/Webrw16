@@ -21,14 +21,43 @@
           <img src="images/logo16.png" alt="Logo RW 16" />
           <span>RW 16 Kel. Cibat</span>
         </div>
+
+        <!-- ================================== -->
+        <!-- ===== NAVIGASI YANG DIPERBARUI ===== -->
+        <!-- ================================== -->
         <nav class="navbar">
           <a href="index.html">Home</a>
           <a href="#">Berita</a>
           <a href="layanan.html">Layanan</a>
           <a href="#">Informasi</a>
-          <a href="#">Tentang Kami</a>
-          <a href="#">Galeri</a>
+
+          <!-- Dropdown untuk Tentang Kami -->
+          <div class="dropdown">
+            <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
+              >Tentang Kami <i class="fas fa-chevron-down"></i
+            ></a>
+            <div class="dropdown-menu" id="tentang-kami-menu">
+              <a href="#">Visi & Misi</a>
+              <a href="#">Struktur Organisasi</a>
+              <a href="#">Galeri</a>
+            </div>
+          </div>
+
+          <!-- Dropdown untuk Profil Pengguna (disembunyikan dulu) -->
+          <div class="dropdown" id="profil-dropdown" style="display: none">
+            <a href="#" class="dropdown-toggle" id="profil-toggle"
+              >Profil <i class="fas fa-chevron-down"></i
+            ></a>
+            <div class="dropdown-menu" id="profil-menu">
+              <a href="riwayat.html">Riwayat Saya</a>
+              <a href="#" id="logout-link-nav">Logout</a>
+            </div>
+          </div>
+
+          <!-- Tombol Login (untuk pengunjung) -->
+          <a href="login.html" id="login-button-nav">Login</a>
         </nav>
+
         <button class="hamburger" id="hamburger-menu">
           <i class="fas fa-bars"></i>
         </button>
@@ -36,6 +65,7 @@
     </header>
 
     <main>
+      <!-- ... sisa konten main tetap sama ... -->
       <section class="hero">
         <h1>RUKUN WARGA 16</h1>
         <p>
@@ -77,6 +107,7 @@
     </main>
 
     <footer>
+      <!-- ... konten footer tetap sama ... -->
       <div class="info-kantor">
         <div class="nomor-rw">16</div>
         <div class="alamat">
@@ -89,29 +120,9 @@
       </div>
     </footer>
 
+    <!-- PENTING: Hapus firebaseConfig dan auth.js dari sini -->
+    <!-- index.html tidak perlu tahu soal auth, itu tugas script.js -->
     <script src="script.js" type="module"></script>
-
-    <script type="module">
-      // Import the functions you need from the SDKs you need
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-      // TODO: Add SDKs for Firebase products that you want to use
-      // https://firebase.google.com/docs/web/setup#available-libraries
-
-      // Your web app's Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyBD4ypi0bq71tJfDdyqgdLL3A_RSye9Q7I",
-        authDomain: "rw16cibabat-dbf87.firebaseapp.com",
-        projectId: "rw16cibabat-dbf87",
-        storageBucket: "rw16cibabat-dbf87.firebasestorage.app",
-        messagingSenderId: "744879659808",
-        appId: "1:744879659808:web:9d91c4bd2068260e189545",
-      };
-
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-    </script>
-
-    <script src="auth.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   </body>
 </html>

@@ -5,6 +5,12 @@ import {
   collection,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+// TAMBAHKAN IMPORT UNTUK AUTHENTICATION
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
 // Konfigurasi Firebase-mu (sudah disesuaikan)
 const firebaseConfig = {
@@ -19,24 +25,37 @@ const firebaseConfig = {
 // Inisialisasi Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app); // Inisialisasi Authentication
 
-// === FUNGSI UNTUK MENGAMBIL DAN MENAMPILKAN BERITA ===
+// ===================================================
+// === BAGIAN BARU: CEK STATUS LOGIN & UPDATE NAVIGASI ===
+// ===================================================
+const loginButtonNav = document.getElementById("login-button-nav");
+const profilDropdown = document.getElementById("profil-dropdown");
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User sedang login
+    console.log("User terdeteksi:", user.email);
+    loginButtonNav.style.display = "none"; // Sembunyikan tombol Login
+    profilDropdown.style.display = "inline-block"; // Tampilkan dropdown Profil
+  } else {
+    // User tidak login
+    console.log("Tidak ada user yang login.");
+    loginButtonNav.style.display = "inline-block"; // Tampilkan tombol Login
+    profilDropdown.style.display = "none"; // Sembunyikan dropdown Profil
+  }
+});
+
+// === FUNGSI UNTUK MENGAMBIL DAN MENAMPILKAN BERITA (TETAP SAMA) ===
 const beritaContainer = document.getElementById("berita-container");
 
 async function tampilkanBerita() {
   try {
-    // Ambil semua dokumen dari koleksi 'berita'
     const querySnapshot = await getDocs(collection(db, "berita"));
-
-    // Kosongkan kontainer sebelum diisi berita baru
     beritaContainer.innerHTML = "";
-
-    // Looping untuk setiap dokumen (berita) yang ditemukan
     querySnapshot.forEach((doc) => {
-      const berita = doc.data(); // Ambil datanya
-
-      // Buat elemen HTML untuk setiap kartu berita
+      const berita = doc.data();
       const kartuHTML = `
         <article class="kartu-berita">
             <img src="${berita.gambarUrl}" alt="Gambar Berita">
@@ -46,17 +65,11 @@ async function tampilkanBerita() {
             </div>
         </article>
       `;
-
-      // Buat div pembungkus untuk slide Swiper
       const slideWrapper = document.createElement("div");
       slideWrapper.className = "swiper-slide";
       slideWrapper.innerHTML = kartuHTML;
-
-      // Masukkan slide yang sudah jadi ke dalam kontainer
       beritaContainer.appendChild(slideWrapper);
     });
-
-    // Setelah semua berita berhasil dimuat, panggil fungsi untuk mengaktifkan slider
     initializeSwiper();
   } catch (error) {
     console.error("Error mengambil data berita: ", error);
@@ -64,44 +77,27 @@ async function tampilkanBerita() {
   }
 }
 
-// === FUNGSI BARU UNTUK MENGAKTIFKAN SWIPER CAROUSEL ===
+// === FUNGSI UNTUK MENGAKTIFKAN SWIPER CAROUSEL (TETAP SAMA) ===
 function initializeSwiper() {
   const swiper = new Swiper(".mySwiper", {
-    // Mengatur agar terlihat beberapa slide sekaligus
     slidesPerView: 1,
-    spaceBetween: 30, // Jarak antar slide
-    loop: true, // Agar bisa berputar terus menerus
-
-    // Opsi untuk Autoplay
+    spaceBetween: 30,
+    loop: true,
     autoplay: {
-      delay: 3000, // Pindah setiap 3 detik
-      disableOnInteraction: false, // Tetap autoplay setelah di-swipe manual
+      delay: 3000,
+      disableOnInteraction: false,
     },
-
-    // Opsi untuk Pagination (titik-titik di bawah)
     pagination: {
       el: ".swiper-pagination",
       clickable: true,
     },
-
-    // Opsi untuk Navigation (tombol panah)
     navigation: {
       nextEl: ".swiper-button-next",
       prevEl: ".swiper-button-prev",
     },
-
-    // Pengaturan responsif untuk menyesuaikan jumlah slide di layar berbeda
     breakpoints: {
-      // Jika lebar layar 640px atau lebih
-      640: {
-        slidesPerView: 2,
-        spaceBetween: 20,
-      },
-      // Jika lebar layar 1024px atau lebih
-      1024: {
-        slidesPerView: 3,
-        spaceBetween: 30,
-      },
+      640: { slidesPerView: 2, spaceBetween: 20 },
+      1024: { slidesPerView: 3, spaceBetween: 30 },
     },
   });
 }
@@ -112,6 +108,53 @@ const navbar = document.querySelector(".navbar");
 if (hamburgerMenu) {
   hamburgerMenu.addEventListener("click", () => {
     navbar.classList.toggle("active");
+  });
+}
+
+// =====================================
+// === LOGIKA BARU UNTUK DROPDOWN MENU ===
+// =====================================
+function closeAllDropdowns() {
+  document
+    .querySelectorAll(".dropdown-menu")
+    .forEach((menu) => menu.classList.remove("active"));
+  document
+    .querySelectorAll(".dropdown-toggle")
+    .forEach((toggle) => toggle.classList.remove("active"));
+}
+
+document.querySelectorAll(".dropdown-toggle").forEach((toggle) => {
+  toggle.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const menu = toggle.nextElementSibling;
+    const isActive = menu.classList.contains("active");
+    closeAllDropdowns();
+    if (!isActive) {
+      menu.classList.add("active");
+      toggle.classList.add("active");
+    }
+  });
+});
+
+window.addEventListener("click", () => {
+  closeAllDropdowns();
+});
+
+// === LOGIKA BARU UNTUK TOMBOL LOGOUT ===
+const logoutLinkNav = document.getElementById("logout-link-nav");
+if (logoutLinkNav) {
+  logoutLinkNav.addEventListener("click", (e) => {
+    e.preventDefault();
+    signOut(auth)
+      .then(() => {
+        console.log("Logout berhasil.");
+        alert("Anda berhasil logout.");
+        window.location.href = "index.html"; // Kembali ke halaman utama setelah logout
+      })
+      .catch((error) => {
+        console.error("Error saat logout:", error);
+      });
   });
 }
 
