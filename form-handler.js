@@ -1,4 +1,4 @@
-// ... (semua import Firebase tetap sama, kita masih butuh Firestore) ...
+// Import fungsi yang kita butuhkan dari Firebase SDK (TANPA STORAGE)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import {
   getAuth,
@@ -40,14 +40,44 @@ onAuthStateChanged(auth, (user) => {
     currentUser = user;
     loadFormDetails();
   } else {
-    window.location.href = `login.html`;
+    const currentUrl = window.location.href;
+    alert("Anda harus login untuk mengakses halaman ini.");
+    window.location.href = `login.html?redirect=${encodeURIComponent(
+      currentUrl
+    )}`;
   }
 });
 async function loadFormDetails() {
-  /* ... kode ini tidak berubah ... */
+  layananId = new URLSearchParams(window.location.search).get("id");
+  if (!layananId) {
+    loadingIndicator.innerHTML = "<h2>Error: ID Layanan tidak ditemukan.</h2>";
+    return;
+  }
+  try {
+    const docRef = doc(db, "layanan", layananId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const layanan = docSnap.data();
+      document.getElementById(
+        "form-title"
+      ).textContent = `Form Pengajuan: ${layanan.namaLayanan}`;
+      let persyaratanHTML = "<p><strong>Persyaratan:</strong></p><ul>";
+      layanan.persyaratan.forEach((item) => {
+        persyaratanHTML += `<li>${item}</li>`;
+      });
+      persyaratanHTML += "</ul>";
+      document.getElementById("persyaratan-info").innerHTML = persyaratanHTML;
+      loadingIndicator.style.display = "none";
+      mainContent.style.display = "block";
+    } else {
+      loadingIndicator.innerHTML = "<h2>Error: Layanan tidak ditemukan.</h2>";
+    }
+  } catch (error) {
+    loadingIndicator.innerHTML = "<h2>Gagal memuat form.</h2>";
+  }
 }
 
-// ### LOGIKA PENGIRIMAN FORM (DIUBAH TOTAL UNTUK CLOUDINARY) ###
+// ### LOGIKA PENGIRIMAN FORM (CLOUDINARY) ###
 suratForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!currentUser || !layananId) return;
@@ -65,7 +95,6 @@ suratForm.addEventListener("submit", async (e) => {
   statusMessage.textContent = "";
 
   try {
-    // 1. MINTA "TIKET UPLOAD" DARI PETUGAS RAHASIA (NETLIFY FUNCTION)
     const timestamp = Math.round(new Date().getTime() / 1000);
     const paramsToSign = { timestamp: timestamp };
 
@@ -76,17 +105,15 @@ suratForm.addEventListener("submit", async (e) => {
     const sigData = await sigResponse.json();
     const signature = sigData.signature;
 
-    // 2. SIAPKAN FORM DATA UNTUK DIKIRIM KE CLOUDINARY
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("api_key", "576324551919849");
+    formData.append("api_key", "576324551919849"); // GANTI JIKA BERBEDA
     formData.append("timestamp", timestamp);
     formData.append("signature", signature);
 
     submitButton.textContent = "Mengunggah file...";
 
-    // 3. KIRIM FILE LANGSUNG KE CLOUDINARY
-    const cloudName = "do1ba7gkn";
+    const cloudName = "do1ba7gkn"; // GANTI JIKA BERBEDA
     const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
 
     const uploadResponse = await fetch(uploadUrl, {
@@ -94,9 +121,8 @@ suratForm.addEventListener("submit", async (e) => {
       body: formData,
     });
     const uploadData = await uploadResponse.json();
-    const fileUrl = uploadData.secure_url; // Ini link file-nya!
+    const fileUrl = uploadData.secure_url;
 
-    // 4. SIMPAN DATA KE FIRESTORE (seperti sebelumnya)
     submitButton.textContent = "Menyimpan data...";
     const dataPengajuan = {
       userId: currentUser.uid,
@@ -108,7 +134,7 @@ suratForm.addEventListener("submit", async (e) => {
       keperluan: keperluan,
       status: "Menunggu Persetujuan",
       tanggalPengajuan: serverTimestamp(),
-      fileUrl: fileUrl, // Simpan link dari Cloudinary
+      fileUrl: fileUrl,
     };
     await addDoc(collection(db, "pengajuanSurat"), dataPengajuan);
 
