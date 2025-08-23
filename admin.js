@@ -13,6 +13,7 @@ import {
   orderBy,
   doc,
   updateDoc,
+  getDoc, // Pastikan getDoc di-import
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -28,18 +29,32 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ... (kode elemen, satpam, dan logout tetap sama) ...
 const loadingIndicator = document.getElementById("loading-indicator");
 const adminContainer = document.getElementById("admin-container");
-onAuthStateChanged(auth, (user) => {
+const tableBody = document.getElementById("pengajuan-table-body");
+
+// Satpam digital (DIPERBARUI)
+onAuthStateChanged(auth, async (user) => {
   if (user) {
-    loadingIndicator.style.display = "none";
-    adminContainer.style.display = "block";
-    tampilkanPengajuan();
+    // Verifikasi peran admin SEBELUM mengambil data
+    const userDocRef = doc(db, "users", user.uid);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists() && userDocSnap.data().role === "admin") {
+      // Jika benar admin, baru tampilkan halaman dan muat data
+      loadingIndicator.style.display = "none";
+      adminContainer.style.display = "block";
+      tampilkanPengajuan();
+    } else {
+      // Jika bukan admin, tendang
+      alert("Akses ditolak. Anda bukan admin.");
+      window.location.href = "index.html";
+    }
   } else {
     window.location.href = "login.html";
   }
 });
+
 const logoutButton = document.getElementById("logout-btn");
 if (logoutButton) {
   logoutButton.addEventListener("click", () => {
@@ -47,9 +62,7 @@ if (logoutButton) {
   });
 }
 
-// === FUNGSI TAMPILKAN PENGAJUAN (DIPERBARUI TOTAL) ===
-const tableBody = document.getElementById("pengajuan-table-body");
-
+// === FUNGSI TAMPILKAN PENGAJUAN ===
 async function tampilkanPengajuan() {
   try {
     const q = query(
@@ -60,7 +73,6 @@ async function tampilkanPengajuan() {
     tableBody.innerHTML = "";
 
     if (querySnapshot.empty) {
-      // Perbarui colspan menjadi 7 karena ada kolom baru
       tableBody.innerHTML =
         '<tr><td colspan="7" style="text-align:center;">Belum ada pengajuan surat.</td></tr>';
       return;
@@ -111,9 +123,8 @@ async function tampilkanPengajuan() {
   }
 }
 
-// === FUNGSI EVENT LISTENER (DIPERBARUI) ===
+// === FUNGSI EVENT LISTENER ===
 function addEventListenersToButtons() {
-  // Tombol Setujui & Tandai Selesai
   document.querySelectorAll(".btn-approve").forEach((button) => {
     button.addEventListener("click", (e) => {
       const docId = e.target.dataset.id;
@@ -124,8 +135,6 @@ function addEventListenersToButtons() {
       }
     });
   });
-
-  // Tombol Tolak
   document.querySelectorAll(".btn-reject").forEach((button) => {
     button.addEventListener("click", (e) => {
       const docId = e.target.dataset.id;
@@ -134,7 +143,7 @@ function addEventListenersToButtons() {
   });
 }
 
-// === FUNGSI UPDATE STATUS (TETAP SAMA) ===
+// === FUNGSI UPDATE STATUS ===
 async function updateStatus(docId, newStatus) {
   try {
     const docRef = doc(db, "pengajuanSurat", docId);
@@ -146,30 +155,24 @@ async function updateStatus(docId, newStatus) {
   }
 }
 
-// === FUNGSI UNTUK TANDAI SELESAI (DIPERBARUI DENGAN PROMPT) ===
+// === FUNGSI UNTUK TANDAI SELESAI ===
 async function tandaiSelesai(docId) {
-  // Minta admin untuk memasukkan link ke surat yang sudah jadi
   const fileUrl = prompt(
     "PROSES SIMULASI:\n\nMasukkan link ke file surat yang sudah jadi (misal: link Google Drive).",
     ""
   );
-
-  // Jika admin mengklik "Cancel", prompt akan mengembalikan null
   if (fileUrl === null) {
     alert("Aksi dibatalkan.");
     return;
   }
-
-  // Jika admin mengklik "OK" (bahkan jika kosong)
   try {
     const docRef = doc(db, "pengajuanSurat", docId);
     await updateDoc(docRef, {
       status: "Selesai",
-      // Simpan link yang dimasukkan admin ke database
-      fileSuratJadiUrl: fileUrl || "#", // Jika kosong, beri placeholder '#'
+      fileSuratJadiUrl: fileUrl || "#",
     });
     alert('Pengajuan berhasil ditandai sebagai "Selesai"');
-    tampilkanPengajuan(); // Muat ulang tabel
+    tampilkanPengajuan();
   } catch (error) {
     console.error("Error menandai selesai:", error);
     alert("Gagal menandai selesai.");
