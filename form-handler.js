@@ -77,7 +77,7 @@ async function loadFormDetails() {
   }
 }
 
-// ### LOGIKA PENGIRIMAN FORM (CLOUDINARY) ###
+// ### LOGIKA PENGIRIMAN FORM (DENGAN REDIRECT) ###
 suratForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!currentUser || !layananId) return;
@@ -138,15 +138,26 @@ suratForm.addEventListener("submit", async (e) => {
     };
     await addDoc(collection(db, "pengajuanSurat"), dataPengajuan);
 
-    statusMessage.textContent = "Pengajuan surat berhasil dikirim!";
+    // ===================================
+    // ===== BAGIAN BARU DIMULAI DI SINI =====
+    // ===================================
+
+    statusMessage.textContent =
+      "Pengajuan berhasil! Anda akan diarahkan kembali...";
     statusMessage.style.color = "green";
     suratForm.reset();
+
+    // Tunggu 2 detik, lalu arahkan ke halaman layanan
+    setTimeout(() => {
+      window.location.href = "layanan.html";
+    }, 2000); // 2000 milidetik = 2 detik
   } catch (error) {
     console.error("Error saat proses pengajuan: ", error);
     statusMessage.textContent = "Gagal mengirim pengajuan. Silakan coba lagi.";
     statusMessage.style.color = "red";
-  } finally {
+    // Aktifkan kembali tombol jika terjadi error
     submitButton.disabled = false;
     submitButton.textContent = "Ajukan Surat";
   }
+  // Kita hapus 'finally' agar tombol tidak aktif lagi setelah sukses
 });
