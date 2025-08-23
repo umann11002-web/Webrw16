@@ -3,31 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Halaman Admin - RW 16</title>
+    <title>Dashboard Admin - RW 16</title>
     <link rel="stylesheet" href="style.css" />
     <style>
-      .admin-container {
-        padding: 2rem 5%;
-      }
-      .admin-header {
+      /* Styling khusus untuk Dashboard Admin */
+      .admin-nav {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 2rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid var(--border-color);
+        padding: 1rem 5%;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
-      .admin-header h1 {
-        border: none;
+      .admin-nav .nav-links a {
+        text-decoration: none;
+        color: var(--dark-text);
+        margin: 0 15px;
+        font-weight: 500;
       }
-      .logout-btn {
-        padding: 0.6rem 1.2rem;
-        border: none;
+      .admin-nav .logout-btn {
         background-color: #dc3545;
         color: white;
+        padding: 0.6rem 1.2rem;
         border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.9rem;
+        text-decoration: none;
+      }
+      .admin-main {
+        padding: 2rem 5%;
+      }
+      .admin-main h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+      .admin-main h2 {
+        margin-top: 2rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5rem;
+      }
+      th,
+      td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+      thead tr {
+        background-color: #f2f2f2;
       }
       .action-btn {
         padding: 0.4rem 0.8rem;
@@ -46,101 +69,33 @@
     </style>
   </head>
   <body>
-    <div id="loading-indicator" style="text-align: center; margin-top: 5rem">
-      <h2>Memuat...</h2>
-    </div>
-    <div id="admin-container" class="admin-container" style="display: none">
-      <div class="admin-header">
-        <h1>Dashboard Admin RW 16</h1>
-        <button id="logout-btn" class="logout-btn">Logout</button>
+    <header class="admin-nav">
+      <div class="nav-title"><strong>Dashboard Admin</strong></div>
+      <div class="nav-links">
+        <a href="admin.html">Home</a>
+        <a href="#">Berita</a>
+        <a href="manage-layanan.html">Layanan</a>
+        <a href="#">Informasi</a>
+        <a href="#">Tentang Kami</a>
+        <a href="#" id="logout-btn" class="logout-btn">Logout</a>
       </div>
-      <div
-        class="admin-actions"
-        style="
-          margin-bottom: 2rem;
-          padding: 1rem;
-          background-color: #f8f9fa;
-          border-radius: 8px;
-        "
-      >
-        <h3>Panel Kelola</h3>
-        <a href="manage-layanan.html" class="action-btn btn-approve"
-          >Kelola Jenis Layanan</a
-        >
-      </div>
+    </header>
+
+    <main id="admin-main" class="admin-main">
+      <h1>Selamat Datang Admin</h1>
       <div id="admin-content">
         <h2>Daftar Pengajuan Surat Masuk</h2>
         <div style="overflow-x: auto">
-          <table
-            style="width: 100%; border-collapse: collapse; margin-top: 1.5rem"
-          >
+          <table>
             <thead>
-              <tr style="background-color: #f2f2f2">
-                <th
-                  style="
-                    padding: 12px;
-                    border: 1px solid #ddd;
-                    text-align: left;
-                  "
-                >
-                  Tanggal
-                </th>
-                <th
-                  style="
-                    padding: 12px;
-                    border: 1px solid #ddd;
-                    text-align: left;
-                  "
-                >
-                  Pemohon
-                </th>
-                <th
-                  style="
-                    padding: 12px;
-                    border: 1px solid #ddd;
-                    text-align: left;
-                  "
-                >
-                  Jenis Surat
-                </th>
-
-                <th
-                  style="
-                    padding: 12px;
-                    border: 1px solid #ddd;
-                    text-align: left;
-                  "
-                >
-                  Keperluan
-                </th>
-
-                <th
-                  style="
-                    padding: 12px;
-                    border: 1px solid #ddd;
-                    text-align: left;
-                  "
-                >
-                  Status
-                </th>
-                <th
-                  style="
-                    padding: 12px;
-                    border: 1px solid #ddd;
-                    text-align: left;
-                  "
-                >
-                  Aksi Awal
-                </th>
-                <th
-                  style="
-                    padding: 12px;
-                    border: 1px solid #ddd;
-                    text-align: left;
-                  "
-                >
-                  Aksi Lanjutan
-                </th>
+              <tr>
+                <th>Tanggal</th>
+                <th>Pemohon</th>
+                <th>Jenis Surat</th>
+                <th>Keperluan</th>
+                <th>Status</th>
+                <th>Aksi Awal</th>
+                <th>Aksi Lanjutan</th>
               </tr>
             </thead>
             <tbody id="pengajuan-table-body">
@@ -149,7 +104,9 @@
           </table>
         </div>
       </div>
-    </div>
+    </main>
+
+    <!-- Kita akan gunakan admin.js yang sudah ada, tapi tanpa loading indicator -->
     <script src="admin.js" type="module"></script>
   </body>
 </html>

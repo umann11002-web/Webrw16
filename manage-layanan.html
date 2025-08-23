@@ -3,36 +3,122 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kelola Layanan - Admin RW 16</title>
+    <title>Kelola Layanan - Admin</title>
     <link rel="stylesheet" href="style.css" />
-    <!-- Menggunakan style yang mirip dengan halaman admin -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
     <style>
-      body {
-        background-color: #f8f9fa;
-      }
-      .manage-container {
-        max-width: 900px;
-        margin: 2rem auto;
-      }
-      .card {
+      /* Menggunakan nav yang sama dengan admin.html */
+      .admin-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 5%;
         background: white;
-        padding: 1.5rem;
-        border-radius: 8px;
-        margin-bottom: 2rem;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
-      .card h2 {
-        border: none;
-        padding-left: 0;
+      .admin-nav .nav-links a {
+        text-decoration: none;
+        color: var(--dark-text);
+        margin: 0 15px;
+        font-weight: 500;
+      }
+      .admin-nav .logout-btn {
+        background-color: #dc3545;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+
+      .manage-main {
+        padding: 2rem 5%;
+      }
+      .layanan-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+      }
+      .kartu-layanan-admin {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        position: relative;
+      }
+      .kartu-layanan-admin h3 {
         margin-top: 0;
       }
+      .kartu-actions {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+      }
+      .kartu-actions button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        margin-left: 0.5rem;
+      }
+
+      /* Tombol + (FAB) */
+      .fab {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 60px;
+        height: 60px;
+        background-color: var(--primary-green);
+        color: white;
+        border-radius: 50%;
+        border: none;
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+      }
+
+      /* Modal (Pop-up) */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 500px;
+      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .close-btn {
+        font-size: 1.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+      }
       .form-group {
-        margin-bottom: 1rem;
+        margin: 1rem 0;
       }
       .form-group label {
         display: block;
         margin-bottom: 0.5rem;
-        font-weight: 600;
       }
       .form-group input,
       .form-group textarea {
@@ -48,34 +134,42 @@
         color: white;
         border-radius: 4px;
         cursor: pointer;
-        font-size: 1rem;
-      }
-      #layanan-list li {
-        padding: 0.5rem 0;
-        border-bottom: 1px solid #eee;
       }
     </style>
   </head>
   <body>
-    <div class="manage-container">
-      <a href="admin.html" style="margin-bottom: 1rem; display: inline-block"
-        >&larr; Kembali ke Dashboard</a
-      >
-
-      <div class="card">
-        <h2>Daftar Layanan Saat Ini</h2>
-        <ul id="layanan-list">
-          <li>Memuat layanan...</li>
-        </ul>
+    <header class="admin-nav">
+      <div class="nav-title"><strong>Dashboard Admin</strong></div>
+      <div class="nav-links">
+        <a href="admin.html">Home</a>
+        <a href="#">Berita</a>
+        <a href="manage-layanan.html">Layanan</a>
+        <a href="#">Informasi</a>
+        <a href="#">Tentang Kami</a>
+        <a href="#" id="logout-btn-alt" class="logout-btn">Logout</a>
       </div>
+    </header>
 
-      <div class="card">
-        <h2>Tambah Layanan Baru</h2>
-        <form id="add-layanan-form">
+    <main class="manage-main">
+      <h1>Layanan yang Tersedia</h1>
+      <div id="layanan-grid" class="layanan-grid">
+        <!-- Kartu layanan akan diisi oleh JavaScript -->
+      </div>
+    </main>
+
+    <button class="fab" id="add-layanan-btn">+</button>
+
+    <!-- Modal untuk Tambah/Edit Layanan -->
+    <div class="modal-overlay" id="layanan-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-title">Tambah Layanan Baru</h2>
+          <button class="close-btn" id="close-modal-btn">&times;</button>
+        </div>
+        <form id="layanan-form">
+          <input type="hidden" id="layanan-id-hidden" />
           <div class="form-group">
-            <label for="layanan-id"
-              >ID Layanan (singkat, huruf kecil, tanpa spasi, cth: skck)</label
-            >
+            <label for="layanan-id">ID Layanan (cth: skck)</label>
             <input type="text" id="layanan-id" required />
           </div>
           <div class="form-group">
@@ -83,25 +177,20 @@
             <input type="text" id="layanan-nama" required />
           </div>
           <div class="form-group">
-            <label for="layanan-deskripsi">Deskripsi Singkat</label>
+            <label for="layanan-deskripsi">Deskripsi</label>
             <textarea id="layanan-deskripsi" rows="2" required></textarea>
           </div>
           <div class="form-group">
-            <label for="layanan-persyaratan"
-              >Persyaratan (pisahkan dengan koma)</label
-            >
-            <textarea
-              id="layanan-persyaratan"
-              rows="3"
-              placeholder="Contoh: Surat Pengantar RT, Fotokopi KTP, Fotokopi KK"
-              required
-            ></textarea>
+            <label for="layanan-persyaratan">Persyaratan (pisahkan koma)</label>
+            <textarea id="layanan-persyaratan" rows="3" required></textarea>
           </div>
-          <button type="submit" class="submit-btn">Tambah Layanan</button>
+          <button type="submit" class="submit-btn" id="save-layanan-btn">
+            Simpan
+          </button>
         </form>
-        <p id="status-message" style="margin-top: 1rem; font-weight: 600"></p>
       </div>
     </div>
+
     <script src="manage-layanan.js" type="module"></script>
   </body>
 </html>
