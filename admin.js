@@ -13,7 +13,7 @@ import {
   orderBy,
   doc,
   updateDoc,
-  getDoc, // Pastikan getDoc di-import
+  getDoc,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -29,24 +29,19 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const loadingIndicator = document.getElementById("loading-indicator");
-const adminContainer = document.getElementById("admin-container");
 const tableBody = document.getElementById("pengajuan-table-body");
+const logoutButton = document.getElementById("logout-btn");
 
-// Satpam digital (DIPERBARUI)
+// Satpam digital (Disederhanakan untuk desain baru)
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    // Verifikasi peran admin SEBELUM mengambil data
     const userDocRef = doc(db, "users", user.uid);
     const userDocSnap = await getDoc(userDocRef);
 
     if (userDocSnap.exists() && userDocSnap.data().role === "admin") {
-      // Jika benar admin, baru tampilkan halaman dan muat data
-      loadingIndicator.style.display = "none";
-      adminContainer.style.display = "block";
+      // Jika benar admin, langsung muat data
       tampilkanPengajuan();
     } else {
-      // Jika bukan admin, tendang
       alert("Akses ditolak. Anda bukan admin.");
       window.location.href = "index.html";
     }
@@ -55,10 +50,12 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-const logoutButton = document.getElementById("logout-btn");
+// Tombol Logout
 if (logoutButton) {
   logoutButton.addEventListener("click", () => {
-    signOut(auth);
+    signOut(auth).then(() => {
+      window.location.href = "login.html";
+    });
   });
 }
 
@@ -123,7 +120,7 @@ async function tampilkanPengajuan() {
   }
 }
 
-// === FUNGSI EVENT LISTENER ===
+// ... (sisa kode addEventListenersToButtons, updateStatus, dan tandaiSelesai tetap sama) ...
 function addEventListenersToButtons() {
   document.querySelectorAll(".btn-approve").forEach((button) => {
     button.addEventListener("click", (e) => {
@@ -142,8 +139,6 @@ function addEventListenersToButtons() {
     });
   });
 }
-
-// === FUNGSI UPDATE STATUS ===
 async function updateStatus(docId, newStatus) {
   try {
     const docRef = doc(db, "pengajuanSurat", docId);
@@ -154,8 +149,6 @@ async function updateStatus(docId, newStatus) {
     alert("Gagal mengubah status.");
   }
 }
-
-// === FUNGSI UNTUK TANDAI SELESAI ===
 async function tandaiSelesai(docId) {
   const fileUrl = prompt(
     "PROSES SIMULASI:\n\nMasukkan link ke file surat yang sudah jadi (misal: link Google Drive).",
