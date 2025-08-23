@@ -1,4 +1,4 @@
-// Import fungsi yang kita butuhkan dari Firebase SDK (TANPA STORAGE)
+// ... (semua import Firebase tetap sama) ...
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import {
   getAuth,
@@ -77,7 +77,7 @@ async function loadFormDetails() {
   }
 }
 
-// ### LOGIKA PENGIRIMAN FORM (DENGAN REDIRECT) ###
+// ### LOGIKA PENGIRIMAN FORM (DIPERBARUI) ###
 suratForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!currentUser || !layananId) return;
@@ -111,6 +111,12 @@ suratForm.addEventListener("submit", async (e) => {
     formData.append("timestamp", timestamp);
     formData.append("signature", signature);
 
+    // ===================================
+    // ===== PERBAIKAN ADA DI SINI =====
+    // ===================================
+    // Beritahu Cloudinary untuk mendeteksi tipe file secara otomatis
+    formData.append("resource_type", "auto");
+
     submitButton.textContent = "Mengunggah file...";
 
     const cloudName = "do1ba7gkn"; // GANTI JIKA BERBEDA
@@ -138,26 +144,19 @@ suratForm.addEventListener("submit", async (e) => {
     };
     await addDoc(collection(db, "pengajuanSurat"), dataPengajuan);
 
-    // ===================================
-    // ===== BAGIAN BARU DIMULAI DI SINI =====
-    // ===================================
-
     statusMessage.textContent =
       "Pengajuan berhasil! Anda akan diarahkan kembali...";
     statusMessage.style.color = "green";
     suratForm.reset();
 
-    // Tunggu 2 detik, lalu arahkan ke halaman layanan
     setTimeout(() => {
       window.location.href = "layanan.html";
-    }, 2000); // 2000 milidetik = 2 detik
+    }, 2000);
   } catch (error) {
     console.error("Error saat proses pengajuan: ", error);
     statusMessage.textContent = "Gagal mengirim pengajuan. Silakan coba lagi.";
     statusMessage.style.color = "red";
-    // Aktifkan kembali tombol jika terjadi error
     submitButton.disabled = false;
     submitButton.textContent = "Ajukan Surat";
   }
-  // Kita hapus 'finally' agar tombol tidak aktif lagi setelah sukses
 });
