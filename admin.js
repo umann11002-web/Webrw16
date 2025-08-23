@@ -1,4 +1,4 @@
-// ... (semua import dan inisialisasi Firebase tetap sama) ...
+// Import fungsi yang kita butuhkan dari Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import {
   getAuth,
@@ -73,13 +73,12 @@ async function tampilkanPengajuan() {
         .toDate()
         .toLocaleDateString("id-ID");
 
-      // ... (logika untuk tombol tetap sama) ...
       let aksiAwalHTML = "";
       if (data.status === "Menunggu Persetujuan") {
         aksiAwalHTML = `
-                    <button class="action-btn btn-approve" data-id="${docId}">Setujui</button>
-                    <button class="action-btn btn-reject" data-id="${docId}">Tolak</button>
-                `;
+                <button class="action-btn btn-approve" data-id="${docId}">Setujui</button>
+                <button class="action-btn btn-reject" data-id="${docId}">Tolak</button>
+              `;
       }
       let aksiLanjutanHTML = "";
       if (data.fileUrl) {
@@ -91,20 +90,16 @@ async function tampilkanPengajuan() {
         aksiLanjutanHTML += `<button class="action-btn btn-approve" data-id="${docId}" style="margin-top:5px;">Tandai Selesai</button>`;
       }
 
-      // Buat baris baru untuk tabel
       const row = `
-                <tr>
-                    <td>${tanggal}</td>
-                    <td>${data.userEmail}</td>
-                    <td>${data.jenisSurat}</td>
-                    
-                    <!-- DATA BARU YANG DITAMPILKAN -->
-                    <td>${data.keperluan}</td>
-                    
-                    <td>${data.status}</td>
-                    <td>${aksiAwalHTML}</td>
-                    <td>${aksiLanjutanHTML}</td>
-                </tr>
+              <tr>
+                  <td>${tanggal}</td>
+                  <td>${data.userEmail}</td>
+                  <td>${data.jenisSurat}</td>
+                  <td>${data.keperluan}</td>
+                  <td>${data.status}</td>
+                  <td>${aksiAwalHTML}</td>
+                  <td>${aksiLanjutanHTML}</td>
+              </tr>
             `;
       tableBody.innerHTML += row;
     });
@@ -118,11 +113,10 @@ async function tampilkanPengajuan() {
 
 // === FUNGSI EVENT LISTENER (DIPERBARUI) ===
 function addEventListenersToButtons() {
-  // Tombol Setujui
+  // Tombol Setujui & Tandai Selesai
   document.querySelectorAll(".btn-approve").forEach((button) => {
     button.addEventListener("click", (e) => {
       const docId = e.target.dataset.id;
-      // Cek teks tombol untuk menentukan aksi
       if (e.target.textContent === "Setujui") {
         updateStatus(docId, "Disetujui");
       } else if (e.target.textContent === "Tandai Selesai") {
@@ -152,25 +146,32 @@ async function updateStatus(docId, newStatus) {
   }
 }
 
-// === FUNGSI BARU UNTUK TANDAI SELESAI ===
+// === FUNGSI UNTUK TANDAI SELESAI (DIPERBARUI DENGAN PROMPT) ===
 async function tandaiSelesai(docId) {
-  // WORKAROUND: Karena belum ada upload, kita hanya konfirmasi
-  const isConfirmed = confirm(
-    "Apakah Anda yakin ingin menandai pengajuan ini sebagai 'Selesai'? Aksi ini tidak bisa dibatalkan."
+  // Minta admin untuk memasukkan link ke surat yang sudah jadi
+  const fileUrl = prompt(
+    "PROSES SIMULASI:\n\nMasukkan link ke file surat yang sudah jadi (misal: link Google Drive).",
+    ""
   );
 
-  if (isConfirmed) {
-    try {
-      const docRef = doc(db, "pengajuanSurat", docId);
-      await updateDoc(docRef, {
-        status: "Selesai",
-        // Nanti, URL file surat jadi akan disimpan di sini
-        fileSuratJadiUrl: "#", // Kita beri placeholder '#'
-      });
-      alert('Pengajuan berhasil ditandai sebagai "Selesai"');
-      tampilkanPengajuan();
-    } catch (error) {
-      alert("Gagal menandai selesai.");
-    }
+  // Jika admin mengklik "Cancel", prompt akan mengembalikan null
+  if (fileUrl === null) {
+    alert("Aksi dibatalkan.");
+    return;
+  }
+
+  // Jika admin mengklik "OK" (bahkan jika kosong)
+  try {
+    const docRef = doc(db, "pengajuanSurat", docId);
+    await updateDoc(docRef, {
+      status: "Selesai",
+      // Simpan link yang dimasukkan admin ke database
+      fileSuratJadiUrl: fileUrl || "#", // Jika kosong, beri placeholder '#'
+    });
+    alert('Pengajuan berhasil ditandai sebagai "Selesai"');
+    tampilkanPengajuan(); // Muat ulang tabel
+  } catch (error) {
+    console.error("Error menandai selesai:", error);
+    alert("Gagal menandai selesai.");
   }
 }

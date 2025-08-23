@@ -67,6 +67,8 @@ async function tampilkanRiwayat(userId) {
 
       // Siapkan tombol download (nonaktif jika belum selesai)
       const isSelesai = data.status === "Selesai";
+      const hasFileLink =
+        data.fileSuratJadiUrl && data.fileSuratJadiUrl !== "#";
       const downloadButton = isSelesai
         ? `<a href="${data.fileSuratJadiUrl}" class="download-btn" target="_blank">Download</a>`
         : `<button class="download-btn disabled" disabled>Download</button>`;

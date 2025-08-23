@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelola Layanan - Admin RW 16</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Menggunakan style yang mirip dengan halaman admin -->
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .manage-container {
+        max-width: 900px;
+        margin: 2rem auto;
+      }
+      .card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .card h2 {
+        border: none;
+        padding-left: 0;
+        margin-top: 0;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .submit-btn {
+        padding: 0.7rem 1.5rem;
+        border: none;
+        background-color: var(--primary-green);
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      #layanan-list li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="manage-container">
+      <a href="admin.html" style="margin-bottom: 1rem; display: inline-block"
+        >&larr; Kembali ke Dashboard</a
+      >
+
+      <div class="card">
+        <h2>Daftar Layanan Saat Ini</h2>
+        <ul id="layanan-list">
+          <li>Memuat layanan...</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Tambah Layanan Baru</h2>
+        <form id="add-layanan-form">
+          <div class="form-group">
+            <label for="layanan-id"
+              >ID Layanan (singkat, huruf kecil, tanpa spasi, cth: skck)</label
+            >
+            <input type="text" id="layanan-id" required />
+          </div>
+          <div class="form-group">
+            <label for="layanan-nama">Nama Lengkap Layanan</label>
+            <input type="text" id="layanan-nama" required />
+          </div>
+          <div class="form-group">
+            <label for="layanan-deskripsi">Deskripsi Singkat</label>
+            <textarea id="layanan-deskripsi" rows="2" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="layanan-persyaratan"
+              >Persyaratan (pisahkan dengan koma)</label
+            >
+            <textarea
+              id="layanan-persyaratan"
+              rows="3"
+              placeholder="Contoh: Surat Pengantar RT, Fotokopi KTP, Fotokopi KK"
+              required
+            ></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Tambah Layanan</button>
+        </form>
+        <p id="status-message" style="margin-top: 1rem; font-weight: 600"></p>
+      </div>
+    </div>
+    <script src="manage-layanan.js" type="module"></script>
+  </body>
+</html>
