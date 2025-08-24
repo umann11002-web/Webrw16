@@ -126,8 +126,12 @@ suratForm.addEventListener("submit", async (e) => {
     submitButton.textContent = "Mengunggah file...";
 
     const cloudName = "do1ba7gkn"; // GANTI JIKA BEDA
-    const resourceType = file.type.startsWith("image") ? "image" : "raw";
-    const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
+    // =============================================================
+    // ===== PERUBAHAN URL UPLOAD ADA DI SINI =====
+    // =============================================================
+    // Kita gunakan /auto/upload yang akan menangani semua jenis file
+    const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
 
     const uploadResponse = await fetch(uploadUrl, {
       method: "POST",
