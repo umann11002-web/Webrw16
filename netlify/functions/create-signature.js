@@ -9,18 +9,26 @@ cloudinary.config({
 
 exports.handler = async (event, context) => {
   try {
-    const body = JSON.parse(event.body);
-    const paramsToSign = body.params_to_sign;
+    // Petugas rahasia sekarang yang membuat timestamp
+    const timestamp = Math.round(new Date().getTime() / 1000);
+    const folder = "persyaratan";
 
-    // Buat signature berdasarkan SEMUA parameter yang dikirim
+    // Buat signature berdasarkan parameter yang dibuat di sini
     const signature = cloudinary.utils.api_sign_request(
-      paramsToSign,
+      { timestamp, folder },
       process.env.CLOUDINARY_API_SECRET
     );
 
+    // Kirim kembali semua yang dibutuhkan oleh browser
     return {
       statusCode: 200,
-      body: JSON.stringify({ signature }),
+      body: JSON.stringify({
+        signature: signature,
+        timestamp: timestamp,
+        folder: folder,
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+      }),
     };
   } catch (error) {
     return {
