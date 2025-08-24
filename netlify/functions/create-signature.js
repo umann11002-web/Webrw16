@@ -1,5 +1,7 @@
+// This is a Netlify Function, it runs on the server.
 const cloudinary = require("cloudinary").v2;
 
+// Konfigurasi Cloudinary menggunakan Environment Variables yang aman
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,

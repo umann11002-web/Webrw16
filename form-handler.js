@@ -113,23 +113,31 @@ suratForm.addEventListener("submit", async (e) => {
   submitButton.textContent = "Meminta izin upload...";
 
   try {
+    // 1. SIAPKAN SEMUA PARAMETER YANG AKAN DIKIRIM KE CLOUDINARY
     const timestamp = Math.round(new Date().getTime() / 1000);
+    const folder = "persyaratan"; // Tentukan folder tujuan
 
     const paramsToSign = {
       timestamp: timestamp,
-      resource_type: "auto",
+      folder: folder,
     };
 
+    // 2. MINTA TANDA TANGAN UNTUK SEMUA PARAMETER
     const sigResponse = await fetch("/.netlify/functions/create-signature", {
       method: "POST",
       body: JSON.stringify({ params_to_sign: paramsToSign }),
     });
     const sigData = await sigResponse.json();
+    if (sigData.error) {
+      throw new Error(sigData.error);
+    }
     const signature = sigData.signature;
 
+    // 3. SIAPKAN FORM DATA
     const formData = new FormData();
     formData.append("file", file);
     formData.append("api_key", "576324551919849"); // GANTI JIKA BEDA
+    // Kirim semua parameter yang sudah ditandatangani
     for (const key in paramsToSign) {
       formData.append(key, paramsToSign[key]);
     }
@@ -137,8 +145,10 @@ suratForm.addEventListener("submit", async (e) => {
 
     submitButton.textContent = "Mengunggah file...";
 
+    // 4. KIRIM KE CLOUDINARY
     const cloudName = "do1ba7gkn"; // GANTI JIKA BEDA
-    const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
+    const resourceType = file.type.startsWith("image") ? "image" : "raw";
+    const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
 
     const uploadResponse = await fetch(uploadUrl, {
       method: "POST",
@@ -151,6 +161,7 @@ suratForm.addEventListener("submit", async (e) => {
     }
     const fileUrl = uploadData.secure_url;
 
+    // 5. SIMPAN KE FIRESTORE
     submitButton.textContent = "Menyimpan data...";
     const dataPengajuan = {
       userId: currentUser.uid,
