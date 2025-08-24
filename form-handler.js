@@ -26,49 +26,50 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ... (kode elemen, satpam, dan fungsi loadFormDetails tetap sama) ...
+// Ambil elemen dari HTML
 const mainContent = document.getElementById("main-content");
 const loadingIndicator = document.getElementById("loading-indicator");
+const formTitle = document.getElementById("form-title");
+const persyaratanInfo = document.getElementById("persyaratan-info");
 const suratForm = document.getElementById("surat-form");
 const statusMessage = document.getElementById("status-message");
 const submitButton = document.getElementById("submit-btn");
+
 let currentUser = null;
 let layananId = null;
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    currentUser = user;
-    loadFormDetails();
-  } else {
-    const currentUrl = window.location.href;
-    alert("Anda harus login untuk mengakses halaman ini.");
-    window.location.href = `login.html?redirect=${encodeURIComponent(
-      currentUrl
-    )}`;
-  }
-});
+// Fungsi untuk mendapatkan ID layanan dari URL
+function getLayananIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id");
+}
+
+// Fungsi untuk memuat detail layanan dari Firestore dan membangun form
 async function loadFormDetails() {
-  layananId = new URLSearchParams(window.location.search).get("id");
+  layananId = getLayananIdFromUrl();
   if (!layananId) {
     loadingIndicator.innerHTML =
       "<h2>Error: ID Layanan tidak ditemukan di URL.</h2>";
     return;
   }
+
   try {
     const docRef = doc(db, "layanan", layananId);
     const docSnap = await getDoc(docRef);
+
     if (docSnap.exists()) {
       const layanan = docSnap.data();
-      document.getElementById(
-        "form-title"
-      ).textContent = `Form Pengajuan: ${layanan.namaLayanan}`;
+
+      formTitle.textContent = `Form Pengajuan: ${layanan.namaLayanan}`;
+
       let persyaratanHTML =
         "<p><strong>Pastikan Anda menyiapkan persyaratan berikut:</strong></p><ul>";
       layanan.persyaratan.forEach((item) => {
         persyaratanHTML += `<li>${item}</li>`;
       });
       persyaratanHTML += "</ul>";
-      document.getElementById("persyaratan-info").innerHTML = persyaratanHTML;
+      persyaratanInfo.innerHTML = persyaratanHTML;
+
       loadingIndicator.style.display = "none";
       mainContent.style.display = "block";
     } else {
@@ -81,7 +82,21 @@ async function loadFormDetails() {
   }
 }
 
-// ### LOGIKA PENGIRIMAN FORM (DENGAN PERBAIKAN FINAL) ###
+// Satpam digital (ROUTE GUARD)
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+    loadFormDetails();
+  } else {
+    const currentUrl = window.location.href;
+    alert("Anda harus login untuk mengakses halaman ini.");
+    window.location.href = `login.html?redirect=${encodeURIComponent(
+      currentUrl
+    )}`;
+  }
+});
+
+// ### LOGIKA PENGIRIMAN FORM (VERSI FINAL) ###
 suratForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!currentUser || !layananId) return;
@@ -95,56 +110,38 @@ suratForm.addEventListener("submit", async (e) => {
   }
 
   submitButton.disabled = true;
-  submitButton.textContent = "Meminta izin upload...";
+  submitButton.textContent = "Menyiapkan upload...";
 
   try {
-    const timestamp = Math.round(new Date().getTime() / 1000);
-    const folder = "persyaratan"; // Tentukan folder tujuan
-
-    const paramsToSign = {
-      timestamp: timestamp,
-      folder: folder,
-    };
-
+    // 1. MINTA "PAKET UPLOAD" LENGKAP DARI NETLIFY FUNCTION
     const sigResponse = await fetch("/.netlify/functions/create-signature", {
       method: "POST",
-      body: JSON.stringify({ params_to_sign: paramsToSign }),
     });
-    const sigData = await sigResponse.json();
-    if (sigData.error) {
-      throw new Error(sigData.error);
-    }
-    const signature = sigData.signature;
+    const uploadData = await sigResponse.json();
+    if (uploadData.error) throw new Error(uploadData.error);
 
+    // 2. SIAPKAN FORM DATA DENGAN SEMUA INFO DARI "PAKET"
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("api_key", "576324551919849"); // GANTI JIKA BEDA
-    formData.append("timestamp", timestamp);
-    formData.append("signature", signature);
-    formData.append("folder", folder);
+    formData.append("api_key", uploadData.api_key);
+    formData.append("timestamp", uploadData.timestamp);
+    formData.append("signature", uploadData.signature);
+    formData.append("folder", uploadData.folder);
 
     submitButton.textContent = "Mengunggah file...";
 
-    const cloudName = "do1ba7gkn"; // GANTI JIKA BEDA
-
-    // =============================================================
-    // ===== PERUBAHAN URL UPLOAD ADA DI SINI =====
-    // =============================================================
-    // Kita gunakan /auto/upload yang akan menangani semua jenis file
-    const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
-
+    // 3. KIRIM KE CLOUDINARY
+    const uploadUrl = `https://api.cloudinary.com/v1_1/${uploadData.cloud_name}/auto/upload`;
     const uploadResponse = await fetch(uploadUrl, {
       method: "POST",
       body: formData,
     });
-    const uploadData = await uploadResponse.json();
+    const finalData = await uploadResponse.json();
+    if (finalData.error) throw new Error(finalData.error.message);
 
-    if (uploadData.error) {
-      throw new Error(uploadData.error.message);
-    }
-    const fileUrl = uploadData.secure_url;
+    const fileUrl = finalData.secure_url;
 
-    // SIMPAN KE FIRESTORE
+    // 4. SIMPAN KE FIRESTORE
     submitButton.textContent = "Menyimpan data...";
     const dataPengajuan = {
       userId: currentUser.uid,
