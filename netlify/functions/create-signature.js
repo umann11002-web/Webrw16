@@ -1,7 +1,5 @@
-// This is a Netlify Function, it runs on the server.
 const cloudinary = require("cloudinary").v2;
 
-// Konfigurasi Cloudinary menggunakan Environment Variables yang aman
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -10,12 +8,12 @@ cloudinary.config({
 });
 
 exports.handler = async (event, context) => {
-  // Dapatkan parameter dari permintaan browser
-  const body = JSON.parse(event.body);
-  const paramsToSign = body.params_to_sign;
-
   try {
-    // Buat signature (tanda tangan) yang aman di server
+    // Ambil SEMUA parameter yang dikirim dari browser
+    const body = JSON.parse(event.body);
+    const paramsToSign = body.params_to_sign;
+
+    // Buat signature berdasarkan SEMUA parameter tersebut
     const signature = cloudinary.utils.api_sign_request(
       paramsToSign,
       process.env.CLOUDINARY_API_SECRET

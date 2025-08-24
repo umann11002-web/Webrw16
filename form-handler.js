@@ -77,7 +77,7 @@ async function loadFormDetails() {
   }
 }
 
-// ### LOGIKA PENGIRIMAN FORM (DIPERBARUI) ###
+// ### LOGIKA PENGIRIMAN FORM (DIPERBARUI TOTAL) ###
 suratForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!currentUser || !layananId) return;
@@ -86,18 +86,23 @@ suratForm.addEventListener("submit", async (e) => {
   const keperluan = document.getElementById("keperluan").value;
 
   if (!file) {
-    alert("Silakan pilih file persyaratan untuk diunggah.");
+    alert("Silakan pilih file persyaratan.");
     return;
   }
 
   submitButton.disabled = true;
   submitButton.textContent = "Meminta izin upload...";
-  statusMessage.textContent = "";
 
   try {
+    // 1. SIAPKAN SEMUA PARAMETER YANG AKAN DIKIRIM KE CLOUDINARY
     const timestamp = Math.round(new Date().getTime() / 1000);
-    const paramsToSign = { timestamp: timestamp };
+    const paramsToSign = {
+      timestamp: timestamp,
+      // TAMBAHKAN resource_type DI SINI AGAR IKUT DITANDATANGANI
+      resource_type: "auto",
+    };
 
+    // 2. MINTA TANDA TANGAN UNTUK SEMUA PARAMETER
     const sigResponse = await fetch("/.netlify/functions/create-signature", {
       method: "POST",
       body: JSON.stringify({ params_to_sign: paramsToSign }),
@@ -105,21 +110,20 @@ suratForm.addEventListener("submit", async (e) => {
     const sigData = await sigResponse.json();
     const signature = sigData.signature;
 
+    // 3. SIAPKAN FORM DATA
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("api_key", "576324551919849"); // GANTI JIKA BERBEDA
-    formData.append("timestamp", timestamp);
+    formData.append("api_key", "576324551919849"); // GANTI JIKA BEDA
+    // Kirim semua parameter yang sudah ditandatangani
+    for (const key in paramsToSign) {
+      formData.append(key, paramsToSign[key]);
+    }
     formData.append("signature", signature);
-
-    // ===================================
-    // ===== PERBAIKAN ADA DI SINI =====
-    // ===================================
-    // Beritahu Cloudinary untuk mendeteksi tipe file secara otomatis
-    formData.append("resource_type", "auto");
 
     submitButton.textContent = "Mengunggah file...";
 
-    const cloudName = "do1ba7gkn"; // GANTI JIKA BERBEDA
+    // 4. KIRIM KE CLOUDINARY
+    const cloudName = "do1ba7gkn"; // GANTI JIKA BEDA
     const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
 
     const uploadResponse = await fetch(uploadUrl, {
@@ -127,8 +131,13 @@ suratForm.addEventListener("submit", async (e) => {
       body: formData,
     });
     const uploadData = await uploadResponse.json();
+
+    if (uploadData.error) {
+      throw new Error(uploadData.error.message);
+    }
     const fileUrl = uploadData.secure_url;
 
+    // 5. SIMPAN KE FIRESTORE
     submitButton.textContent = "Menyimpan data...";
     const dataPengajuan = {
       userId: currentUser.uid,
@@ -154,7 +163,7 @@ suratForm.addEventListener("submit", async (e) => {
     }, 2000);
   } catch (error) {
     console.error("Error saat proses pengajuan: ", error);
-    statusMessage.textContent = "Gagal mengirim pengajuan. Silakan coba lagi.";
+    statusMessage.textContent = `Gagal: ${error.message}`;
     statusMessage.style.color = "red";
     submitButton.disabled = false;
     submitButton.textContent = "Ajukan Surat";
