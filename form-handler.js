@@ -26,63 +26,15 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Ambil elemen dari HTML
+// ... (kode elemen, satpam, dan fungsi loadFormDetails tetap sama) ...
 const mainContent = document.getElementById("main-content");
 const loadingIndicator = document.getElementById("loading-indicator");
-const formTitle = document.getElementById("form-title");
-const persyaratanInfo = document.getElementById("persyaratan-info");
 const suratForm = document.getElementById("surat-form");
 const statusMessage = document.getElementById("status-message");
 const submitButton = document.getElementById("submit-btn");
-
 let currentUser = null;
 let layananId = null;
 
-// Fungsi untuk mendapatkan ID layanan dari URL
-function getLayananIdFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("id");
-}
-
-// Fungsi untuk memuat detail layanan dari Firestore dan membangun form
-async function loadFormDetails() {
-  layananId = getLayananIdFromUrl();
-  if (!layananId) {
-    loadingIndicator.innerHTML =
-      "<h2>Error: ID Layanan tidak ditemukan di URL.</h2>";
-    return;
-  }
-
-  try {
-    const docRef = doc(db, "layanan", layananId);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      const layanan = docSnap.data();
-
-      formTitle.textContent = `Form Pengajuan: ${layanan.namaLayanan}`;
-
-      let persyaratanHTML =
-        "<p><strong>Pastikan Anda menyiapkan persyaratan berikut:</strong></p><ul>";
-      layanan.persyaratan.forEach((item) => {
-        persyaratanHTML += `<li>${item}</li>`;
-      });
-      persyaratanHTML += "</ul>";
-      persyaratanInfo.innerHTML = persyaratanHTML;
-
-      loadingIndicator.style.display = "none";
-      mainContent.style.display = "block";
-    } else {
-      loadingIndicator.innerHTML =
-        "<h2>Error: Layanan tidak ditemukan di database.</h2>";
-    }
-  } catch (error) {
-    console.error("Error mengambil detail layanan:", error);
-    loadingIndicator.innerHTML = "<h2>Gagal memuat form.</h2>";
-  }
-}
-
-// Satpam digital (ROUTE GUARD)
 onAuthStateChanged(auth, (user) => {
   if (user) {
     currentUser = user;
@@ -95,6 +47,39 @@ onAuthStateChanged(auth, (user) => {
     )}`;
   }
 });
+async function loadFormDetails() {
+  layananId = new URLSearchParams(window.location.search).get("id");
+  if (!layananId) {
+    loadingIndicator.innerHTML =
+      "<h2>Error: ID Layanan tidak ditemukan di URL.</h2>";
+    return;
+  }
+  try {
+    const docRef = doc(db, "layanan", layananId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const layanan = docSnap.data();
+      document.getElementById(
+        "form-title"
+      ).textContent = `Form Pengajuan: ${layanan.namaLayanan}`;
+      let persyaratanHTML =
+        "<p><strong>Pastikan Anda menyiapkan persyaratan berikut:</strong></p><ul>";
+      layanan.persyaratan.forEach((item) => {
+        persyaratanHTML += `<li>${item}</li>`;
+      });
+      persyaratanHTML += "</ul>";
+      document.getElementById("persyaratan-info").innerHTML = persyaratanHTML;
+      loadingIndicator.style.display = "none";
+      mainContent.style.display = "block";
+    } else {
+      loadingIndicator.innerHTML =
+        "<h2>Error: Layanan tidak ditemukan di database.</h2>";
+    }
+  } catch (error) {
+    console.error("Error mengambil detail layanan:", error);
+    loadingIndicator.innerHTML = "<h2>Gagal memuat form.</h2>";
+  }
+}
 
 // ### LOGIKA PENGIRIMAN FORM (DENGAN PERBAIKAN FINAL) ###
 suratForm.addEventListener("submit", async (e) => {
@@ -113,7 +98,6 @@ suratForm.addEventListener("submit", async (e) => {
   submitButton.textContent = "Meminta izin upload...";
 
   try {
-    // 1. SIAPKAN SEMUA PARAMETER YANG AKAN DIKIRIM KE CLOUDINARY
     const timestamp = Math.round(new Date().getTime() / 1000);
     const folder = "persyaratan"; // Tentukan folder tujuan
 
@@ -122,7 +106,6 @@ suratForm.addEventListener("submit", async (e) => {
       folder: folder,
     };
 
-    // 2. MINTA TANDA TANGAN UNTUK SEMUA PARAMETER
     const sigResponse = await fetch("/.netlify/functions/create-signature", {
       method: "POST",
       body: JSON.stringify({ params_to_sign: paramsToSign }),
@@ -133,19 +116,15 @@ suratForm.addEventListener("submit", async (e) => {
     }
     const signature = sigData.signature;
 
-    // 3. SIAPKAN FORM DATA
     const formData = new FormData();
     formData.append("file", file);
     formData.append("api_key", "576324551919849"); // GANTI JIKA BEDA
-    // Kirim semua parameter yang sudah ditandatangani
-    for (const key in paramsToSign) {
-      formData.append(key, paramsToSign[key]);
-    }
+    formData.append("timestamp", timestamp);
     formData.append("signature", signature);
+    formData.append("folder", folder);
 
     submitButton.textContent = "Mengunggah file...";
 
-    // 4. KIRIM KE CLOUDINARY
     const cloudName = "do1ba7gkn"; // GANTI JIKA BEDA
     const resourceType = file.type.startsWith("image") ? "image" : "raw";
     const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
@@ -161,7 +140,7 @@ suratForm.addEventListener("submit", async (e) => {
     }
     const fileUrl = uploadData.secure_url;
 
-    // 5. SIMPAN KE FIRESTORE
+    // SIMPAN KE FIRESTORE
     submitButton.textContent = "Menyimpan data...";
     const dataPengajuan = {
       userId: currentUser.uid,
