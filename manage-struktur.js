@@ -14,7 +14,12 @@ import {
 
 // ... (Konfigurasi Firebase) ...
 const firebaseConfig = {
-  /* ... salin dari file lain ... */
+  apiKey: "AIzaSyBD4ypi0bq71tJfDdyqgdLL3A_RSye9Q7I",
+  authDomain: "rw16cibabat-dbf87.firebaseapp.com",
+  projectId: "rw16cibabat-dbf87",
+  storageBucket: "rw16cibabat-dbf87.appspot.com",
+  messagingSenderId: "744879659808",
+  appId: "1:744879659808:web:9d91c4bd2068260e189545",
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
