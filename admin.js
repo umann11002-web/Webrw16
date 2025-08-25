@@ -31,15 +31,6 @@ const db = getFirestore(app);
 
 // Menunggu sampai seluruh halaman HTML selesai dimuat
 document.addEventListener("DOMContentLoaded", () => {
-  // === LOGIKA HAMBURGER MENU ===
-  const hamburgerBtn = document.getElementById("admin-hamburger-btn");
-  const navLinks = document.getElementById("admin-nav-links");
-  if (hamburgerBtn && navLinks) {
-    hamburgerBtn.addEventListener("click", () => {
-      navLinks.classList.toggle("active");
-    });
-  }
-
   // === SATPAM DIGITAL & PEMUAT DATA ===
   const tableBody = document.getElementById("pengajuan-table-body");
   onAuthStateChanged(auth, async (user) => {
