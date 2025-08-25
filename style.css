@@ -344,43 +344,80 @@ footer {
   background-color: var(--bg-light);
 }
 
+.admin-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 5%;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.admin-nav .nav-links a {
+  text-decoration: none;
+  color: var(--dark-text);
+  margin: 0 15px;
+  font-weight: 500;
+}
+.admin-nav .hamburger-btn {
+  display: none; /* Sembunyikan hamburger di desktop */
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* --- Aturan untuk HP & Tablet (lebar 768px atau kurang) --- */
 @media (max-width: 768px) {
-  /* --- Perbaikan Navigasi Admin --- */
   .admin-nav {
-    flex-direction: column; /* Susun logo dan link ke bawah */
-    align-items: flex-start; /* Rata kiri */
-    gap: 1rem; /* Beri jarak */
+    flex-direction: column;
+    align-items: stretch; /* Penuhi lebar */
+  }
+
+  .admin-nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .admin-nav .hamburger-btn {
+    display: block; /* Tampilkan hamburger di HP */
   }
 
   .admin-nav .nav-links {
+    display: none; /* Sembunyikan menu secara default di HP */
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  /* Kelas 'active' ini akan ditambahkan oleh JavaScript untuk menampilkan menu */
+  .admin-nav .nav-links.active {
     display: flex;
-    flex-direction: column; /* Susun link menu ke bawah */
-    align-items: flex-start; /* Rata kiri */
-    gap: 0.8rem; /* Beri jarak antar link */
   }
 
   .admin-nav .nav-links a {
-    margin: 0; /* Hapus margin horizontal */
+    margin: 0;
+    padding: 0.8rem 0; /* Beri padding vertikal */
+    border-top: 1px solid #eee;
   }
 
   /* --- Perbaikan Umum Halaman Admin --- */
   .admin-main,
   .manage-main {
-    padding: 1.5rem 5%; /* Kurangi padding di HP */
+    padding: 1.5rem 5%;
   }
 
   .admin-main h1 {
-    font-size: 1.5rem; /* Kecilkan judul utama */
+    font-size: 1.5rem;
   }
 
   /* --- Perbaikan Tabel di Dashboard --- */
-  /* div yang membungkus tabel akan bisa di-scroll ke samping */
   .admin-content div[style*="overflow-x:auto"] {
     border: 1px solid #ddd;
     border-radius: 4px;
   }
 
-  /* Beri tahu user bahwa tabel bisa di-scroll */
   .admin-content p::after {
     content: " (Geser tabel ke samping untuk melihat semua kolom)";
     font-style: italic;
