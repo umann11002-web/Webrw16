@@ -12,67 +12,59 @@
     <style>
       .main-content {
         padding: 2rem 5%;
-        background-color: #f4f7f6;
       }
-      .intro-box {
-        background: white;
-        padding: 2rem;
-        border-radius: 12px;
-        text-align: center;
-        margin-bottom: 2rem;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-      }
-      .intro-box h1 {
-        margin-top: 0;
-      }
-      .org-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.5rem;
-      }
-      .org-card-link {
-        text-decoration: none;
-        color: inherit;
+      .org-chart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
       }
       .org-card {
         background: white;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        transition: transform 0.2s, box-shadow 0.2s;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 250px;
       }
-      .org-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      .org-card img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1rem;
+        border: 3px solid #eee;
       }
-      .org-card-title {
-        padding: 1rem 1.5rem;
-        font-weight: 700;
+      .org-card h3 {
+        margin: 0 0 5px 0;
         font-size: 1.2rem;
-        text-align: center;
       }
-      .org-card-desc {
-        padding: 0 1.5rem 1.5rem 1.5rem;
+      .org-card p {
+        margin: 0;
         color: #6c757d;
-        text-align: center;
+        font-weight: 500;
+      }
+      .org-level {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
       }
     </style>
   </head>
   <body>
+    <!-- Header & Navigasi Konsisten -->
     <header>
       <div class="header-content">
         <div class="logo">
           <img src="images/logo16.png" alt="Logo RW 16" />
           <span>RW 16 Kel. Cibat</span>
         </div>
-
         <nav class="navbar">
           <a href="index.html">Home</a>
           <a href="berita.html">Berita</a>
           <a href="layanan.html">Layanan</a>
           <a href="informasi.html">Informasi</a>
-
-          <!-- Dropdown untuk Tentang Kami -->
           <div class="dropdown">
             <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
               >Tentang Kami <i class="fas fa-chevron-down"></i
@@ -83,8 +75,6 @@
               <a href="galeri.html">Galeri</a>
             </div>
           </div>
-
-          <!-- Dropdown untuk Profil Pengguna (disembunyikan dulu) -->
           <div class="dropdown" id="profil-dropdown" style="display: none">
             <a href="#" class="dropdown-toggle" id="profil-toggle"
               >Profil <i class="fas fa-chevron-down"></i
@@ -94,11 +84,8 @@
               <a href="#" id="logout-link-nav">Logout</a>
             </div>
           </div>
-
-          <!-- Tombol Login (untuk pengunjung) -->
           <a href="login.html" id="login-button-nav">Login</a>
         </nav>
-
         <button class="hamburger" id="hamburger-menu">
           <i class="fas fa-bars"></i>
         </button>
@@ -106,47 +93,67 @@
     </header>
 
     <main class="main-content">
-      <div class="intro-box">
-        <h1>Struktur Organisasi</h1>
-        <p>
-          Kenali lebih dekat para pengurus yang berdedikasi untuk melayani dan
-          memajukan lingkungan RW 16.
-        </p>
-      </div>
+      <h1>Struktur Organisasi RW 16</h1>
 
-      <div class="org-grid">
-        <a href="struktur-rw.html" class="org-card-link">
+      <div class="org-chart">
+        <!-- Ketua RW -->
+        <div class="org-card">
+          <img
+            src="https://placehold.co/100x100/EFEFEF/AAAAAA?text=Foto"
+            alt="Foto Ketua RW"
+          />
+          <h3>Nama Ketua RW</h3>
+          <p>Ketua RW 16</p>
+        </div>
+
+        <!-- Level Wakil, Sekretaris, Bendahara -->
+        <div class="org-level">
           <div class="org-card">
-            <div class="org-card-title">Struktur RW</div>
-            <div class="org-card-desc">
-              Lihat bagan kepengurusan tingkat Rukun Warga.
-            </div>
+            <img
+              src="https://placehold.co/100x100/EFEFEF/AAAAAA?text=Foto"
+              alt="Foto Wakil"
+            />
+            <h3>Nama Wakil</h3>
+            <p>Wakil Ketua RW</p>
           </div>
-        </a>
-        <a href="struktur-rt.html" class="org-card-link">
           <div class="org-card">
-            <div class="org-card-title">Struktur RT</div>
-            <div class="org-card-desc">
-              Temukan informasi pengurus di setiap Rukun Tetangga.
-            </div>
+            <img
+              src="https://placehold.co/100x100/EFEFEF/AAAAAA?text=Foto"
+              alt="Foto Sekretaris"
+            />
+            <h3>Nama Sekretaris</h3>
+            <p>Sekretaris</p>
           </div>
-        </a>
-        <a href="karang-taruna.html" class="org-card-link">
           <div class="org-card">
-            <div class="org-card-title">Karang Taruna</div>
-            <div class="org-card-desc">
-              Organisasi pemuda-pemudi yang aktif dan kreatif.
-            </div>
+            <img
+              src="https://placehold.co/100x100/EFEFEF/AAAAAA?text=Foto"
+              alt="Foto Bendahara"
+            />
+            <h3>Nama Bendahara</h3>
+            <p>Bendahara</p>
           </div>
-        </a>
-        <a href="#" class="org-card-link">
+        </div>
+
+        <!-- Level Seksi-seksi -->
+        <div class="org-level">
           <div class="org-card">
-            <div class="org-card-title">PKK</div>
-            <div class="org-card-desc">
-              Gerakan pemberdayaan dan kesejahteraan keluarga.
-            </div>
+            <img
+              src="https://placehold.co/100x100/EFEFEF/AAAAAA?text=Foto"
+              alt="Foto Seksi Keamanan"
+            />
+            <h3>Nama Koordinator</h3>
+            <p>Seksi Keamanan</p>
           </div>
-        </a>
+          <div class="org-card">
+            <img
+              src="https://placehold.co/100x100/EFEFEF/AAAAAA?text=Foto"
+              alt="Foto Seksi Kebersihan"
+            />
+            <h3>Nama Koordinator</h3>
+            <p>Seksi Kebersihan</p>
+          </div>
+          <!-- Tambahkan seksi lainnya di sini -->
+        </div>
       </div>
     </main>
 

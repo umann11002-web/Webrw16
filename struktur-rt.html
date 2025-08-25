@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar Pengurus RT - RW 16</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <style>
+      .main-content {
+        padding: 2rem 5%;
+      }
+      .rt-selection-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1.5rem;
+      }
+      .rt-card {
+        background: white;
+        padding: 2rem 1rem;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-decoration: none;
+        color: var(--dark-text);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, background-color 0.2s;
+      }
+      .rt-card:hover {
+        transform: translateY(-5px);
+        background-color: var(--primary-green);
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <div class="logo">
+          <img src="images/logo16.png" alt="Logo RW 16" />
+          <span>RW 16 Kel. Cibat</span>
+        </div>
+
+        <nav class="navbar">
+          <a href="index.html">Home</a>
+          <a href="berita.html">Berita</a>
+          <a href="layanan.html">Layanan</a>
+          <a href="informasi.html">Informasi</a>
+
+          <!-- Dropdown untuk Tentang Kami -->
+          <div class="dropdown">
+            <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
+              >Tentang Kami <i class="fas fa-chevron-down"></i
+            ></a>
+            <div class="dropdown-menu" id="tentang-kami-menu">
+              <a href="visi-misi.html">Visi & Misi</a>
+              <a href="struktur-organisasi.html">Struktur Organisasi</a>
+              <a href="galeri.html">Galeri</a>
+            </div>
+          </div>
+
+          <!-- Dropdown untuk Profil Pengguna (disembunyikan dulu) -->
+          <div class="dropdown" id="profil-dropdown" style="display: none">
+            <a href="#" class="dropdown-toggle" id="profil-toggle"
+              >Profil <i class="fas fa-chevron-down"></i
+            ></a>
+            <div class="dropdown-menu" id="profil-menu">
+              <a href="riwayat.html">Riwayat Saya</a>
+              <a href="#" id="logout-link-nav">Logout</a>
+            </div>
+          </div>
+
+          <!-- Tombol Login (untuk pengunjung) -->
+          <a href="login.html" id="login-button-nav">Login</a>
+        </nav>
+
+        <button class="hamburger" id="hamburger-menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <h1>Pilih Rukun Tetangga (RT)</h1>
+      <p>Silakan pilih RT untuk melihat detail kepengurusannya.</p>
+
+      <div class="rt-selection-grid">
+        <a href="#" class="rt-card">RT 01</a>
+        <a href="#" class="rt-card">RT 02</a>
+        <a href="#" class="rt-card">RT 03</a>
+        <a href="#" class="rt-card">RT 04</a>
+        <a href="#" class="rt-card">RT 05</a>
+        <a href="#" class="rt-card">RT 06</a>
+        <a href="#" class="rt-card">RT 07</a>
+        <a href="#" class="rt-card">RT 08</a>
+      </div>
+    </main>
+
+    <script src="script.js" type="module"></script>
+  </body>
+</html>
