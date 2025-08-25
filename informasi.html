@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Informasi Kependudukan - RW 16</title>
     <link rel="stylesheet" href="style.css" />
-    <!-- Kita butuh Font Awesome untuk ikon -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
-    <!-- Library untuk membuat grafik -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       .info-main {
@@ -70,32 +68,28 @@
         background: white;
         padding: 2rem;
         border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
       }
       .chart-container h2 {
         border-left: 5px solid var(--primary-green);
         padding-left: 10px;
+        margin-top: 0;
       }
     </style>
   </head>
   <body>
+    <!-- Header & Navigasi Konsisten -->
     <header>
       <div class="header-content">
         <div class="logo">
           <img src="images/logo16.png" alt="Logo RW 16" />
           <span>RW 16 Kel. Cibat</span>
         </div>
-
-        <!-- ================================== -->
-        <!-- ===== NAVIGASI YANG DIPERBARUI ===== -->
-        <!-- ================================== -->
         <nav class="navbar">
           <a href="index.html">Home</a>
-          <a href="#">Berita</a>
+          <a href="berita.html">Berita</a>
           <a href="layanan.html">Layanan</a>
-          <a href="#">Informasi</a>
-
-          <!-- Dropdown untuk Tentang Kami -->
+          <a href="informasi.html">Informasi</a>
           <div class="dropdown">
             <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
               >Tentang Kami <i class="fas fa-chevron-down"></i
@@ -106,8 +100,6 @@
               <a href="galeri.html">Galeri</a>
             </div>
           </div>
-
-          <!-- Dropdown untuk Profil Pengguna (disembunyikan dulu) -->
           <div class="dropdown" id="profil-dropdown" style="display: none">
             <a href="#" class="dropdown-toggle" id="profil-toggle"
               >Profil <i class="fas fa-chevron-down"></i
@@ -117,11 +109,8 @@
               <a href="#" id="logout-link-nav">Logout</a>
             </div>
           </div>
-
-          <!-- Tombol Login (untuk pengunjung) -->
           <a href="login.html" id="login-button-nav">Login</a>
         </nav>
-
         <button class="hamburger" id="hamburger-menu">
           <i class="fas fa-bars"></i>
         </button>
@@ -136,41 +125,39 @@
           <div class="icon total"><i class="fas fa-users"></i></div>
           <div class="text">
             <h3>TOTAL PENDUDUK</h3>
-            <p id="total-penduduk">1348</p>
+            <p id="total-penduduk">...</p>
           </div>
         </div>
         <div class="summary-card">
           <div class="icon kk"><i class="fas fa-house-user"></i></div>
           <div class="text">
             <h3>KEPALA KELUARGA</h3>
-            <p id="kepala-keluarga">304</p>
+            <p id="kepala-keluarga">...</p>
           </div>
         </div>
         <div class="summary-card">
           <div class="icon wanita"><i class="fas fa-female"></i></div>
           <div class="text">
             <h3>PEREMPUAN</h3>
-            <p id="jumlah-wanita">543</p>
+            <p id="jumlah-wanita">...</p>
           </div>
         </div>
         <div class="summary-card">
           <div class="icon pria"><i class="fas fa-male"></i></div>
           <div class="text">
             <h3>LAKI-LAKI</h3>
-            <p id="jumlah-pria">605</p>
+            <p id="jumlah-pria">...</p>
           </div>
         </div>
       </div>
 
       <div class="chart-container">
-        <h2>Berdasarkan Jenis Kelamin</h2>
-        <canvas id="chart-gender"></canvas>
+        <h2>Berdasarkan Kelompok Umur</h2>
+        <canvas id="piramida-penduduk-chart"></canvas>
       </div>
     </main>
 
-    <!-- Panggil script.js agar nav bar berfungsi -->
     <script src="script.js" type="module"></script>
-    <!-- Panggil script khusus untuk halaman ini -->
     <script src="informasi.js" type="module"></script>
   </body>
 </html>

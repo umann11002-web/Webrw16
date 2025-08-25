@@ -17,7 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Fungsi utama untuk memuat data statistik
+// Fungsi utama untuk memuat semua data statistik
 async function loadStatistik() {
   try {
     const docRef = doc(db, "statistik", "data_penduduk");
@@ -25,19 +25,33 @@ async function loadStatistik() {
 
     if (docSnap.exists()) {
       const data = docSnap.data();
+      const kelompokUmur = data.kelompokUmur || {};
 
-      // 1. Update kartu ringkasan
+      // --- PENGHITUNGAN TOTAL OTOMATIS ---
+      let totalPria = 0;
+      let totalWanita = 0;
+      Object.values(kelompokUmur).forEach((kelompok) => {
+        totalPria += kelompok.pria || 0;
+        totalWanita += kelompok.wanita || 0;
+      });
+      const totalPenduduk = totalPria + totalWanita;
+
+      // --- UPDATE KARTU RINGKASAN ---
       document.getElementById("total-penduduk").textContent =
-        data.totalPenduduk + " Jiwa";
+        totalPenduduk + " Jiwa";
       document.getElementById("kepala-keluarga").textContent =
         data.kepalaKeluarga + " Jiwa";
       document.getElementById("jumlah-wanita").textContent =
-        data.jumlahWanita + " Jiwa";
-      document.getElementById("jumlah-pria").textContent =
-        data.jumlahPria + " Jiwa";
+        totalWanita + " Jiwa";
+      document.getElementById("jumlah-pria").textContent = totalPria + " Jiwa";
 
-      // 2. Buat grafik jenis kelamin
-      buatGrafikGender(data.jumlahPria, data.jumlahWanita);
+      // --- BUAT PIRAMIDA PENDUDUK ---
+      const labels = Object.keys(kelompokUmur).sort(
+        (a, b) => parseInt(a.split("-")[0]) - parseInt(b.split("-")[0])
+      );
+      const dataPria = labels.map((label) => kelompokUmur[label].pria);
+      const dataWanita = labels.map((label) => kelompokUmur[label].wanita);
+      buatPiramida(labels, dataPria, dataWanita);
     } else {
       console.log("Dokumen statistik tidak ditemukan!");
     }
@@ -46,40 +60,58 @@ async function loadStatistik() {
   }
 }
 
-// Fungsi untuk membuat grafik menggunakan Chart.js
-function buatGrafikGender(pria, wanita) {
-  const ctx = document.getElementById("chart-gender").getContext("2d");
+// Fungsi untuk membuat grafik piramida (tidak berubah)
+function buatPiramida(labels, dataPria, dataWanita) {
+  const ctx = document
+    .getElementById("piramida-penduduk-chart")
+    .getContext("2d");
   new Chart(ctx, {
-    type: "bar", // Tipe grafik: bar, pie, line, dll.
+    type: "bar",
     data: {
-      labels: ["Laki-laki", "Perempuan"],
+      labels: labels,
       datasets: [
         {
-          label: "Jumlah Penduduk",
-          data: [pria, wanita],
-          backgroundColor: [
-            "rgba(54, 162, 235, 0.6)", // Warna biru untuk pria
-            "rgba(255, 99, 132, 0.6)", // Warna pink untuk wanita
-          ],
-          borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)"],
+          label: "Laki-Laki",
+          data: dataPria.map((num) => -num),
+          backgroundColor: "rgba(54, 162, 235, 0.6)",
+          borderColor: "rgba(54, 162, 235, 1)",
           borderWidth: 1,
+          barPercentage: 0.9,
+          categoryPercentage: 0.8,
+        },
+        {
+          label: "Perempuan",
+          data: dataWanita,
+          backgroundColor: "rgba(255, 99, 132, 0.6)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+          barPercentage: 0.9,
+          categoryPercentage: 0.8,
         },
       ],
     },
     options: {
+      indexAxis: "y",
+      responsive: true,
       scales: {
-        y: {
-          beginAtZero: true,
+        x: {
+          stacked: true,
+          min: -100,
+          max: 100,
+          ticks: { callback: (value) => Math.abs(value) },
         },
+        y: { stacked: true, beginAtZero: true },
       },
       plugins: {
-        legend: {
-          display: false, // Sembunyikan legenda
+        tooltip: {
+          callbacks: {
+            label: (context) =>
+              `${context.dataset.label || ""}: ${Math.abs(context.raw)}`,
+          },
         },
       },
     },
   });
 }
 
-// Panggil fungsi utama saat halaman dimuat
 document.addEventListener("DOMContentLoaded", loadStatistik);
