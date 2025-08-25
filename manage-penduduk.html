@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelola Statistik Penduduk - Admin</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <style>
+      /* Menggunakan style yang sama dengan halaman admin lainnya */
+      .admin-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 5%;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      .admin-nav .nav-links a {
+        text-decoration: none;
+        color: var(--dark-text);
+        margin: 0 15px;
+        font-weight: 500;
+      }
+      .admin-nav .logout-btn {
+        background-color: #dc3545;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+      .manage-main {
+        padding: 2rem 5%;
+      }
+      .form-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        max-width: 600px;
+        margin: auto;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .form-card h1 {
+        margin-top: 0;
+      }
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1.1rem;
+      }
+      .submit-btn {
+        padding: 0.8rem 2rem;
+        border: none;
+        background-color: var(--primary-green);
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="admin-nav">
+      <!-- Salin-tempel nav bar dari admin.html di sini -->
+      <div class="nav-title"><strong>Dashboard Admin</strong></div>
+      <div class="nav-links">
+        <a href="admin.html">Home</a>
+        <a href="#">Berita</a>
+        <a href="manage-layanan.html">Layanan</a>
+        <a href="#">Informasi</a>
+        <a href="#">Tentang Kami</a>
+        <a href="#" id="logout-btn" class="logout-btn">Logout</a>
+      </div>
+    </header>
+
+    <main class="manage-main">
+      <div class="form-card">
+        <h1>Update Statistik Penduduk</h1>
+        <p>
+          Masukkan angka terbaru untuk data kependudukan. Data ini akan
+          ditampilkan di halaman Informasi untuk publik.
+        </p>
+        <form id="statistik-form">
+          <div class="form-group">
+            <label for="total-penduduk">Total Penduduk</label>
+            <input type="number" id="total-penduduk" required />
+          </div>
+          <div class="form-group">
+            <label for="kepala-keluarga">Jumlah Kepala Keluarga</label>
+            <input type="number" id="kepala-keluarga" required />
+          </div>
+          <div class="form-group">
+            <label for="jumlah-pria">Jumlah Laki-laki</label>
+            <input type="number" id="jumlah-pria" required />
+          </div>
+          <div class="form-group">
+            <label for="jumlah-wanita">Jumlah Perempuan</label>
+            <input type="number" id="jumlah-wanita" required />
+          </div>
+          <button type="submit" class="submit-btn" id="save-btn">
+            Simpan Perubahan
+          </button>
+        </form>
+        <p id="status-message" style="margin-top: 1rem; font-weight: 600"></p>
+      </div>
+    </main>
+
+    <script src="manage-penduduk.js" type="module"></script>
+  </body>
+</html>

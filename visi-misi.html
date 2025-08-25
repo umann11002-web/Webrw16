@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visi & Misi - RW 16</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <style>
+      .main-content {
+        padding: 2rem 5%;
+        max-width: 900px;
+        margin: auto;
+      }
+      .vision-mission-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+      }
+      .vision-mission-card h2 {
+        border-left: 5px solid var(--primary-green);
+        padding-left: 10px;
+        margin-top: 0;
+      }
+      .vision-mission-card blockquote {
+        font-size: 1.1rem;
+        font-style: italic;
+        color: #555;
+        border-left: 3px solid #eee;
+        padding-left: 1.5rem;
+        margin: 1rem 0;
+      }
+      .vision-mission-card ul {
+        list-style: none;
+        padding-left: 0;
+      }
+      .vision-mission-card li {
+        padding: 0.5rem 0;
+        display: flex;
+        align-items: flex-start;
+      }
+      .vision-mission-card li i {
+        margin-right: 15px;
+        margin-top: 5px;
+        color: var(--primary-green);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header & Navigasi Konsisten -->
+    <header>
+      <div class="header-content">
+        <div class="logo">
+          <img src="images/logo16.png" alt="Logo RW 16" />
+          <span>RW 16 Kel. Cibat</span>
+        </div>
+        <nav class="navbar">
+          <a href="index.html">Home</a>
+          <a href="berita.html">Berita</a>
+          <a href="layanan.html">Layanan</a>
+          <a href="informasi.html">Informasi</a>
+          <div class="dropdown">
+            <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
+              >Tentang Kami <i class="fas fa-chevron-down"></i
+            ></a>
+            <div class="dropdown-menu" id="tentang-kami-menu">
+              <a href="visi-misi.html">Visi & Misi</a>
+              <a href="struktur-organisasi.html">Struktur Organisasi</a>
+              <a href="galeri.html">Galeri</a>
+            </div>
+          </div>
+          <div class="dropdown" id="profil-dropdown" style="display: none">
+            <a href="#" class="dropdown-toggle" id="profil-toggle"
+              >Profil <i class="fas fa-chevron-down"></i
+            ></a>
+            <div class="dropdown-menu" id="profil-menu">
+              <a href="riwayat.html">Riwayat Saya</a>
+              <a href="#" id="logout-link-nav">Logout</a>
+            </div>
+          </div>
+          <a href="login.html" id="login-button-nav">Login</a>
+        </nav>
+        <button class="hamburger" id="hamburger-menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <h1>Visi & Misi RW 16</h1>
+
+      <!-- Kartu Visi -->
+      <div class="vision-mission-card">
+        <h2>Visi</h2>
+        <blockquote>
+          "Menjadi Rukun Warga yang Maju, Aman, Sejahtera, dan Berbudaya, serta
+          Berlandaskan Semangat Gotong Royong."
+        </blockquote>
+      </div>
+
+      <!-- Kartu Misi -->
+      <div class="vision-mission-card">
+        <h2>Misi</h2>
+        <ul>
+          <li>
+            <i class="fas fa-check-circle"></i>
+            <div>
+              Meningkatkan partisipasi aktif warga dalam setiap kegiatan untuk
+              mempererat tali persaudaraan.
+            </div>
+          </li>
+          <li>
+            <i class="fas fa-check-circle"></i>
+            <div>
+              Menciptakan lingkungan yang bersih, sehat, dan aman melalui
+              program kerja bakti dan siskamling.
+            </div>
+          </li>
+          <li>
+            <i class="fas fa-check-circle"></i>
+            <div>
+              Mengoptimalkan pelayanan administrasi yang cepat, mudah, dan
+              transparan bagi seluruh warga.
+            </div>
+          </li>
+          <li>
+            <i class="fas fa-check-circle"></i>
+            <div>
+              Mengembangkan potensi generasi muda melalui kegiatan Karang Taruna
+              yang positif dan kreatif.
+            </div>
+          </li>
+          <li>
+            <i class="fas fa-check-circle"></i>
+            <div>
+              Menjalin kemitraan yang baik dengan pemerintah dan pihak terkait
+              untuk pembangunan lingkungan.
+            </div>
+          </li>
+        </ul>
+      </div>
+    </main>
+
+    <script src="script.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Informasi Kependudukan - RW 16</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Kita butuh Font Awesome untuk ikon -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <!-- Library untuk membuat grafik -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .info-main {
+        padding: 2rem 5%;
+      }
+      .info-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+      }
+      .summary-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .summary-card .icon {
+        font-size: 2rem;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: white;
+        flex-shrink: 0;
+      }
+      .summary-card .icon.total {
+        background-color: #ffc107;
+      }
+      .summary-card .icon.kk {
+        background-color: #17a2b8;
+      }
+      .summary-card .icon.wanita {
+        background-color: #dc3545;
+      }
+      .summary-card .icon.pria {
+        background-color: #007bff;
+      }
+      .summary-card .text h3 {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #6c757d;
+        font-weight: 500;
+      }
+      .summary-card .text p {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #343a40;
+      }
+      .chart-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+      .chart-container h2 {
+        border-left: 5px solid var(--primary-green);
+        padding-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <div class="logo">
+          <img src="images/logo16.png" alt="Logo RW 16" />
+          <span>RW 16 Kel. Cibat</span>
+        </div>
+
+        <!-- ================================== -->
+        <!-- ===== NAVIGASI YANG DIPERBARUI ===== -->
+        <!-- ================================== -->
+        <nav class="navbar">
+          <a href="index.html">Home</a>
+          <a href="#">Berita</a>
+          <a href="layanan.html">Layanan</a>
+          <a href="#">Informasi</a>
+
+          <!-- Dropdown untuk Tentang Kami -->
+          <div class="dropdown">
+            <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
+              >Tentang Kami <i class="fas fa-chevron-down"></i
+            ></a>
+            <div class="dropdown-menu" id="tentang-kami-menu">
+              <a href="visi-misi.html">Visi & Misi</a>
+              <a href="struktur-organisasi.html">Struktur Organisasi</a>
+              <a href="galeri.html">Galeri</a>
+            </div>
+          </div>
+
+          <!-- Dropdown untuk Profil Pengguna (disembunyikan dulu) -->
+          <div class="dropdown" id="profil-dropdown" style="display: none">
+            <a href="#" class="dropdown-toggle" id="profil-toggle"
+              >Profil <i class="fas fa-chevron-down"></i
+            ></a>
+            <div class="dropdown-menu" id="profil-menu">
+              <a href="riwayat.html">Riwayat Saya</a>
+              <a href="#" id="logout-link-nav">Logout</a>
+            </div>
+          </div>
+
+          <!-- Tombol Login (untuk pengunjung) -->
+          <a href="login.html" id="login-button-nav">Login</a>
+        </nav>
+
+        <button class="hamburger" id="hamburger-menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </header>
+
+    <main class="info-main">
+      <h1>Statistik Penduduk RW 16</h1>
+
+      <div class="info-summary-grid">
+        <div class="summary-card">
+          <div class="icon total"><i class="fas fa-users"></i></div>
+          <div class="text">
+            <h3>TOTAL PENDUDUK</h3>
+            <p id="total-penduduk">1348</p>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="icon kk"><i class="fas fa-house-user"></i></div>
+          <div class="text">
+            <h3>KEPALA KELUARGA</h3>
+            <p id="kepala-keluarga">304</p>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="icon wanita"><i class="fas fa-female"></i></div>
+          <div class="text">
+            <h3>PEREMPUAN</h3>
+            <p id="jumlah-wanita">543</p>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="icon pria"><i class="fas fa-male"></i></div>
+          <div class="text">
+            <h3>LAKI-LAKI</h3>
+            <p id="jumlah-pria">605</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <h2>Berdasarkan Jenis Kelamin</h2>
+        <canvas id="chart-gender"></canvas>
+      </div>
+    </main>
+
+    <!-- Panggil script.js agar nav bar berfungsi -->
+    <script src="script.js" type="module"></script>
+    <!-- Panggil script khusus untuk halaman ini -->
+    <script src="informasi.js" type="module"></script>
+  </body>
+</html>

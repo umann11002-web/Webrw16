@@ -343,3 +343,48 @@ footer {
 .dropdown-menu a:hover {
   background-color: var(--bg-light);
 }
+
+@media (max-width: 768px) {
+  /* --- Perbaikan Navigasi Admin --- */
+  .admin-nav {
+    flex-direction: column; /* Susun logo dan link ke bawah */
+    align-items: flex-start; /* Rata kiri */
+    gap: 1rem; /* Beri jarak */
+  }
+
+  .admin-nav .nav-links {
+    display: flex;
+    flex-direction: column; /* Susun link menu ke bawah */
+    align-items: flex-start; /* Rata kiri */
+    gap: 0.8rem; /* Beri jarak antar link */
+  }
+
+  .admin-nav .nav-links a {
+    margin: 0; /* Hapus margin horizontal */
+  }
+
+  /* --- Perbaikan Umum Halaman Admin --- */
+  .admin-main,
+  .manage-main {
+    padding: 1.5rem 5%; /* Kurangi padding di HP */
+  }
+
+  .admin-main h1 {
+    font-size: 1.5rem; /* Kecilkan judul utama */
+  }
+
+  /* --- Perbaikan Tabel di Dashboard --- */
+  /* div yang membungkus tabel akan bisa di-scroll ke samping */
+  .admin-content div[style*="overflow-x:auto"] {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  /* Beri tahu user bahwa tabel bisa di-scroll */
+  .admin-content p::after {
+    content: " (Geser tabel ke samping untuk melihat semua kolom)";
+    font-style: italic;
+    font-size: 0.8rem;
+    color: #6c757d;
+  }
+}

@@ -3,35 +3,52 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Berita Terkini - RW 16</title>
+    <title>Galeri Kegiatan - RW 16</title>
     <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
     <style>
-      .berita-main {
+      .main-content {
         padding: 2rem 5%;
       }
-      /* Menggunakan kembali style dari halaman layanan */
-      .berita-grid {
+      .gallery-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
       }
-      /* Menggunakan kembali style kartu berita dari style.css */
-      .kartu-berita {
-        background: white;
+      .gallery-item {
         border-radius: 8px;
         overflow: hidden;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-        transition: transform 0.2s;
-        text-decoration: none; /* Menghilangkan garis bawah jika kartu adalah link */
-        color: var(--dark-text);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        cursor: pointer;
       }
-      .kartu-berita:hover {
-        transform: translateY(-5px);
+      .gallery-item img {
+        width: 100%;
+        height: 220px; /* Sedikit lebih tinggi untuk tampilan yang lebih baik */
+        object-fit: cover;
+        display: block;
+        transition: transform 0.3s ease;
+      }
+      .gallery-item:hover img {
+        transform: scale(1.05);
+      }
+      .gallery-item .overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        color: white;
+        padding: 1rem;
+        font-weight: 600;
       }
     </style>
   </head>
   <body>
-    <!-- Salin-tempel header & nav bar dari index.html ke sini -->
+    <!-- Header & Navigasi Konsisten -->
     <header>
       <div class="header-content">
         <div class="logo">
@@ -70,16 +87,15 @@
       </div>
     </header>
 
-    <main class="berita-main">
-      <h1>Berita & Pengumuman</h1>
-      <div class="berita-grid" id="berita-grid-container">
-        <p>Memuat berita...</p>
+    <main class="main-content">
+      <h1>Galeri Kegiatan</h1>
+
+      <div class="gallery-grid" id="gallery-grid-container">
+        <p>Memuat galeri...</p>
       </div>
     </main>
 
-    <!-- Panggil script universal untuk nav bar -->
     <script src="script.js" type="module"></script>
-    <!-- Panggil script khusus untuk halaman ini -->
-    <script src="berita.js" type="module"></script>
+    <script src="galeri.js" type="module"></script>
   </body>
 </html>

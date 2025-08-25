@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Struktur Organisasi - RW 16</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <style>
+      .main-content {
+        padding: 2rem 5%;
+      }
+      .org-chart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+      }
+      .org-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 250px;
+      }
+      .org-card img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1rem;
+        border: 3px solid #eee;
+      }
+      .org-card h3 {
+        margin: 0 0 5px 0;
+        font-size: 1.2rem;
+      }
+      .org-card p {
+        margin: 0;
+        color: #6c757d;
+        font-weight: 500;
+      }
+      .org-level {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header & Navigasi Konsisten -->
+    <header>
+      <div class="header-content">
+        <div class="logo">
+          <img src="images/logo16.png" alt="Logo RW 16" />
+          <span>RW 16 Kel. Cibat</span>
+        </div>
+        <nav class="navbar">
+          <a href="index.html">Home</a>
+          <a href="berita.html">Berita</a>
+          <a href="layanan.html">Layanan</a>
+          <a href="informasi.html">Informasi</a>
+          <div class="dropdown">
+            <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
+              >Tentang Kami <i class="fas fa-chevron-down"></i
+            ></a>
+            <div class="dropdown-menu" id="tentang-kami-menu">
+              <a href="#">Visi & Misi</a>
+              <a href="struktur-organisasi.html">Struktur Organisasi</a>
+              <a href="#">Galeri</a>
+            </div>
+          </div>
+          <div class="dropdown" id="profil-dropdown" style="display: none">
+            <a href="#" class="dropdown-toggle" id="profil-toggle"
+              >Profil <i class="fas fa-chevron-down"></i
+            ></a>
+            <div class="dropdown-menu" id="profil-menu">
+              <a href="riwayat.html">Riwayat Saya</a>
+              <a href="#" id="logout-link-nav">Logout</a>
+            </div>
+          </div>
+          <a href="login.html" id="login-button-nav">Login</a>
+        </nav>
+        <button class="hamburger" id="hamburger-menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <h1>Struktur Organisasi RW 16</h1>
+
+      <div class="org-chart">
+        <!-- Ketua RW -->
+        <div class="org-card">
+          <img
+            src="https://placehold.co/100x100/EFEFEF/AAAAAA?text=Foto"
+            alt="Foto Ketua RW"
+          />
+          <h3>Nama Ketua RW</h3>
+          <p>Ketua RW 16</p>
+        </div>
+
+        <!-- Level Wakil, Sekretaris, Bendahara -->
+        <div class="org-level">
+          <div class="org-card">
+            <img
+              src="https://placehold.co/100x100/EFEFEF/AAAAAA?text=Foto"
+              alt="Foto Wakil"
+            />
+            <h3>Nama Wakil</h3>
+            <p>Wakil Ketua RW</p>
+          </div>
+          <div class="org-card">
+            <img
+              src="https://placehold.co/100x100/EFEFEF/AAAAAA?text=Foto"
+              alt="Foto Sekretaris"
+            />
+            <h3>Nama Sekretaris</h3>
+            <p>Sekretaris</p>
+          </div>
+          <div class="org-card">
+            <img
+              src="https://placehold.co/100x100/EFEFEF/AAAAAA?text=Foto"
+              alt="Foto Bendahara"
+            />
+            <h3>Nama Bendahara</h3>
+            <p>Bendahara</p>
+          </div>
+        </div>
+
+        <!-- Level Seksi-seksi -->
+        <div class="org-level">
+          <div class="org-card">
+            <img
+              src="https://placehold.co/100x100/EFEFEF/AAAAAA?text=Foto"
+              alt="Foto Seksi Keamanan"
+            />
+            <h3>Nama Koordinator</h3>
+            <p>Seksi Keamanan</p>
+          </div>
+          <div class="org-card">
+            <img
+              src="https://placehold.co/100x100/EFEFEF/AAAAAA?text=Foto"
+              alt="Foto Seksi Kebersihan"
+            />
+            <h3>Nama Koordinator</h3>
+            <p>Seksi Kebersihan</p>
+          </div>
+          <!-- Tambahkan seksi lainnya di sini -->
+        </div>
+      </div>
+    </main>
+
+    <script src="script.js" type="module"></script>
+  </body>
+</html>
