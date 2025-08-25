@@ -61,7 +61,7 @@ loginForm.addEventListener("submit", async (e) => {
         window.location.href = "admin.html"; // Arahkan admin ke dashboard
       } else {
         alert("Login sebagai Warga berhasil!");
-        window.location.href = "layanan.html"; // Arahkan warga ke halaman layanan
+        window.location.href = "index.html"; // Arahkan warga ke halaman home
       }
     } else {
       // Jika data user tidak ditemukan di firestore (kasus aneh)
