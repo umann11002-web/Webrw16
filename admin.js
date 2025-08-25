@@ -13,7 +13,7 @@ import {
   orderBy,
   doc,
   updateDoc,
-  getDoc, // Pastikan getDoc di-import
+  getDoc,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -29,40 +29,53 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const tableBody = document.getElementById("pengajuan-table-body");
-const logoutButton = document.getElementById("logout-btn");
+// Menunggu sampai seluruh halaman HTML selesai dimuat
+document.addEventListener("DOMContentLoaded", () => {
+  // === LOGIKA HAMBURGER MENU ===
+  const hamburgerBtn = document.getElementById("admin-hamburger-btn");
+  const navLinks = document.getElementById("admin-nav-links");
+  if (hamburgerBtn && navLinks) {
+    hamburgerBtn.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+    });
+  }
 
-// Satpam digital (DIPERBARUI)
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    // Verifikasi peran admin SEBELUM mengambil data
-    const userDocRef = doc(db, "users", user.uid);
-    const userDocSnap = await getDoc(userDocRef);
+  // === SATPAM DIGITAL & PEMUAT DATA ===
+  const tableBody = document.getElementById("pengajuan-table-body");
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
 
-    if (userDocSnap.exists() && userDocSnap.data().role === "admin") {
-      // Jika benar admin, baru muat data
-      tampilkanPengajuan();
+      if (userDocSnap.exists() && userDocSnap.data().role === "admin") {
+        // Hanya muat data jika tabelnya ada di halaman ini
+        if (tableBody) {
+          tampilkanPengajuan();
+        }
+      } else {
+        alert("Akses ditolak. Anda bukan admin.");
+        window.location.href = "index.html";
+      }
     } else {
-      // Jika bukan admin, tendang
-      alert("Akses ditolak. Anda bukan admin.");
-      window.location.href = "index.html";
+      window.location.href = "login.html";
     }
-  } else {
-    window.location.href = "login.html";
+  });
+
+  // === TOMBOL LOGOUT ===
+  const logoutButton = document.getElementById("logout-btn");
+  if (logoutButton) {
+    logoutButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      });
+    });
   }
 });
 
-// Tombol Logout
-if (logoutButton) {
-  logoutButton.addEventListener("click", () => {
-    signOut(auth).then(() => {
-      window.location.href = "login.html";
-    });
-  });
-}
-
 // === FUNGSI TAMPILKAN PENGAJUAN ===
 async function tampilkanPengajuan() {
+  const tableBody = document.getElementById("pengajuan-table-body");
   try {
     const q = query(
       collection(db, "pengajuanSurat"),
