@@ -13,7 +13,7 @@ import {
   orderBy,
   doc,
   updateDoc,
-  getDoc,
+  getDoc, // Pastikan getDoc di-import
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -32,16 +32,18 @@ const db = getFirestore(app);
 const tableBody = document.getElementById("pengajuan-table-body");
 const logoutButton = document.getElementById("logout-btn");
 
-// Satpam digital (Disederhanakan untuk desain baru)
+// Satpam digital (DIPERBARUI)
 onAuthStateChanged(auth, async (user) => {
   if (user) {
+    // Verifikasi peran admin SEBELUM mengambil data
     const userDocRef = doc(db, "users", user.uid);
     const userDocSnap = await getDoc(userDocRef);
 
     if (userDocSnap.exists() && userDocSnap.data().role === "admin") {
-      // Jika benar admin, langsung muat data
+      // Jika benar admin, baru muat data
       tampilkanPengajuan();
     } else {
+      // Jika bukan admin, tendang
       alert("Akses ditolak. Anda bukan admin.");
       window.location.href = "index.html";
     }
