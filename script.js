@@ -4,6 +4,8 @@ import {
   getFirestore,
   collection,
   getDocs,
+  doc,
+  getDoc,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 import {
   getAuth,
@@ -11,7 +13,7 @@ import {
   signOut,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
-// Konfigurasi Firebase-mu
+// Konfigurasi Firebase-mu (sudah disesuaikan)
 const firebaseConfig = {
   apiKey: "AIzaSyBD4ypi0bq71tJfDdyqgdLL3A_RSye9Q7I",
   authDomain: "rw16cibabat-dbf87.firebaseapp.com",
@@ -26,27 +28,29 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// === CEK STATUS LOGIN & UPDATE NAVIGASI ===
-// Kode ini aman di luar karena ia mengubah tampilan setelah statusnya berubah
-const loginButtonNav = document.getElementById("login-button-nav");
-const profilDropdown = document.getElementById("profil-dropdown");
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    if (loginButtonNav) loginButtonNav.style.display = "none";
-    if (profilDropdown) profilDropdown.style.display = "inline-block";
-  } else {
-    if (loginButtonNav) loginButtonNav.style.display = "inline-block";
-    if (profilDropdown) profilDropdown.style.display = "none";
-  }
-});
-
 // === SEMUA LOGIKA YANG BERINTERAKSI DENGAN DOM KITA MASUKKAN KE SINI ===
 document.addEventListener("DOMContentLoaded", () => {
+  // --- Logika Status Login & Navigasi ---
+  const loginButtonNav = document.getElementById("login-button-nav");
+  const profilDropdown = document.getElementById("profil-dropdown");
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      if (loginButtonNav) loginButtonNav.style.display = "none";
+      if (profilDropdown) profilDropdown.style.display = "inline-block";
+    } else {
+      if (loginButtonNav) loginButtonNav.style.display = "inline-block";
+      if (profilDropdown) profilDropdown.style.display = "none";
+    }
+  });
+
   // --- Logika untuk Slider Berita (hanya di index.html) ---
-  const beritaContainer = document.getElementById("berita-container");
-  if (beritaContainer) {
+  if (document.getElementById("berita-container")) {
     tampilkanBerita();
+  }
+
+  // --- LOGIKA BARU UNTUK STATISTIK DI HOME ---
+  if (document.getElementById("home-total-penduduk")) {
+    loadHomeStats();
   }
 
   // --- Logika untuk Hamburger Menu ---
@@ -103,11 +107,44 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// === FUNGSI-FUNGSI PEMBANTU (TETAP DI LUAR) ===
+// === FUNGSI-FUNGSI PEMBANTU ===
+
+// FUNGSI BARU UNTUK MEMUAT STATISTIK DI HOME
+async function loadHomeStats() {
+  try {
+    const docRef = doc(db, "statistik", "data_penduduk");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const kelompokUmur = data.kelompokUmur || {};
+
+      let totalPria = 0;
+      let totalWanita = 0;
+      Object.values(kelompokUmur).forEach((kelompok) => {
+        totalPria += kelompok.pria || 0;
+        totalWanita += kelompok.wanita || 0;
+      });
+      const totalPenduduk = totalPria + totalWanita;
+
+      // Update elemen di index.html
+      document.getElementById("home-total-penduduk").textContent =
+        totalPenduduk;
+      document.getElementById("home-kepala-keluarga").textContent =
+        data.kepalaKeluarga;
+      document.getElementById("home-jumlah-wanita").textContent = totalWanita;
+      document.getElementById("home-jumlah-pria").textContent = totalPria;
+    } else {
+      console.log("Dokumen statistik tidak ditemukan!");
+    }
+  } catch (error) {
+    console.error("Error mengambil data statistik untuk home: ", error);
+  }
+}
 
 async function tampilkanBerita() {
+  const beritaContainer = document.getElementById("berita-container");
   try {
-    const beritaContainer = document.getElementById("berita-container");
     const querySnapshot = await getDocs(collection(db, "berita"));
     beritaContainer.innerHTML = "";
     querySnapshot.forEach((doc) => {
@@ -129,8 +166,7 @@ async function tampilkanBerita() {
     initializeSwiper();
   } catch (error) {
     console.error("Error mengambil data berita: ", error);
-    document.getElementById("berita-container").innerHTML =
-      "<p>Gagal memuat berita.</p>";
+    beritaContainer.innerHTML = "<p>Gagal memuat berita.</p>";
   }
 }
 
@@ -139,8 +175,14 @@ function initializeSwiper() {
     slidesPerView: 1,
     spaceBetween: 30,
     loop: true,
-    autoplay: { delay: 3000, disableOnInteraction: false },
-    pagination: { el: ".swiper-pagination", clickable: true },
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
     navigation: {
       nextEl: ".swiper-button-next",
       prevEl: ".swiper-button-prev",
