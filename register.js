@@ -54,8 +54,8 @@ registerForm.addEventListener("submit", async (e) => {
     });
 
     console.log("Dokumen user dengan peran berhasil dibuat di Firestore.");
-    alert("Registrasi berhasil! Anda akan diarahkan ke halaman utama.");
-    window.location.href = "index.html";
+    alert("Registrasi berhasil!.");
+    window.location.href = "login.html";
   } catch (error) {
     console.error("Registrasi Gagal:", error.message);
     if (error.code === "auth/email-already-in-use") {
