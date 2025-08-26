@@ -24,6 +24,18 @@ body {
   color: var(--dark-text);
 }
 
+h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 5px solid var(--primary-green);
+  padding-left: 10px;
+}
+
 /* ================================= */
 /* === NAVIGASI PUBLIK (WARGA) === */
 /* ================================= */
@@ -66,7 +78,7 @@ header {
 }
 
 .hamburger {
-  display: none; /* Sembunyikan di desktop */
+  display: none;
   font-size: 1.5rem;
   background: none;
   border: none;
@@ -95,6 +107,7 @@ header {
   z-index: 1;
   border-radius: 4px;
   margin-top: 0.5rem;
+  overflow: hidden;
 }
 .dropdown-menu.active {
   display: block;
@@ -125,16 +138,6 @@ main {
   padding: 2rem 1rem;
   border-radius: 8px;
   margin-bottom: 2rem;
-}
-h1 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-  border-left: 5px solid var(--primary-green);
-  padding-left: 10px;
 }
 
 /* Tombol Informasi */
@@ -183,10 +186,6 @@ h2 {
 .home-stats {
   padding: 0 5%;
   margin-bottom: 2rem;
-}
-.home-stats h2 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
 }
 .home-stats > p {
   color: var(--light-text);
@@ -292,7 +291,7 @@ footer {
 }
 
 /* ================================= */
-/* === NAVIGASI HALAMAN ADMIN === */
+/* === HALAMAN ADMIN (UMUM) === */
 /* ================================= */
 .admin-nav {
   display: flex;
@@ -302,24 +301,79 @@ footer {
   background: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+.admin-nav .nav-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.admin-nav .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
 .admin-nav .nav-links a {
   text-decoration: none;
   color: var(--dark-text);
-  margin: 0 15px;
-  font-weight: 500;
+  padding: 0.5rem;
+}
+.admin-nav .logout-btn {
+  background-color: #dc3545;
+  color: white !important;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 4px;
 }
 .admin-nav .hamburger-btn {
-  display: none; /* Sembunyikan hamburger di desktop */
+  display: none;
   font-size: 1.5rem;
   background: none;
   border: none;
   cursor: pointer;
 }
+.admin-nav .dropdown-menu {
+  margin-top: 0.5rem;
+}
+.admin-main,
+.manage-main {
+  padding: 2rem 5%;
+}
+.admin-main h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+.admin-main h2 {
+  margin-top: 2rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+}
+th,
+td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+thead tr {
+  background-color: #f2f2f2;
+}
+.action-btn {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  margin-right: 5px;
+}
+.btn-approve {
+  background-color: var(--primary-green);
+}
+.btn-reject {
+  background-color: #6c757d;
+}
 
 /* #################################### */
 /* ###   ATURAN RESPONSIVE (SIHIR)  ### */
 /* #################################### */
-
 @media (max-width: 768px) {
   /* --- Navigasi Publik di HP --- */
   .hamburger {
@@ -329,7 +383,7 @@ footer {
     display: none;
     flex-direction: column;
     position: absolute;
-    top: 95px; /* Sesuaikan dengan tinggi header */
+    top: 95px;
     left: 0;
     width: 100%;
     background: white;
@@ -378,15 +432,28 @@ footer {
     display: none;
     flex-direction: column;
     width: 100%;
+    align-items: stretch;
+    gap: 0;
     margin-top: 1rem;
   }
   .admin-nav .nav-links.active {
     display: flex;
   }
-  .admin-nav .nav-links a {
-    margin: 0;
+  .admin-nav .nav-links a,
+  .admin-nav .dropdown-toggle {
     padding: 0.8rem 0;
     border-top: 1px solid #eee;
+  }
+  .admin-nav .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    border-top: 1px dashed #ccc;
+    padding-left: 1rem;
+    margin-top: 0;
+  }
+  .admin-nav .dropdown-menu a {
+    border-top: none;
+    padding: 0.5rem 0;
   }
 
   /* --- Konten Admin di HP --- */
@@ -400,11 +467,6 @@ footer {
   .admin-content div[style*="overflow-x:auto"] {
     border: 1px solid #ddd;
     border-radius: 4px;
-  }
-  .admin-content p::after {
-    content: " (Geser tabel ke samping untuk melihat semua kolom)";
-    font-style: italic;
-    font-size: 0.8rem;
-    color: #6c757d;
+    -webkit-overflow-scrolling: touch;
   }
 }
