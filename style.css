@@ -351,78 +351,94 @@ footer {
   padding: 1rem 5%;
   background: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.admin-nav .nav-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.admin-nav .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 .admin-nav .nav-links a {
   text-decoration: none;
   color: var(--dark-text);
-  margin: 0 15px;
-  font-weight: 500;
+  padding: 0.5rem;
+}
+.admin-nav .logout-btn {
+  background-color: #dc3545;
+  color: white !important;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 4px;
 }
 .admin-nav .hamburger-btn {
-  display: none; /* Sembunyikan hamburger di desktop */
+  display: none;
   font-size: 1.5rem;
   background: none;
   border: none;
   cursor: pointer;
 }
+/* Dropdown di dalam nav admin */
+.admin-nav .dropdown {
+  position: relative;
+}
+.admin-nav .dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 180px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+.admin-nav .dropdown-menu.active {
+  display: block;
+}
+.admin-nav .dropdown-menu a {
+  display: block;
+  width: 100%;
+}
 
-/* --- Aturan untuk HP & Tablet (lebar 768px atau kurang) --- */
+/* Responsif untuk nav admin */
 @media (max-width: 768px) {
   .admin-nav {
     flex-direction: column;
-    align-items: stretch; /* Penuhi lebar */
+    align-items: stretch;
   }
-
   .admin-nav-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
   }
-
   .admin-nav .hamburger-btn {
-    display: block; /* Tampilkan hamburger di HP */
+    display: block;
   }
-
   .admin-nav .nav-links {
-    display: none; /* Sembunyikan menu secara default di HP */
+    display: none;
     flex-direction: column;
     width: 100%;
-    margin-top: 1rem;
+    align-items: stretch;
+    gap: 0;
   }
-
-  /* Kelas 'active' ini akan ditambahkan oleh JavaScript untuk menampilkan menu */
   .admin-nav .nav-links.active {
     display: flex;
   }
-
-  .admin-nav .nav-links a {
-    margin: 0;
-    padding: 0.8rem 0; /* Beri padding vertikal */
+  .admin-nav .nav-links a,
+  .admin-nav .dropdown-toggle {
+    padding: 0.8rem 0;
     border-top: 1px solid #eee;
   }
-
-  /* --- Perbaikan Umum Halaman Admin --- */
-  .admin-main,
-  .manage-main {
-    padding: 1.5rem 5%;
-  }
-
-  .admin-main h1 {
-    font-size: 1.5rem;
-  }
-
-  /* --- Perbaikan Tabel di Dashboard --- */
-  .admin-content div[style*="overflow-x:auto"] {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-
-  .admin-content p::after {
-    content: " (Geser tabel ke samping untuk melihat semua kolom)";
-    font-style: italic;
-    font-size: 0.8rem;
-    color: #6c757d;
+  .admin-nav .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    border-top: 1px dashed #ccc;
+    padding-left: 1rem;
   }
 }
 
