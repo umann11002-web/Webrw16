@@ -15,136 +15,160 @@
     />
   </head>
   <body>
-    <header>
-      <div class="header-content">
-        <div class="logo">
-          <img src="images/logo16.png" alt="Logo RW 16" />
-          <span>RW 16 Kel. Cibat</span>
-        </div>
+    <!-- [PERUBAHAN] Semua konten utama sekarang dibungkus dalam 'page-wrapper' -->
+    <div class="page-wrapper">
+      <header>
+        <div class="header-content">
+          <div class="logo">
+            <img src="images/logo16.png" alt="Logo RW 16" />
+            <span>RW 16 Kel. Cibat</span>
+          </div>
 
-        <nav class="navbar">
-          <a href="index.html">Home</a>
-          <a href="berita.html">Berita</a>
-          <a href="layanan.html">Layanan</a>
-          <a href="informasi.html">Informasi</a>
-
-          <!-- Dropdown untuk Tentang Kami -->
-          <div class="dropdown">
-            <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
-              >Tentang Kami <i class="fas fa-chevron-down"></i
-            ></a>
-            <div class="dropdown-menu" id="tentang-kami-menu">
-              <a href="visi-misi.html">Visi & Misi</a>
-              <a href="struktur-organisasi.html">Struktur Organisasi</a>
-              <a href="galeri.html">Galeri</a>
+          <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="berita.html">Berita</a>
+            <a href="layanan.html">Layanan</a>
+            <a href="informasi.html">Informasi</a>
+            <div class="dropdown">
+              <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
+                >Tentang Kami <i class="fas fa-chevron-down"></i
+              ></a>
+              <div class="dropdown-menu" id="tentang-kami-menu">
+                <a href="visi-misi.html">Visi & Misi</a>
+                <a href="struktur-organisasi.html">Struktur Organisasi</a>
+                <a href="galeri.html">Galeri</a>
+              </div>
             </div>
-          </div>
-
-          <!-- Dropdown untuk Profil Pengguna (disembunyikan dulu) -->
-          <div class="dropdown" id="profil-dropdown" style="display: none">
-            <a href="#" class="dropdown-toggle" id="profil-toggle"
-              >Profil <i class="fas fa-chevron-down"></i
-            ></a>
-            <div class="dropdown-menu" id="profil-menu">
-              <a href="riwayat.html">Riwayat Saya</a>
-              <a href="#" id="logout-link-nav">Logout</a>
+            <div class="dropdown" id="profil-dropdown" style="display: none">
+              <a href="#" class="dropdown-toggle" id="profil-toggle"
+                >Profil <i class="fas fa-chevron-down"></i
+              ></a>
+              <div class="dropdown-menu" id="profil-menu">
+                <a href="riwayat.html">Riwayat Saya</a>
+                <a href="#" id="logout-link-nav">Logout</a>
+              </div>
             </div>
-          </div>
+            <a href="login.html" id="login-button-nav">Login</a>
+          </nav>
 
-          <!-- Tombol Login (untuk pengunjung) -->
-          <a href="login.html" id="login-button-nav">Login</a>
-        </nav>
-
-        <button class="hamburger" id="hamburger-menu">
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
-    </header>
-
-    <main>
-      <!-- ... sisa konten main tetap sama ... -->
-      <section class="hero">
-        <h1>RUKUN WARGA 16</h1>
-        <p>
-          DESKRIPSI SINGKAT MENGENAI RW 16, VISI, MISI, ATAU SAMBUTAN KETUA RW.
-        </p>
-      </section>
-
-      <section class="informasi">
-        <h2>Informasi</h2>
-        <div class="info-buttons">
-          <a href="informasi.html" class="info-btn penduduk">
-            <i class="fas fa-users"></i>
-            <span>Penduduk</span>
-          </a>
-          <a href="#" class="info-btn bansos">
-            <i class="fas fa-hand-holding-heart"></i>
-            <span>Bantuan Sosial</span>
-          </a>
-          <a href="struktur-organisasi.html" class="info-btn struktur-rw">
-            <i class="fas fa-sitemap"></i>
-            <span>Struktur RW</span>
-          </a>
-          <a href="struktur-rt.html" class="info-btn struktur-rt">
-            <i class="fas fa-building-user"></i>
-            <span>Struktur RT</span>
-          </a>
+          <button class="hamburger" id="hamburger-menu">
+            <i class="fas fa-bars"></i>
+          </button>
         </div>
-      </section>
+      </header>
 
-      <section class="home-stats">
-        <h2>Administrasi Penduduk</h2>
-        <p>
-          Sistem digital yang berfungsi mempermudah pengelolaan data dan
-          informasi terkait dengan kependudukan.
-        </p>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <span id="home-total-penduduk">...</span>
-            <p>Penduduk</p>
-          </div>
-          <div class="stat-card">
-            <span id="home-jumlah-pria">...</span>
-            <p>Laki-Laki</p>
-          </div>
-          <div class="stat-card">
-            <span id="home-kepala-keluarga">...</span>
-            <p>Kepala Keluarga</p>
-          </div>
-          <div class="stat-card">
-            <span id="home-jumlah-wanita">...</span>
-            <p>Perempuan</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="berita-utama">
-        <h2>Berita Utama</h2>
-        <div class="swiper mySwiper">
-          <div class="swiper-wrapper" id="berita-container"></div>
-          <div class="swiper-button-next"></div>
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-pagination"></div>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <!-- ... konten footer tetap sama ... -->
-      <div class="info-kantor">
-        <div class="nomor-rw">16</div>
-        <div class="alamat">
-          <h4>KANTOR RW 16</h4>
+      <main>
+        <section class="hero">
+          <h1>RUKUN WARGA 16</h1>
           <p>
-            Jl. Pesantren No. KM.2, RW 16, Cibabat, Kec. Cimahi Utara, Kota
-            Cimahi, Jawa Barat 40513
+            DESKRIPSI SINGKAT MENGENAI RW 16, VISI, MISI, ATAU SAMBUTAN KETUA
+            RW.
           </p>
-        </div>
-      </div>
-    </footer>
+        </section>
 
-    <!-- PENTING: Hapus firebaseConfig dan auth.js dari sini -->
-    <!-- index.html tidak perlu tahu soal auth, itu tugas script.js -->
+        <section class="informasi">
+          <h2>Informasi</h2>
+          <div class="info-buttons">
+            <a href="informasi.html" class="info-btn penduduk">
+              <i class="fas fa-users"></i>
+              <span>Penduduk</span>
+            </a>
+            <a href="#" class="info-btn bansos">
+              <i class="fas fa-hand-holding-heart"></i>
+              <span>Bantuan Sosial</span>
+            </a>
+            <a href="struktur-organisasi.html" class="info-btn struktur-rw">
+              <i class="fas fa-sitemap"></i>
+              <span>Struktur RW</span>
+            </a>
+            <a href="struktur-rt.html" class="info-btn struktur-rt">
+              <i class="fas fa-building-user"></i>
+              <span>Struktur RT</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="home-stats">
+          <h2>Administrasi Penduduk</h2>
+          <p>
+            Sistem digital yang berfungsi mempermudah pengelolaan data dan
+            informasi terkait dengan kependudukan.
+          </p>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span id="home-total-penduduk">...</span>
+              <p>Penduduk</p>
+            </div>
+            <div class="stat-card">
+              <span id="home-jumlah-pria">...</span>
+              <p>Laki-Laki</p>
+            </div>
+            <div class="stat-card">
+              <span id="home-kepala-keluarga">...</span>
+              <p>Kepala Keluarga</p>
+            </div>
+            <div class="stat-card">
+              <span id="home-jumlah-wanita">...</span>
+              <p>Perempuan</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="berita-utama">
+          <h2>Berita Utama</h2>
+          <div class="swiper mySwiper">
+            <div class="swiper-wrapper" id="berita-container"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div class="info-kantor">
+          <div class="nomor-rw">16</div>
+          <div class="alamat">
+            <h4>KANTOR RW 16</h4>
+            <p>
+              Jl. Pesantren No. KM.2, RW 16, Cibabat, Kec. Cimahi Utara, Kota
+              Cimahi, Jawa Barat 40513
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- Penutup .page-wrapper -->
+
+    <!-- [BARU] Navigasi Bawah untuk Tampilan Mobile -->
+    <nav class="bottom-nav">
+      <a href="index.html" class="bottom-nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Beranda</span>
+      </a>
+      <a href="layanan.html" class="bottom-nav-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Layanan</span>
+      </a>
+      <a href="berita.html" class="bottom-nav-item">
+        <i class="fas fa-newspaper"></i>
+        <span>Berita</span>
+      </a>
+      <a href="login.html" class="bottom-nav-item" id="bottom-nav-login">
+        <i class="fas fa-user"></i>
+        <span>Login</span>
+      </a>
+      <a
+        href="#"
+        class="bottom-nav-item"
+        id="bottom-nav-profil"
+        style="display: none"
+      >
+        <i class="fas fa-user"></i>
+        <span>Profil</span>
+      </a>
+    </nav>
+
     <script src="script.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   </body>
