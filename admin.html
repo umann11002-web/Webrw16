@@ -5,32 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard Admin - RW 16</title>
     <link rel="stylesheet" href="style.css" />
+    <!-- Pastikan Font Awesome dipanggil untuk ikon hamburger -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
     <style>
-      /* Styling khusus untuk Dashboard Admin */
-      .admin-nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        padding: 1rem 5%;
-        background: white;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-      .admin-nav .nav-links a {
-        text-decoration: none;
-        color: var(--dark-text);
-        margin: 0 15px;
-        font-weight: 500;
-      }
-      .admin-nav .logout-btn {
-        background-color: #dc3545;
-        color: white;
-        padding: 0.6rem 1.2rem;
-        border-radius: 4px;
-        text-decoration: none;
-      }
+      /* Styling ini bisa kamu pindahkan ke style.css jika mau */
       .admin-main {
         padding: 2rem 5%;
       }
@@ -72,6 +53,9 @@
     </style>
   </head>
   <body>
+    <!-- ================================== -->
+    <!-- ===== HEADER YANG SUDAH BENAR ===== -->
+    <!-- ================================== -->
     <header class="admin-nav">
       <div class="admin-nav-header">
         <div class="nav-title"><strong>Dashboard Admin</strong></div>
@@ -120,8 +104,8 @@
       </div>
     </main>
 
-    <!-- Kita akan gunakan admin.js yang sudah ada, tapi tanpa loading indicator -->
-    <script src="admin.js" type="module"></script>
+    <!-- Memanggil skrip navigasi dan skrip khusus halaman ini -->
     <script src="admin-nav.js" type="module"></script>
+    <script src="admin.js" type="module"></script>
   </body>
 </html>
