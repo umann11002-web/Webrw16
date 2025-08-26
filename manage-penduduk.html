@@ -18,15 +18,11 @@
         padding: 1rem 5%;
         background: white;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        position: sticky;
-        top: 0;
-        z-index: 1000;
       }
       .admin-nav .nav-links a {
         text-decoration: none;
         color: var(--dark-text);
         margin: 0 15px;
-        font-weight: 500;
       }
       .admin-nav .logout-btn {
         background-color: #dc3545;
@@ -42,11 +38,12 @@
         background: white;
         padding: 2rem;
         border-radius: 8px;
-        max-width: 600px;
+        max-width: 800px;
         margin: auto;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       }
-      .form-card h1 {
+      .form-card h1,
+      .form-card h2 {
         margin-top: 0;
       }
       .form-group {
@@ -64,6 +61,16 @@
         border-radius: 4px;
         font-size: 1.1rem;
       }
+      .age-group-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+        align-items: center;
+        margin-bottom: 0.8rem;
+      }
+      .age-group-row label {
+        font-weight: normal;
+      }
       .submit-btn {
         padding: 0.8rem 2rem;
         border: none;
@@ -78,18 +85,13 @@
   <body>
     <header class="admin-nav">
       <div class="admin-nav-header">
-        <div class="nav-title">
-          <!-- Ganti dengan logo jika mau, atau biarkan teks -->
-          <strong>RW 16 Admin Panel</strong>
-        </div>
+        <div class="nav-title"><strong>Dashboard Admin</strong></div>
         <button class="hamburger-btn" id="admin-hamburger-btn">
           <i class="fas fa-bars"></i>
         </button>
       </div>
       <div class="nav-links" id="admin-nav-links">
         <a href="admin.html">Dashboard</a>
-
-        <!-- Dropdown untuk Kelola Data -->
         <div class="dropdown">
           <a href="#" class="dropdown-toggle"
             >Kelola Data <i class="fas fa-chevron-down"></i
@@ -100,7 +102,6 @@
             <a href="manage-penduduk.html">Statistik</a>
           </div>
         </div>
-
         <a href="#" id="admin-logout-btn" class="logout-btn">Logout</a>
       </div>
     </header>
@@ -109,28 +110,24 @@
       <div class="form-card">
         <h1>Update Statistik Penduduk</h1>
         <p>
-          Masukkan angka terbaru untuk data kependudukan. Data ini akan
-          ditampilkan di halaman Informasi untuk publik.
+          Data yang diubah di sini akan secara otomatis memperbarui halaman
+          Informasi untuk publik.
         </p>
         <form id="statistik-form">
-          <div class="form-group">
-            <label for="total-penduduk">Total Penduduk</label>
-            <input type="number" id="total-penduduk" required />
-          </div>
           <div class="form-group">
             <label for="kepala-keluarga">Jumlah Kepala Keluarga</label>
             <input type="number" id="kepala-keluarga" required />
           </div>
-          <div class="form-group">
-            <label for="jumlah-pria">Jumlah Laki-laki</label>
-            <input type="number" id="jumlah-pria" required />
+
+          <hr style="margin: 2rem 0" />
+
+          <h2>Data Piramida Penduduk</h2>
+          <div id="kelompok-umur-container">
+            <p>Memuat data kelompok umur...</p>
           </div>
-          <div class="form-group">
-            <label for="jumlah-wanita">Jumlah Perempuan</label>
-            <input type="number" id="jumlah-wanita" required />
-          </div>
+
           <button type="submit" class="submit-btn" id="save-btn">
-            Simpan Perubahan
+            Simpan Semua Perubahan
           </button>
         </form>
         <p id="status-message" style="margin-top: 1rem; font-weight: 600"></p>
@@ -138,6 +135,5 @@
     </main>
 
     <script src="manage-penduduk.js" type="module"></script>
-    <script src="admin-nav.js" type="module"></script>
   </body>
 </html>

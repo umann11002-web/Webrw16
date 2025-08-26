@@ -26,25 +26,22 @@ const db = getFirestore(app);
 
 // Ambil elemen
 const statistikForm = document.getElementById("statistik-form");
-const totalPendudukInput = document.getElementById("total-penduduk");
 const kepalaKeluargaInput = document.getElementById("kepala-keluarga");
-const jumlahPriaInput = document.getElementById("jumlah-pria");
-const jumlahWanitaInput = document.getElementById("jumlah-wanita");
+const kelompokUmurContainer = document.getElementById(
+  "kelompok-umur-container"
+);
 const statusMessage = document.getElementById("status-message");
 const saveBtn = document.getElementById("save-btn");
-const logoutBtn = document.getElementById("logout-btn");
 
 const docRef = doc(db, "statistik", "data_penduduk");
 
-// Satpam: Pastikan hanya admin yang bisa akses
+// Satpam
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    const userDocRef = doc(db, "users", user.uid);
-    const userDocSnap = await getDoc(userDocRef);
-    if (userDocSnap.exists() && userDocSnap.data().role === "admin") {
-      loadStatistik(); // Jika admin, muat data statistik
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (userDoc.exists() && userDoc.data().role === "admin") {
+      loadStatistik();
     } else {
-      alert("Anda tidak punya hak akses ke halaman ini.");
       window.location.href = "index.html";
     }
   } else {
@@ -52,38 +49,62 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// Fungsi untuk memuat data statistik yang ada ke dalam form
+// Fungsi untuk memuat data dan membangun form secara dinamis
 async function loadStatistik() {
   try {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const data = docSnap.data();
-      totalPendudukInput.value = data.totalPenduduk;
-      kepalaKeluargaInput.value = data.kepalaKeluarga;
-      jumlahPriaInput.value = data.jumlahPria;
-      jumlahWanitaInput.value = data.jumlahWanita;
+      kepalaKeluargaInput.value = data.kepalaKeluarga || 0;
+
+      const kelompokUmur = data.kelompokUmur || {};
+      kelompokUmurContainer.innerHTML = ""; // Kosongkan kontainer
+
+      // Urutkan kelompok umur
+      const sortedLabels = Object.keys(kelompokUmur).sort(
+        (a, b) => parseInt(a.split("-")[0]) - parseInt(b.split("-")[0])
+      );
+
+      sortedLabels.forEach((label) => {
+        const pria = kelompokUmur[label].pria || 0;
+        const wanita = kelompokUmur[label].wanita || 0;
+
+        const row = document.createElement("div");
+        row.className = "age-group-row";
+        row.innerHTML = `
+                    <label for="pria-${label}">${label}</label>
+                    <input type="number" id="pria-${label}" value="${pria}" placeholder="Jumlah Pria">
+                    <input type="number" id="wanita-${label}" value="${wanita}" placeholder="Jumlah Wanita">
+                `;
+        kelompokUmurContainer.appendChild(row);
+      });
     } else {
-      console.log("Belum ada data statistik, form akan kosong.");
+      console.log("Belum ada data statistik.");
     }
   } catch (error) {
     console.error("Error memuat statistik: ", error);
-    statusMessage.textContent = "Gagal memuat data.";
-    statusMessage.style.color = "red";
   }
 }
 
-// Fungsi untuk menyimpan perubahan
+// Fungsi untuk menyimpan semua perubahan
 statistikForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   saveBtn.disabled = true;
   saveBtn.textContent = "Menyimpan...";
 
   try {
+    const newKelompokUmur = {};
+    const rows = kelompokUmurContainer.querySelectorAll(".age-group-row");
+    rows.forEach((row) => {
+      const label = row.querySelector("label").textContent;
+      const pria = Number(row.querySelector(`input[id^="pria-"]`).value);
+      const wanita = Number(row.querySelector(`input[id^="wanita-"]`).value);
+      newKelompokUmur[label] = { pria, wanita };
+    });
+
     const dataToSave = {
-      totalPenduduk: Number(totalPendudukInput.value),
       kepalaKeluarga: Number(kepalaKeluargaInput.value),
-      jumlahPria: Number(jumlahPriaInput.value),
-      jumlahWanita: Number(jumlahWanitaInput.value),
+      kelompokUmur: newKelompokUmur,
     };
 
     await setDoc(docRef, dataToSave);
@@ -96,13 +117,6 @@ statistikForm.addEventListener("submit", async (e) => {
     statusMessage.style.color = "red";
   } finally {
     saveBtn.disabled = false;
-    saveBtn.textContent = "Simpan Perubahan";
+    saveBtn.textContent = "Simpan Semua Perubahan";
   }
-});
-
-// Tombol Logout
-logoutBtn.addEventListener("click", () => {
-  signOut(auth).then(() => {
-    window.location.href = "login.html";
-  });
 });
