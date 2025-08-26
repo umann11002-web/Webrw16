@@ -32,7 +32,6 @@ const db = getFirestore(app);
 // Menunggu sampai seluruh halaman HTML selesai dimuat
 document.addEventListener("DOMContentLoaded", () => {
   const tableBody = document.getElementById("pengajuan-table-body");
-  // [PERUBAHAN] Mengambil elemen select yang baru
   const filterJenisSurat = document.getElementById("filter-jenis-surat");
 
   // Satpam digital
@@ -42,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const userDocSnap = await getDoc(userDocRef);
       if (userDocSnap.exists() && userDocSnap.data().role === "admin") {
         if (tableBody) {
-          // Memanggil fungsi untuk mengisi filter dan menampilkan data
           populateFilterDropdown();
           tampilkanPengajuan();
         }
@@ -54,22 +52,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // [PERUBAHAN] Event listener sekarang menggunakan 'change' pada elemen select
   if (filterJenisSurat) {
     filterJenisSurat.addEventListener("change", () => {
-      // Panggil fungsi tampilkanPengajuan dengan nilai dari filter
       tampilkanPengajuan(filterJenisSurat.value);
     });
   }
 
-  // Kode untuk modal tetap ada dan tidak berubah
   const closeModalBtn = document.getElementById("close-modal-btn");
   const uploadForm = document.getElementById("upload-surat-form");
   if (closeModalBtn) closeModalBtn.addEventListener("click", closeModal);
   if (uploadForm) uploadForm.addEventListener("submit", handleUploadSuratJadi);
 });
 
-// [PERUBAHAN] Fungsi ini sekarang mengisi <select> dropdown, bukan modal
 async function populateFilterDropdown() {
   const filterSelect = document.getElementById("filter-jenis-surat");
   if (!filterSelect) return;
@@ -78,12 +72,11 @@ async function populateFilterDropdown() {
 
     querySnapshot.forEach((doc) => {
       const layanan = doc.data();
-      const jenisSuratValue = `Form Pengajuan: ${layanan.namaLayanan}`;
+      const jenisSuratValue = layanan.namaLayanan;
 
-      // Membuat elemen <option> baru
       const option = document.createElement("option");
       option.value = jenisSuratValue;
-      option.textContent = layanan.namaLayanan; // Teks yang dilihat pengguna
+      option.textContent = layanan.namaLayanan;
       filterSelect.appendChild(option);
     });
   } catch (error) {
@@ -104,6 +97,7 @@ async function tampilkanPengajuan(filterValue = "semua") {
     if (filterValue === "semua") {
       q = query(baseQuery, orderBy("tanggalPengajuan", "desc"));
     } else {
+      // [FIX] Logika prefix "Surat: " dihapus. Sekarang mencari nilai yang sama persis.
       q = query(
         baseQuery,
         where("jenisSurat", "==", filterValue),
@@ -175,7 +169,6 @@ async function updateStatus(docId, newStatus) {
     const docRef = doc(db, "pengajuanSurat", docId);
     await updateDoc(docRef, { status: newStatus });
     alert(`Status berhasil diubah menjadi "${newStatus}"`);
-    // [PERUBAHAN] Mengambil nilai filter saat ini dari select dropdown
     const currentFilter = document.getElementById("filter-jenis-surat").value;
     tampilkanPengajuan(currentFilter);
   } catch (error) {

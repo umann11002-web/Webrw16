@@ -3,47 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kelola Galeri - Admin</title>
+    <title>Kelola Galeri Album - Admin</title>
     <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
     <style>
-      /* Menggunakan style yang mirip dengan manage-layanan.html */
-      .admin-nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem 5%;
-        background: white;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-      }
-      .admin-nav .nav-links a {
-        text-decoration: none;
-        color: var(--dark-text);
-        margin: 0 15px;
-        font-weight: 500;
-      }
-      .admin-nav .logout-btn {
-        background-color: #dc3545;
-        color: white;
-        padding: 0.6rem 1.2rem;
-        border-radius: 4px;
-        text-decoration: none;
-      }
+      /* Style umum untuk halaman kelola */
       .manage-main {
         padding: 2rem 5%;
       }
-      .upload-card {
+      .card {
         background: white;
         padding: 1.5rem;
         border-radius: 8px;
         margin-bottom: 2rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
       }
       .form-group {
         margin-bottom: 1rem;
@@ -66,22 +42,67 @@
         color: white;
         border-radius: 4px;
         cursor: pointer;
+        transition: background-color 0.2s;
       }
-      .gallery-grid-admin {
+      .submit-btn:hover {
+        background-color: #218838;
+      }
+      .submit-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+
+      /* Grid untuk daftar album */
+      .album-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
       }
-      .gallery-item-admin {
+      .album-card {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         position: relative;
       }
-      .gallery-item-admin img {
+      .album-cover {
         width: 100%;
-        height: 150px;
+        height: 180px;
         object-fit: cover;
-        border-radius: 8px;
+        background-color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #aaa;
       }
-      .delete-btn {
+      .album-info {
+        padding: 1rem;
+      }
+      .album-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+      .album-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+      .album-btn {
+        flex-grow: 1;
+        padding: 0.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .btn-add-photo {
+        background-color: #007bff;
+        color: white;
+      }
+      .btn-delete-album {
+        background-color: #dc3545;
+        color: white;
+      }
+      .delete-album-btn-corner {
         position: absolute;
         top: 8px;
         right: 8px;
@@ -92,77 +113,125 @@
         width: 30px;
         height: 30px;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Style untuk Modal (Popup) */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: none; /* Diubah oleh JS */
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+      }
+      .modal-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 600px;
+      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      .close-btn {
+        font-size: 1.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+      }
+      #preview-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+        margin-top: 1rem;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+      #preview-container img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
       }
     </style>
   </head>
   <body>
+    <!-- Navigasi Admin (Sama seperti halaman lain) -->
     <header class="admin-nav">
-      <div class="admin-nav-header">
-        <div class="nav-title">
-          <!-- Ganti dengan logo jika mau, atau biarkan teks -->
-          <strong>RW 16 Admin Panel</strong>
-        </div>
-        <button class="hamburger-btn" id="admin-hamburger-btn">
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
-      <div class="nav-links" id="admin-nav-links">
-        <a href="admin.html">Dashboard</a>
-
-        <!-- Dropdown untuk Kelola Data -->
-        <div class="dropdown">
-          <a href="#" class="dropdown-toggle"
-            >Kelola Data <i class="fas fa-chevron-down"></i
-          ></a>
-          <div class="dropdown-menu">
-            <a href="manage-layanan.html">Layanan</a>
-            <a href="manage-galeri.html">Galeri</a>
-            <a href="manage-penduduk.html">Statistik</a>
-          </div>
-        </div>
-
-        <a href="#" id="admin-logout-btn" class="logout-btn">Logout</a>
-      </div>
+      <!-- ... Kode navigasi admin kamu ... -->
     </header>
 
     <main class="manage-main">
-      <h1>Kelola Galeri Foto</h1>
+      <h1>Kelola Galeri Album</h1>
 
-      <div class="upload-card">
-        <h2>Unggah Foto Baru</h2>
-        <form id="upload-gallery-form">
+      <!-- Form untuk membuat album baru -->
+      <div class="card">
+        <h2>Buat Album Baru</h2>
+        <form id="create-album-form">
           <div class="form-group">
-            <label for="gallery-title">Judul Foto</label>
+            <label for="album-title-input">Judul Album</label>
             <input
               type="text"
-              id="gallery-title"
-              placeholder="Contoh: Lomba 17 Agustus"
+              id="album-title-input"
+              placeholder="Contoh: Kegiatan 17 Agustus 2025"
               required
             />
           </div>
-          <div class="form-group">
-            <label for="gallery-file">Pilih File Gambar</label>
-            <input
-              type="file"
-              id="gallery-file"
-              accept="image/jpeg, image/png"
-              required
-            />
-          </div>
-          <button type="submit" class="submit-btn" id="upload-btn">
-            Unggah Foto
+          <button type="submit" class="submit-btn" id="create-album-btn">
+            Buat Album
           </button>
         </form>
-        <p id="upload-status" style="margin-top: 1rem; font-weight: 600"></p>
       </div>
 
-      <div class="gallery-container">
-        <h2>Foto yang Sudah Diunggah</h2>
-        <div id="gallery-grid-admin" class="gallery-grid-admin">
-          <p>Memuat galeri...</p>
+      <!-- Container untuk menampilkan daftar album -->
+      <div class="albums-container">
+        <h2>Daftar Album</h2>
+        <div id="album-grid" class="album-grid">
+          <p>Memuat album...</p>
         </div>
       </div>
     </main>
+
+    <!-- Modal/Popup untuk upload banyak foto -->
+    <div class="modal-overlay" id="upload-photos-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-album-title">Unggah Foto</h2>
+          <button class="close-btn" id="close-modal-btn">&times;</button>
+        </div>
+        <form id="upload-photos-form">
+          <input type="hidden" id="album-id-hidden" />
+          <div class="form-group">
+            <label for="photo-files-input"
+              >Pilih File Gambar (Bisa lebih dari satu)</label
+            >
+            <input
+              type="file"
+              id="photo-files-input"
+              accept="image/jpeg, image/png"
+              multiple
+              required
+            />
+          </div>
+          <div id="preview-container"></div>
+          <button type="submit" class="submit-btn" id="upload-photos-btn">
+            Unggah Foto
+          </button>
+        </form>
+        <p id="upload-progress" style="margin-top: 1rem; font-weight: 600"></p>
+      </div>
+    </div>
 
     <script src="manage-galeri.js" type="module"></script>
     <script src="admin-nav.js" type="module"></script>
