@@ -47,36 +47,30 @@ header {
   top: 0;
   z-index: 1000;
 }
-
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
 .logo {
   display: flex;
   align-items: center;
   font-weight: 900;
   font-size: 1.2rem;
 }
-
 .logo img {
   width: 80px;
   margin-right: 10px;
 }
-
 .navbar {
   display: flex;
   align-items: center;
 }
-
 .navbar a {
   text-decoration: none;
   color: var(--dark-text);
   padding: 0 1rem;
 }
-
 .hamburger {
   display: none;
   font-size: 1.5rem;
@@ -84,8 +78,6 @@ header {
   border: none;
   cursor: pointer;
 }
-
-/* Dropdown di Navigasi Publik */
 .dropdown {
   position: relative;
   display: inline-block;
@@ -328,19 +320,9 @@ footer {
   border: none;
   cursor: pointer;
 }
-.admin-nav .dropdown-menu {
-  margin-top: 0.5rem;
-}
 .admin-main,
 .manage-main {
   padding: 2rem 5%;
-}
-.admin-main h1 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-.admin-main h2 {
-  margin-top: 2rem;
 }
 table {
   width: 100%;
@@ -372,7 +354,7 @@ thead tr {
 }
 
 /* #################################### */
-/* ###   ATURAN RESPONSIVE (SIHIR)  ### */
+/* ###   ATURAN RESPONSIF (SIHIR)  ### */
 /* #################################### */
 @media (max-width: 768px) {
   /* --- Navigasi Publik di HP --- */
