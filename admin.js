@@ -3,7 +3,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebas
 import {
   getAuth,
   onAuthStateChanged,
-  signOut,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 import {
   getFirestore,
@@ -14,6 +13,7 @@ import {
   doc,
   updateDoc,
   getDoc,
+  where,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -31,20 +31,22 @@ const db = getFirestore(app);
 
 // Menunggu sampai seluruh halaman HTML selesai dimuat
 document.addEventListener("DOMContentLoaded", () => {
-  // === SATPAM DIGITAL & PEMUAT DATA ===
   const tableBody = document.getElementById("pengajuan-table-body");
+  // [PERUBAHAN] Mengambil elemen select yang baru
+  const filterJenisSurat = document.getElementById("filter-jenis-surat");
+
+  // Satpam digital
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       const userDocRef = doc(db, "users", user.uid);
       const userDocSnap = await getDoc(userDocRef);
-
       if (userDocSnap.exists() && userDocSnap.data().role === "admin") {
-        // Hanya muat data jika tabelnya ada di halaman ini
         if (tableBody) {
+          // Memanggil fungsi untuk mengisi filter dan menampilkan data
+          populateFilterDropdown();
           tampilkanPengajuan();
         }
       } else {
-        alert("Akses ditolak. Anda bukan admin.");
         window.location.href = "index.html";
       }
     } else {
@@ -52,32 +54,69 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // === TOMBOL LOGOUT ===
-  const logoutButton = document.getElementById("logout-btn");
-  if (logoutButton) {
-    logoutButton.addEventListener("click", (e) => {
-      e.preventDefault();
-      signOut(auth).then(() => {
-        window.location.href = "login.html";
-      });
+  // [PERUBAHAN] Event listener sekarang menggunakan 'change' pada elemen select
+  if (filterJenisSurat) {
+    filterJenisSurat.addEventListener("change", () => {
+      // Panggil fungsi tampilkanPengajuan dengan nilai dari filter
+      tampilkanPengajuan(filterJenisSurat.value);
     });
   }
+
+  // Kode untuk modal tetap ada dan tidak berubah
+  const closeModalBtn = document.getElementById("close-modal-btn");
+  const uploadForm = document.getElementById("upload-surat-form");
+  if (closeModalBtn) closeModalBtn.addEventListener("click", closeModal);
+  if (uploadForm) uploadForm.addEventListener("submit", handleUploadSuratJadi);
 });
 
-// === FUNGSI TAMPILKAN PENGAJUAN ===
-async function tampilkanPengajuan() {
-  const tableBody = document.getElementById("pengajuan-table-body");
+// [PERUBAHAN] Fungsi ini sekarang mengisi <select> dropdown, bukan modal
+async function populateFilterDropdown() {
+  const filterSelect = document.getElementById("filter-jenis-surat");
+  if (!filterSelect) return;
   try {
-    const q = query(
-      collection(db, "pengajuanSurat"),
-      orderBy("tanggalPengajuan", "desc")
-    );
+    const querySnapshot = await getDocs(collection(db, "layanan"));
+
+    querySnapshot.forEach((doc) => {
+      const layanan = doc.data();
+      const jenisSuratValue = `Form Pengajuan: ${layanan.namaLayanan}`;
+
+      // Membuat elemen <option> baru
+      const option = document.createElement("option");
+      option.value = jenisSuratValue;
+      option.textContent = layanan.namaLayanan; // Teks yang dilihat pengguna
+      filterSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Error mengisi filter:", error);
+  }
+}
+
+// FUNGSI TAMPILKAN PENGAJUAN (DIPERBARUI DENGAN FILTER)
+async function tampilkanPengajuan(filterValue = "semua") {
+  const tableBody = document.getElementById("pengajuan-table-body");
+  tableBody.innerHTML =
+    '<tr><td colspan="7" style="text-align:center;">Memuat data...</td></tr>';
+
+  try {
+    let q;
+    const baseQuery = collection(db, "pengajuanSurat");
+
+    if (filterValue === "semua") {
+      q = query(baseQuery, orderBy("tanggalPengajuan", "desc"));
+    } else {
+      q = query(
+        baseQuery,
+        where("jenisSurat", "==", filterValue),
+        orderBy("tanggalPengajuan", "desc")
+      );
+    }
+
     const querySnapshot = await getDocs(q);
     tableBody.innerHTML = "";
 
     if (querySnapshot.empty) {
       tableBody.innerHTML =
-        '<tr><td colspan="7" style="text-align:center;">Belum ada pengajuan surat.</td></tr>';
+        '<tr><td colspan="7" style="text-align:center;">Tidak ada pengajuan surat yang cocok.</td></tr>';
       return;
     }
 
@@ -87,13 +126,9 @@ async function tampilkanPengajuan() {
       const tanggal = data.tanggalPengajuan
         .toDate()
         .toLocaleDateString("id-ID");
-
       let aksiAwalHTML = "";
       if (data.status === "Menunggu Persetujuan") {
-        aksiAwalHTML = `
-                <button class="action-btn btn-approve" data-id="${docId}">Setujui</button>
-                <button class="action-btn btn-reject" data-id="${docId}">Tolak</button>
-              `;
+        aksiAwalHTML = `<button class="action-btn btn-approve" data-id="${docId}">Setujui</button> <button class="action-btn btn-reject" data-id="${docId}">Tolak</button>`;
       }
       let aksiLanjutanHTML = "";
       if (data.fileUrl) {
@@ -102,23 +137,11 @@ async function tampilkanPengajuan() {
         aksiLanjutanHTML += `<span>(Tanpa File)</span><br>`;
       }
       if (data.status === "Disetujui") {
-        aksiLanjutanHTML += `<button class="action-btn btn-approve" data-id="${docId}" style="margin-top:5px;">Tandai Selesai</button>`;
+        aksiLanjutanHTML += `<button class="action-btn btn-approve btn-tandai-selesai" data-id="${docId}" style="margin-top:5px;">Tandai Selesai</button>`;
       }
-
-      const row = `
-              <tr>
-                  <td>${tanggal}</td>
-                  <td>${data.userEmail}</td>
-                  <td>${data.jenisSurat}</td>
-                  <td>${data.keperluan}</td>
-                  <td>${data.status}</td>
-                  <td>${aksiAwalHTML}</td>
-                  <td>${aksiLanjutanHTML}</td>
-              </tr>
-            `;
+      const row = `<tr><td>${tanggal}</td><td>${data.userEmail}</td><td>${data.jenisSurat}</td><td>${data.keperluan}</td><td>${data.status}</td><td>${aksiAwalHTML}</td><td>${aksiLanjutanHTML}</td></tr>`;
       tableBody.innerHTML += row;
     });
-
     addEventListenersToButtons();
   } catch (error) {
     console.error("Error mengambil data pengajuan: ", error);
@@ -126,54 +149,99 @@ async function tampilkanPengajuan() {
   }
 }
 
-// ... (sisa kode addEventListenersToButtons, updateStatus, dan tandaiSelesai tetap sama) ...
+// === FUNGSI-FUNGSI PEMBANTU (TIDAK BANYAK BERUBAH) ===
 function addEventListenersToButtons() {
-  document.querySelectorAll(".btn-approve").forEach((button) => {
-    button.addEventListener("click", (e) => {
-      const docId = e.target.dataset.id;
-      if (e.target.textContent === "Setujui") {
-        updateStatus(docId, "Disetujui");
-      } else if (e.target.textContent === "Tandai Selesai") {
-        tandaiSelesai(docId);
-      }
+  document
+    .querySelectorAll(".btn-approve:not(.btn-tandai-selesai)")
+    .forEach((button) => {
+      button.addEventListener("click", (e) => {
+        updateStatus(e.target.dataset.id, "Disetujui");
+      });
     });
-  });
   document.querySelectorAll(".btn-reject").forEach((button) => {
     button.addEventListener("click", (e) => {
-      const docId = e.target.dataset.id;
-      updateStatus(docId, "Ditolak");
+      updateStatus(e.target.dataset.id, "Ditolak");
+    });
+  });
+  document.querySelectorAll(".btn-tandai-selesai").forEach((button) => {
+    button.addEventListener("click", (e) => {
+      openModal(e.target.dataset.id);
     });
   });
 }
+
 async function updateStatus(docId, newStatus) {
   try {
     const docRef = doc(db, "pengajuanSurat", docId);
     await updateDoc(docRef, { status: newStatus });
     alert(`Status berhasil diubah menjadi "${newStatus}"`);
-    tampilkanPengajuan();
+    // [PERUBAHAN] Mengambil nilai filter saat ini dari select dropdown
+    const currentFilter = document.getElementById("filter-jenis-surat").value;
+    tampilkanPengajuan(currentFilter);
   } catch (error) {
     alert("Gagal mengubah status.");
   }
 }
-async function tandaiSelesai(docId) {
-  const fileUrl = prompt(
-    "PROSES SIMULASI:\n\nMasukkan link ke file surat yang sudah jadi (misal: link Google Drive).",
-    ""
-  );
-  if (fileUrl === null) {
-    alert("Aksi dibatalkan.");
+
+// --- Fungsi Modal (Tidak Berubah) ---
+function openModal(docId) {
+  document.getElementById("pengajuan-id-hidden").value = docId;
+  document.getElementById("upload-surat-modal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("upload-surat-form").reset();
+  document.getElementById("upload-status-modal").textContent = "";
+  document.getElementById("upload-surat-modal").style.display = "none";
+}
+
+async function handleUploadSuratJadi(e) {
+  e.preventDefault();
+  const docId = document.getElementById("pengajuan-id-hidden").value;
+  const file = document.getElementById("file-surat-jadi").files[0];
+  const uploadFinalBtn = document.getElementById("upload-final-btn");
+  const uploadStatusModal = document.getElementById("upload-status-modal");
+
+  if (!file) {
+    alert("Silakan pilih file surat yang sudah jadi.");
     return;
   }
+
+  uploadFinalBtn.disabled = true;
+  uploadFinalBtn.textContent = "Mengunggah...";
+  uploadStatusModal.textContent = "";
+
   try {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "yd99selh");
+
+    const cloudName = "do1ba7gkn";
+    const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
+
+    const uploadResponse = await fetch(uploadUrl, {
+      method: "POST",
+      body: formData,
+    });
+    const uploadData = await uploadResponse.json();
+    if (uploadData.error) throw new Error(uploadData.error.message);
+
+    const fileSuratJadiUrl = uploadData.secure_url;
+
     const docRef = doc(db, "pengajuanSurat", docId);
     await updateDoc(docRef, {
       status: "Selesai",
-      fileSuratJadiUrl: fileUrl || "#",
+      fileSuratJadiUrl: fileSuratJadiUrl,
     });
-    alert('Pengajuan berhasil ditandai sebagai "Selesai"');
+
+    alert("Pengajuan berhasil diselesaikan!");
+    closeModal();
     tampilkanPengajuan();
   } catch (error) {
-    console.error("Error menandai selesai:", error);
-    alert("Gagal menandai selesai.");
+    console.error("Error saat menyelesaikan pengajuan:", error);
+    uploadStatusModal.textContent = `Gagal: ${error.message}`;
+  } finally {
+    uploadFinalBtn.disabled = false;
+    uploadFinalBtn.textContent = "Unggah & Selesaikan";
   }
 }

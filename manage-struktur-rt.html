@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelola Struktur RT - Admin</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <style>
+      /* Menggunakan style yang sama dengan halaman admin lainnya */
+      .admin-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 5%;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .admin-nav .nav-links a {
+        text-decoration: none;
+        color: var(--dark-text);
+        margin: 0 15px;
+      }
+      .admin-nav .logout-btn {
+        background-color: #dc3545;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+      .manage-main {
+        padding: 2rem 5%;
+      }
+      .card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .rt-selector {
+        margin-bottom: 2rem;
+      }
+      .rt-selector label {
+        font-weight: 600;
+        margin-right: 1rem;
+      }
+      .rt-selector select {
+        padding: 0.5rem;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+      .pengurus-list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #eee;
+      }
+      .form-inline {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .form-inline input {
+        flex-grow: 1;
+        padding: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .submit-btn {
+        padding: 0.8rem 1.5rem;
+        border: none;
+        background-color: var(--primary-green);
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="admin-nav">
+      <!-- Salin-tempel nav bar dari admin.html di sini -->
+    </header>
+
+    <main class="manage-main">
+      <h1>Kelola Struktur Pengurus RT</h1>
+
+      <div class="card rt-selector">
+        <label for="rt-select">Pilih RT untuk Dikelola:</label>
+        <select id="rt-select">
+          <option value="">-- Pilih RT --</option>
+          <option value="rt01">RT 01</option>
+          <option value="rt02">RT 02</option>
+          <option value="rt03">RT 03</option>
+          <option value="rt04">RT 04</option>
+          <option value="rt05">RT 05</option>
+          <option value="rt06">RT 06</option>
+          <option value="rt07">RT 07</option>
+          <option value="rt08">RT 08</option>
+        </select>
+      </div>
+
+      <!-- Konten ini akan muncul setelah RT dipilih -->
+      <div id="management-content" style="display: none">
+        <div class="card">
+          <h2>Daftar Pengurus <span id="rt-title"></span></h2>
+          <div id="pengurus-list"></div>
+        </div>
+
+        <div class="card">
+          <h2>Tambah Pengurus Baru untuk <span id="rt-title-form"></span></h2>
+          <form id="add-pengurus-form">
+            <div class="form-inline">
+              <input
+                type="text"
+                id="nama-pengurus"
+                placeholder="Nama Lengkap"
+                required
+              />
+              <input
+                type="text"
+                id="jabatan-pengurus"
+                placeholder="Jabatan"
+                required
+              />
+              <input
+                type="text"
+                id="foto-url"
+                placeholder="URL Foto (opsional)"
+              />
+              <button type="submit" class="submit-btn">Tambah</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script src="manage-struktur-rt.js" type="module"></script>
+  </body>
+</html>

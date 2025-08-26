@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Struktur Pengurus RT - RW 16</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <style>
+      /* Menggunakan style yang sama dengan halaman struktur-rw.html */
+      .main-content {
+        padding: 2rem 5%;
+      }
+      .pengurus-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+      }
+      .pengurus-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        transition: transform 0.2s;
+      }
+      .pengurus-card:hover {
+        transform: translateY(-5px);
+      }
+      .pengurus-card img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1rem;
+        border: 4px solid #eee;
+      }
+      .pengurus-card h3 {
+        margin: 0 0 5px 0;
+        font-size: 1.2rem;
+      }
+      .pengurus-card p {
+        margin: 0;
+        color: #6c757d;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header & Navigasi Konsisten -->
+    <header>
+      <!-- Salin-tempel header dari index.html di sini -->
+    </header>
+
+    <main class="main-content">
+      <h1 id="rt-title-heading">Memuat...</h1>
+      <a
+        href="struktur-rt.html"
+        style="margin-bottom: 2rem; display: inline-block"
+        >&larr; Kembali ke pilihan RT</a
+      >
+
+      <!-- Wadah ini akan diisi oleh JavaScript -->
+      <div class="pengurus-grid" id="pengurus-grid-container">
+        <p>Memuat struktur organisasi...</p>
+      </div>
+    </main>
+
+    <script src="script.js" type="module"></script>
+    <script src="detail-rt.js" type="module"></script>
+  </body>
+</html>
