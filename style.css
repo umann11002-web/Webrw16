@@ -22,7 +22,7 @@ body {
   color: var(--dark-text);
 }
 
-/* === HEADER & NAVIGASI === */
+/* === HEADER & NAVIGASI UTAMA === */
 header {
   background: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -84,6 +84,181 @@ header {
   border: none;
   cursor: pointer;
 }
+
+/* === DROPDOWN MENU UTAMA === */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  cursor: pointer;
+}
+
+.dropdown-toggle i {
+  font-size: 0.8em;
+  margin-left: 5px;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.dropdown-menu.active {
+  display: block;
+}
+
+.dropdown-toggle.active i {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu a {
+  color: var(--dark-text);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+}
+
+.dropdown-menu a:hover {
+  background-color: var(--bg-light);
+}
+
+/* === [START] BAGIAN NAVIGASI ADMIN (SUDAH DIPERBAIKI) === */
+
+/* Style dasar untuk navigasi admin di desktop */
+.admin-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 5%;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.admin-nav .nav-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.admin-nav .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-nav .nav-links a {
+  text-decoration: none;
+  color: var(--dark-text);
+  padding: 0.5rem;
+}
+
+.admin-nav .logout-btn {
+  background-color: #dc3545;
+  color: white !important;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 4px;
+}
+
+/* Tombol Hamburger (disembunyikan di desktop secara default) */
+.admin-nav .hamburger-btn {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Dropdown di dalam nav admin */
+.admin-nav .dropdown {
+  position: relative;
+}
+
+.admin-nav .dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 180px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.admin-nav .dropdown-menu.active {
+  display: block;
+}
+
+.admin-nav .dropdown-menu a {
+  display: block;
+  width: 100%;
+}
+
+/* --- ATURAN RESPONSIVE UNTUK NAVIGASI ADMIN (MOBILE) --- */
+@media (max-width: 768px) {
+  /* Bungkus elemen header agar bisa turun ke bawah */
+  .admin-nav {
+    flex-wrap: wrap;
+  }
+
+  /* Buat judul dan hamburger sejajar di satu baris */
+  .admin-nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  /* Tampilkan tombol hamburger di mobile */
+  .admin-nav .hamburger-btn {
+    display: block;
+  }
+
+  /* Sembunyikan link navigasi di mobile secara default */
+  .admin-nav .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch; /* Penuhi lebar container */
+    margin-top: 1rem;
+    gap: 0;
+  }
+
+  /* Saat menu aktif (diklik), tampilkan link */
+  .admin-nav .nav-links.active {
+    display: flex;
+  }
+
+  /* Atur style link di mobile */
+  .admin-nav .nav-links a,
+  .admin-nav .dropdown-toggle {
+    padding: 0.8rem 0;
+    text-align: center;
+    border-top: 1px solid #eee;
+  }
+
+  /* Atur ulang style dropdown di mobile */
+  .admin-nav .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    border-top: 1px dashed #ccc;
+    padding-left: 1rem;
+    background-color: var(--bg-light);
+  }
+}
+
+/* === [END] BAGIAN NAVIGASI ADMIN === */
 
 /* === KONTEN UTAMA === */
 main {
@@ -217,6 +392,58 @@ h2 {
   line-height: 1.4;
 }
 
+/* Bagian Statistik Halaman Utama */
+.home-stats {
+  padding: 0 5%;
+  margin-bottom: 2rem;
+}
+
+.home-stats h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  border-left: 5px solid var(--primary-green);
+  padding-left: 10px;
+}
+
+.home-stats > p {
+  color: var(--light-text);
+  margin-bottom: 1.5rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.stat-card {
+  background-color: #e74c3c;
+  color: white;
+  padding: 1.2rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: scale(1.03);
+}
+
+.stat-card span {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: right;
+}
+
 /* === FOOTER === */
 footer {
   background-color: #343a40;
@@ -255,7 +482,7 @@ footer {
 }
 
 /* #################################### */
-/* ###   ATURAN RESPONSIVE (SIHIR)  ### */
+/* ###   ATURAN RESPONSIVE UMUM     ### */
 /* #################################### */
 
 /* Tampilan untuk Tablet dan Laptop (lebar layar 768px ke atas) */
@@ -293,272 +520,12 @@ footer {
   }
 }
 
-.dropdown {
-  position: relative; /* Ini penting agar menu dropdown tidak lari kemana-mana */
-  display: inline-block;
-}
-
-/* Tombol utama untuk membuka dropdown */
-.dropdown-toggle {
-  cursor: pointer;
-}
-
-.dropdown-toggle i {
-  font-size: 0.8em;
-  margin-left: 5px;
-  transition: transform 0.3s ease;
-}
-
-/* Menu dropdown yang tersembunyi */
-.dropdown-menu {
-  display: none; /* Sembunyi secara default */
-  position: absolute;
-  background-color: white;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  border-radius: 4px;
-  overflow: hidden; /* Agar border-radius terlihat */
-}
-
-/* Tampilkan menu saat class 'active' ditambahkan oleh JavaScript */
-.dropdown-menu.active {
-  display: block;
-}
-
-/* Putar ikon panah saat dropdown aktif */
-.dropdown-toggle.active i {
-  transform: rotate(180deg);
-}
-
-/* Link di dalam dropdown */
-.dropdown-menu a {
-  color: var(--dark-text);
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  width: 100%; /* Memastikan link mengisi seluruh lebar menu */
-}
-
-.dropdown-menu a:hover {
-  background-color: var(--bg-light);
-}
-
-.admin-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 5%;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-.admin-nav .nav-title {
-  font-weight: 700;
-  font-size: 1.2rem;
-}
-.admin-nav .nav-links {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.admin-nav .nav-links a {
-  text-decoration: none;
-  color: var(--dark-text);
-  padding: 0.5rem;
-}
-.admin-nav .logout-btn {
-  background-color: #dc3545;
-  color: white !important;
-  padding: 0.6rem 1.2rem !important;
-  border-radius: 4px;
-}
-.admin-nav .hamburger-btn {
-  display: none;
-  font-size: 1.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-/* Dropdown di dalam nav admin */
-.admin-nav .dropdown {
-  position: relative;
-}
-.admin-nav .dropdown-menu {
-  display: none;
-  position: absolute;
-  background-color: white;
-  min-width: 180px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-  border-radius: 4px;
-  margin-top: 0.5rem;
-}
-.admin-nav .dropdown-menu.active {
-  display: block;
-}
-.admin-nav .dropdown-menu a {
-  display: block;
-  width: 100%;
-}
-
-/* Responsif untuk nav admin */
-@media (max-width: 768px) {
-  .admin-nav {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .admin-nav-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-  .admin-nav .hamburger-btn {
-    display: block;
-  }
-  .admin-nav .nav-links {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    align-items: stretch;
-    gap: 0;
-  }
-  .admin-nav .nav-links.active {
-    display: flex;
-  }
-  .admin-nav .nav-links a,
-  .admin-nav .dropdown-toggle {
-    padding: 0.8rem 0;
-    border-top: 1px solid #eee;
-  }
-  .admin-nav .dropdown-menu {
-    position: static;
-    box-shadow: none;
-    border-top: 1px dashed #ccc;
-    padding-left: 1rem;
-  }
-}
-
-.home-stats {
-  padding: 0 5%; /* Samakan padding dengan section lain */
-  margin-bottom: 2rem;
-}
-
-.home-stats h2 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  border-left: 5px solid var(--primary-green);
-  padding-left: 10px;
-}
-
-.home-stats > p {
-  /* Target paragraf deskripsi */
-  color: var(--light-text);
-  margin-bottom: 1.5rem;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 kolom di desktop */
-  gap: 1rem;
-}
-
-.stat-card {
-  background-color: #e74c3c; /* Warna merah seperti referensi */
-  color: white;
-  padding: 1.2rem;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.2s;
-}
-
-.stat-card:hover {
-  transform: scale(1.03);
-}
-
-.stat-card span {
-  font-size: 2.5rem;
-  font-weight: 700;
-}
-
-.stat-card p {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 500;
-  text-align: right;
-}
-
-/* Responsif untuk HP */
+/* Responsif untuk Statistik dan Perbaikan Umum lainnya di HP */
 @media (max-width: 768px) {
   .stats-grid {
     grid-template-columns: 1fr; /* 1 kolom di HP */
   }
-}
-.admin-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 5%;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.admin-nav .nav-links a {
-  text-decoration: none;
-  color: var(--dark-text);
-  margin: 0 15px;
-  font-weight: 500;
-}
-.admin-nav .hamburger-btn {
-  display: none; /* Sembunyikan hamburger di desktop */
-  font-size: 1.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
 
-/* --- Aturan untuk HP & Tablet (lebar 768px atau kurang) --- */
-@media (max-width: 768px) {
-  .admin-nav {
-    flex-direction: column;
-    align-items: stretch; /* Penuhi lebar */
-  }
-
-  .admin-nav-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-
-  .admin-nav .hamburger-btn {
-    display: block; /* Tampilkan hamburger di HP */
-  }
-
-  .admin-nav .nav-links {
-    display: none; /* Sembunyikan menu secara default di HP */
-    flex-direction: column;
-    width: 100%;
-    margin-top: 1rem;
-  }
-
-  /* Kelas 'active' ini akan ditambahkan oleh JavaScript untuk menampilkan menu */
-  .admin-nav .nav-links.active {
-    display: flex;
-  }
-
-  .admin-nav .nav-links a {
-    margin: 0;
-    padding: 0.8rem 0; /* Beri padding vertikal */
-    border-top: 1px solid #eee;
-  }
-
-  /* --- Perbaikan Umum Halaman Admin --- */
   .admin-main,
   .manage-main {
     padding: 1.5rem 5%;
@@ -568,7 +535,7 @@ footer {
     font-size: 1.5rem;
   }
 
-  /* --- Perbaikan Tabel di Dashboard --- */
+  /* Perbaikan Tabel di Dashboard Admin */
   .admin-content div[style*="overflow-x:auto"] {
     border: 1px solid #ddd;
     border-radius: 4px;
