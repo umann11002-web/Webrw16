@@ -4,37 +4,92 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard Admin - RW 16</title>
-    <!-- Menghubungkan ke Font Awesome untuk ikon hamburger dan dropdown -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    />
-    <!-- HANYA MENGGUNAKAN SATU FILE CSS EKSTERNAL -->
     <link rel="stylesheet" href="style.css" />
-    <!-- 
-      CSS INTERNAL SUDAH DIHAPUS DARI SINI UNTUK MENGHINDARI KONFLIK 
-    -->
+    <style>
+      /* Styling khusus untuk Dashboard Admin */
+      .admin-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        padding: 1rem 5%;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .admin-nav .nav-links a {
+        text-decoration: none;
+        color: var(--dark-text);
+        margin: 0 15px;
+        font-weight: 500;
+      }
+      .admin-nav .logout-btn {
+        background-color: #dc3545;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+      .admin-main {
+        padding: 2rem 5%;
+      }
+      .admin-main h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+      .admin-main h2 {
+        margin-top: 2rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5rem;
+      }
+      th,
+      td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+      thead tr {
+        background-color: #f2f2f2;
+      }
+      .action-btn {
+        padding: 0.4rem 0.8rem;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+        margin-right: 5px;
+      }
+      .btn-approve {
+        background-color: var(--primary-green);
+      }
+      .btn-reject {
+        background-color: #6c757d;
+      }
+    </style>
   </head>
   <body>
-    <!-- Strukturnya sudah bagus, kita pertahankan -->
     <header class="admin-nav">
       <div class="admin-nav-header">
         <div class="nav-title">
+          <!-- Ganti dengan logo jika mau, atau biarkan teks -->
           <strong>RW 16 Admin Panel</strong>
         </div>
-        <!-- Tombol hamburger ini akan muncul di mobile berkat CSS eksternal -->
-        <button class="hamburger-btn">
+        <button class="hamburger-btn" id="admin-hamburger-btn">
           <i class="fas fa-bars"></i>
         </button>
       </div>
-      <div class="nav-links">
+      <div class="nav-links" id="admin-nav-links">
         <a href="admin.html">Dashboard</a>
 
         <!-- Dropdown untuk Kelola Data -->
         <div class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            Kelola Data <i class="fas fa-chevron-down"></i>
-          </a>
+          <a href="#" class="dropdown-toggle"
+            >Kelola Data <i class="fas fa-chevron-down"></i
+          ></a>
           <div class="dropdown-menu">
             <a href="manage-layanan.html">Layanan</a>
             <a href="manage-galeri.html">Galeri</a>
@@ -71,34 +126,7 @@
       </div>
     </main>
 
-    <!-- 
-      PASTIKAN KODE JAVASCRIPT INI ADA DAN BENAR.
-      Jika kamu menggunakan file admin-nav.js, isinya harus seperti di bawah ini.
-    -->
-    <script>
-      // --- Script untuk Hamburger Menu ---
-      const hamburgerBtn = document.querySelector(".admin-nav .hamburger-btn");
-      const navLinks = document.querySelector(".admin-nav .nav-links");
-
-      hamburgerBtn.addEventListener("click", () => {
-        navLinks.classList.toggle("active");
-      });
-
-      // --- Script untuk Dropdown Menu ---
-      const dropdownToggle = document.querySelector(
-        ".admin-nav .dropdown-toggle"
-      );
-      const dropdownMenu = document.querySelector(".admin-nav .dropdown-menu");
-
-      dropdownToggle.addEventListener("click", (event) => {
-        // Mencegah link default berjalan
-        event.preventDefault();
-        dropdownMenu.classList.toggle("active");
-        dropdownToggle.classList.toggle("active");
-      });
-    </script>
-
-    <!-- Kamu bisa memuat script modulermu setelah script interaksi UI -->
+    <!-- Kita akan gunakan admin.js yang sudah ada, tapi tanpa loading indicator -->
     <script src="admin.js" type="module"></script>
     <script src="admin-nav.js" type="module"></script>
   </body>
