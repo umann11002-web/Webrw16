@@ -213,6 +213,21 @@ main {
 .berita-utama {
   margin-bottom: 2rem;
 }
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.section-header h2 {
+  margin-bottom: 0;
+}
+.lihat-semua-btn {
+  text-decoration: none;
+  color: var(--primary-green);
+  font-weight: 500;
+}
+
 .kartu-berita {
   background: white;
   border-radius: 8px;
@@ -288,12 +303,35 @@ footer {
 
 /* === [BARU] TAMPILAN MOBILE MODERN (DI BAWAH 768px) === */
 @media (max-width: 768px) {
-  /* Sembunyikan navigasi atas dan hamburger default */
-  .navbar {
-    display: none !important;
-  }
+  /* [PERBAIKAN] Tampilkan kembali hamburger, tapi sembunyikan menu utamanya */
   .hamburger {
-    display: none !important;
+    display: block; /* Tampilkan lagi hamburger di HP */
+  }
+  .navbar {
+    display: none; /* Sembunyikan menu secara default */
+    flex-direction: column;
+    position: absolute;
+    top: 70px; /* Sesuaikan dengan tinggi header */
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 1rem 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .navbar.active {
+    display: flex; /* Ini akan di-trigger oleh JS untuk menampilkan menu */
+  }
+  .navbar a {
+    padding: 1rem 5%;
+    width: 100%;
+  }
+  .navbar .dropdown {
+    width: 100%;
+  }
+  .navbar .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    border-top: 1px solid #eee;
   }
 
   /* Beri ruang di bawah agar konten tidak tertutup bottom-nav */
@@ -349,9 +387,23 @@ footer {
     color: var(--primary-green);
   }
 
+  /* Redesign Header Section Berita */
+  .section-header {
+    margin-bottom: 1rem; /* Kurangi margin */
+  }
+  .section-header h2 {
+    font-size: 1.3rem;
+  }
+  .lihat-semua-btn {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--dark-text);
+    text-decoration: underline;
+  }
+
   /* Redesign Kartu Berita */
   .berita-utama .swiper-slide {
-    padding: 0.5rem;
+    padding: 0; /* Hapus padding agar kartu penuh */
   }
   .kartu-berita {
     box-shadow: var(--card-shadow);
@@ -375,7 +427,7 @@ footer {
     color: var(--light-text);
   }
 
-  /* === [BARU] NAVIGASI BAWAH (BOTTOM NAV) === */
+  /* NAVIGASI BAWAH (BOTTOM NAV) */
   .bottom-nav {
     display: flex;
     justify-content: space-around;
@@ -402,7 +454,6 @@ footer {
     font-size: 1.5rem;
     margin-bottom: 0.2rem;
   }
-  /* Style untuk item yang aktif */
   .bottom-nav-item.active {
     color: var(--primary-green);
   }
