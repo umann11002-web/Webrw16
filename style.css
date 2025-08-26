@@ -303,13 +303,14 @@ footer {
 
 /* === [BARU] TAMPILAN MOBILE MODERN (DI BAWAH 768px) === */
 @media (max-width: 768px) {
-  /* [PERBAIKAN] Tampilkan kembali hamburger, tapi sembunyikan menu utamanya */
+  /* Tampilkan kembali hamburger, tapi sembunyikan menu utamanya */
   .hamburger {
     display: block; /* Tampilkan lagi hamburger di HP */
   }
   .navbar {
     display: none; /* Sembunyikan menu secara default */
     flex-direction: column;
+    align-items: flex-start; /* [FIX] Paksa item rata kiri */
     position: absolute;
     top: 70px; /* Sesuaikan dengan tinggi header */
     left: 0;
@@ -328,10 +329,17 @@ footer {
   .navbar .dropdown {
     width: 100%;
   }
+  /* [FIX] Atur dropdown toggle agar sama seperti link lainnya */
+  .navbar .dropdown .dropdown-toggle {
+    display: block; /* Buat jadi block element */
+    width: 100%;
+    padding: 1rem 5%;
+  }
   .navbar .dropdown-menu {
     position: static;
     box-shadow: none;
     border-top: 1px solid #eee;
+    padding-left: 1rem; /* Beri sedikit indentasi untuk sub-menu */
   }
 
   /* Beri ruang di bawah agar konten tidak tertutup bottom-nav */
