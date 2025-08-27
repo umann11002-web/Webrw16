@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Informasi Kependudukan - RW 16</title>
-    <!-- CSS sekarang hanya dari file eksternal -->
+    <!-- CSS sekarang HANYA dari file eksternal -->
     <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
@@ -12,61 +12,111 @@
     />
     <!-- Chart.js untuk grafik -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- 
-      BLOK <style>...</style> SUDAH DIHAPUS DARI SINI 
-      DAN DIPINDAHKAN KE FILE style.css
-    -->
+    <!-- BLOK <style>...</style> SUDAH DIHAPUS DARI SINI -->
   </head>
   <body>
-    <!-- Header & Navigasi (Struktur tidak berubah) -->
-    <header>
-      <!-- ... Kode header dan navigasi kamu ... -->
-    </header>
+    <!-- Wrapper untuk konten utama dan bottom nav -->
+    <div class="page-wrapper">
+      <header>
+        <div class="header-content">
+          <div class="logo">
+            <img src="images/logo16.png" alt="Logo RW 16" />
+            <span>RW 16 Kel. Cibat</span>
+          </div>
+          <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="berita.html">Berita</a>
+            <a href="layanan.html">Layanan</a>
+            <a href="informasi.html">Informasi</a>
+            <div class="dropdown">
+              <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
+                >Tentang Kami <i class="fas fa-chevron-down"></i
+              ></a>
+              <div class="dropdown-menu" id="tentang-kami-menu">
+                <a href="visi-misi.html">Visi & Misi</a>
+                <a href="struktur-organisasi.html">Struktur Organisasi</a>
+                <a href="galeri.html">Galeri</a>
+              </div>
+            </div>
+            <div class="dropdown" id="profil-dropdown" style="display: none">
+              <a href="#" class="dropdown-toggle" id="profil-toggle"
+                >Profil <i class="fas fa-chevron-down"></i
+              ></a>
+              <div class="dropdown-menu" id="profil-menu">
+                <a href="riwayat.html">Riwayat Saya</a>
+                <a href="#" id="logout-link-nav">Logout</a>
+              </div>
+            </div>
+            <a href="login.html" id="login-button-nav">Login</a>
+          </nav>
+          <button class="hamburger" id="hamburger-menu">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </header>
 
-    <main class="info-main">
-      <h1>Statistik Penduduk RW 16</h1>
+      <main class="info-main">
+        <h1>Statistik Penduduk RW 16</h1>
 
-      <div class="info-summary-grid">
-        <!-- Kartu-kartu ini akan di-style ulang oleh CSS baru -->
-        <div class="summary-card">
-          <div class="icon total"><i class="fas fa-users"></i></div>
-          <div class="text">
-            <h3>TOTAL PENDUDUK</h3>
-            <p id="total-penduduk">...</p>
+        <div class="info-summary-grid">
+          <div class="summary-card">
+            <div class="icon kk"><i class="fas fa-house-user"></i></div>
+            <div class="text">
+              <h3>KEPALA KELUARGA</h3>
+              <p id="kepala-keluarga">...</p>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="icon wanita"><i class="fas fa-female"></i></div>
+            <div class="text">
+              <h3>PEREMPUAN</h3>
+              <p id="jumlah-wanita">...</p>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="icon pria"><i class="fas fa-male"></i></div>
+            <div class="text">
+              <h3>LAKI-LAKI</h3>
+              <p id="jumlah-pria">...</p>
+            </div>
           </div>
         </div>
-        <div class="summary-card">
-          <div class="icon kk"><i class="fas fa-house-user"></i></div>
-          <div class="text">
-            <h3>KEPALA KELUARGA</h3>
-            <p id="kepala-keluarga">...</p>
-          </div>
-        </div>
-        <div class="summary-card">
-          <div class="icon wanita"><i class="fas fa-female"></i></div>
-          <div class="text">
-            <h3>PEREMPUAN</h3>
-            <p id="jumlah-wanita">...</p>
-          </div>
-        </div>
-        <div class="summary-card">
-          <div class="icon pria"><i class="fas fa-male"></i></div>
-          <div class="text">
-            <h3>LAKI-LAKI</h3>
-            <p id="jumlah-pria">...</p>
-          </div>
-        </div>
-      </div>
 
-      <div class="chart-container">
-        <h2>Berdasarkan Kelompok Umur</h2>
-        <canvas id="piramida-penduduk-chart"></canvas>
-      </div>
-    </main>
+        <div class="chart-container">
+          <h2>Berdasarkan Kelompok Umur</h2>
+          <canvas id="piramida-penduduk-chart"></canvas>
+        </div>
+      </main>
+    </div>
+    <!-- Penutup .page-wrapper -->
 
     <!-- Navigasi Bawah untuk Mobile -->
     <nav class="bottom-nav">
-      <!-- ... Kode navigasi bawah kamu ... -->
+      <a href="index.html" class="bottom-nav-item">
+        <i class="fas fa-home"></i>
+        <span>Beranda</span>
+      </a>
+      <a href="layanan.html" class="bottom-nav-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Layanan</span>
+      </a>
+      <a href="berita.html" class="bottom-nav-item">
+        <i class="fas fa-newspaper"></i>
+        <span>Berita</span>
+      </a>
+      <a href="login.html" class="bottom-nav-item" id="bottom-nav-login">
+        <i class="fas fa-user"></i>
+        <span>Login</span>
+      </a>
+      <a
+        href="#"
+        class="bottom-nav-item"
+        id="bottom-nav-profil"
+        style="display: none"
+      >
+        <i class="fas fa-user"></i>
+        <span>Profil</span>
+      </a>
     </nav>
 
     <script src="script.js" type="module"></script>
