@@ -21,13 +21,11 @@ const db = getFirestore(app);
 
 const beritaContainer = document.getElementById("berita-detail-container");
 
-// Fungsi untuk mengambil ID berita dari URL
 function getBeritaIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
   return params.get("id");
 }
 
-// Fungsi untuk menampilkan detail berita
 async function tampilkanDetailBerita() {
   const beritaId = getBeritaIdFromUrl();
   if (!beritaId) {
@@ -41,24 +39,29 @@ async function tampilkanDetailBerita() {
 
     if (docSnap.exists()) {
       const berita = docSnap.data();
+      document.title = `${berita.judul || "Berita"} - RW 16`;
 
-      // Update judul halaman
-      document.title = `${berita.judul} - RW 16`;
+      // [FIX] Pengecekan tanggal yang lebih kuat
+      let tanggalFormatted = "Tanggal tidak tersedia";
+      if (berita.tanggal && typeof berita.tanggal.toDate === "function") {
+        tanggalFormatted = berita.tanggal.toDate().toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+      } else if (berita.tanggal) {
+        tanggalFormatted = berita.tanggal; // Tampilkan sebagai teks jika bukan timestamp
+      }
 
-      // Format tanggal
-      const tanggal = new Date(berita.tanggal).toLocaleDateString("id-ID", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      });
+      // [FIX] Pengecekan isi berita yang lebih kuat
+      const isiBerita = berita.isi || "<p>[Isi berita tidak tersedia]</p>";
 
-      // Render HTML
       beritaContainer.innerHTML = `
         <div class="berita-header">
           <img src="${berita.gambarUrl}" alt="${berita.judul}">
           <h1>${berita.judul}</h1>
           <div class="meta-info">
-            <span><i class="fas fa-calendar-alt"></i> ${tanggal}</span>
+            <span><i class="fas fa-calendar-alt"></i> ${tanggalFormatted}</span>
             <span><i class="fas fa-user"></i> Ditulis oleh Admin</span>
             <span><i class="fas fa-eye"></i> Dilihat ${
               berita.dilihat || 0
@@ -66,11 +69,11 @@ async function tampilkanDetailBerita() {
           </div>
         </div>
         <div class="berita-content">
-          ${berita.isi}
+          ${isiBerita}
         </div>
       `;
 
-      // Update jumlah 'dilihat' (increment)
+      // Update jumlah 'dilihat'
       await updateDoc(docRef, {
         dilihat: increment(1),
       });
