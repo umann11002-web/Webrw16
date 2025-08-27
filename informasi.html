@@ -12,7 +12,6 @@
     />
     <!-- Chart.js untuk grafik -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- BLOK <style>...</style> SUDAH DIHAPUS DARI SINI -->
   </head>
   <body>
     <!-- Wrapper untuk konten utama dan bottom nav -->
@@ -59,6 +58,14 @@
         <h1>Statistik Penduduk RW 16</h1>
 
         <div class="info-summary-grid">
+          <!-- [FIX] KARTU TOTAL PENDUDUK DIKEMBALIKAN -->
+          <div class="summary-card">
+            <div class="icon total"><i class="fas fa-users"></i></div>
+            <div class="text">
+              <h3>TOTAL PENDUDUK</h3>
+              <p id="total-penduduk">...</p>
+            </div>
+          </div>
           <div class="summary-card">
             <div class="icon kk"><i class="fas fa-house-user"></i></div>
             <div class="text">
