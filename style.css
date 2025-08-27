@@ -20,6 +20,22 @@
   font-family: "Poppins", sans-serif;
 }
 
+/* [PERBAIKAN] Mengatur struktur halaman agar footer menempel di bawah */
+html,
+body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
+.page-wrapper {
+  flex: 1 0 auto;
+}
+footer {
+  flex-shrink: 0;
+}
+
 body {
   background-color: var(--bg-light);
   color: var(--dark-text);
@@ -227,7 +243,7 @@ main,
   font-weight: 500;
 }
 
-/* [PERBAIKAN] Style Kartu Berita yang lebih detail */
+/* Style Kartu Berita yang lebih detail */
 .kartu-berita {
   background: white;
   border-radius: 8px;
@@ -236,7 +252,7 @@ main,
   transition: transform 0.2s;
   text-decoration: none;
   color: var(--dark-text);
-  display: flex; /* Tambahan untuk struktur yang lebih baik */
+  display: flex;
   flex-direction: column;
 }
 .kartu-berita:hover {
@@ -374,7 +390,7 @@ footer {
   color: #ccc;
 }
 
-/* [BARU] Style untuk Halaman Daftar Berita */
+/* Style untuk Halaman Daftar Berita */
 .berita-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -488,7 +504,7 @@ footer {
     box-shadow: var(--card-shadow);
   }
 
-  /* [PERBAIKAN] Atur grid berita menjadi 1 kolom di HP */
+  /* Atur grid berita menjadi 1 kolom di HP */
   .berita-grid {
     grid-template-columns: 1fr;
   }
