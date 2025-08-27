@@ -122,7 +122,8 @@ header {
 /* === KONTEN HALAMAN PUBLIK (UMUM) === */
 /* ================================= */
 main,
-.info-main {
+.info-main,
+.berita-main {
   padding: 1.5rem 5%;
 }
 .hero {
@@ -225,12 +226,18 @@ main,
   color: var(--primary-green);
   font-weight: 500;
 }
+
+/* [PERBAIKAN] Style Kartu Berita yang lebih detail */
 .kartu-berita {
   background: white;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s;
+  text-decoration: none;
+  color: var(--dark-text);
+  display: flex; /* Tambahan untuk struktur yang lebih baik */
+  flex-direction: column;
 }
 .kartu-berita:hover {
   transform: translateY(-5px);
@@ -242,19 +249,34 @@ main,
 }
 .konten-kartu {
   padding: 1rem;
-}
-.konten-kartu .tanggal {
-  display: inline-block;
-  background-color: var(--primary-green);
-  color: white;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  margin-bottom: 0.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 .konten-kartu h3 {
-  font-size: 1rem;
+  font-size: 1.1rem;
   line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+.konten-kartu .cuplikan {
+  font-size: 0.9rem;
+  color: var(--light-text);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+.meta-info-kartu {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: var(--light-text);
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.8rem;
+}
+.meta-info-kartu span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 /* Style untuk Halaman Informasi Statistik (Desktop) */
@@ -350,6 +372,13 @@ footer {
   font-size: 0.9rem;
   line-height: 1.5;
   color: #ccc;
+}
+
+/* [BARU] Style untuk Halaman Daftar Berita */
+.berita-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
 }
 
 /* #################################### */
@@ -457,6 +486,11 @@ footer {
   }
   .kartu-berita {
     box-shadow: var(--card-shadow);
+  }
+
+  /* [PERBAIKAN] Atur grid berita menjadi 1 kolom di HP */
+  .berita-grid {
+    grid-template-columns: 1fr;
   }
 
   /* Redesign Halaman Informasi Statistik Mobile */
