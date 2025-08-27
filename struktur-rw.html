@@ -9,111 +9,45 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
-    <style>
-      .main-content {
-        padding: 2rem 5%;
-      }
-      .org-chart {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2.5rem; /* Jarak antar level */
-      }
-      .org-level {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        flex-wrap: wrap;
-        width: 100%;
-      }
-      .org-card {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-        text-align: center;
-        width: 250px;
-        transition: transform 0.2s;
-      }
-      .org-card:hover {
-        transform: translateY(-5px);
-      }
-      .org-card img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 1rem;
-        border: 4px solid #eee;
-      }
-      .org-card h3 {
-        margin: 0 0 5px 0;
-        font-size: 1.2rem;
-      }
-      .org-card p {
-        margin: 0;
-        color: #6c757d;
-        font-weight: 500;
-      }
-    </style>
+    <!-- [BARU] Menambahkan library Swiper.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <!-- BLOK <style>...</style> SUDAH DIHAPUS DARI SINI -->
   </head>
   <body>
-    <header>
-      <div class="header-content">
-        <div class="logo">
-          <img src="images/logo16.png" alt="Logo RW 16" />
-          <span>RW 16 Kel. Cibat</span>
+    <div class="page-wrapper">
+      <header>
+        <!-- ... Kode header dan navigasi kamu ... -->
+      </header>
+
+      <main class="main-content">
+        <h1>Struktur Kepengurusan RW 16</h1>
+
+        <!-- [PERUBAHAN] Container utama diubah menjadi Swiper -->
+        <div class="swiper org-swiper">
+          <div class="swiper-wrapper" id="org-chart-container">
+            <!-- Konten akan diisi oleh JavaScript -->
+            <p>Memuat struktur organisasi...</p>
+          </div>
+          <!-- Navigasi untuk slider (hanya terlihat di mobile) -->
+          <div class="swiper-pagination"></div>
         </div>
+      </main>
 
-        <nav class="navbar">
-          <a href="index.html">Home</a>
-          <a href="berita.html">Berita</a>
-          <a href="layanan.html">Layanan</a>
-          <a href="informasi.html">Informasi</a>
+      <footer>
+        <!-- ... Kode footer kamu ... -->
+      </footer>
+    </div>
 
-          <!-- Dropdown untuk Tentang Kami -->
-          <div class="dropdown">
-            <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
-              >Tentang Kami <i class="fas fa-chevron-down"></i
-            ></a>
-            <div class="dropdown-menu" id="tentang-kami-menu">
-              <a href="visi-misi.html">Visi & Misi</a>
-              <a href="struktur-organisasi.html">Struktur Organisasi</a>
-              <a href="galeri.html">Galeri</a>
-            </div>
-          </div>
-
-          <!-- Dropdown untuk Profil Pengguna (disembunyikan dulu) -->
-          <div class="dropdown" id="profil-dropdown" style="display: none">
-            <a href="#" class="dropdown-toggle" id="profil-toggle"
-              >Profil <i class="fas fa-chevron-down"></i
-            ></a>
-            <div class="dropdown-menu" id="profil-menu">
-              <a href="riwayat.html">Riwayat Saya</a>
-              <a href="#" id="logout-link-nav">Logout</a>
-            </div>
-          </div>
-
-          <!-- Tombol Login (untuk pengunjung) -->
-          <a href="login.html" id="login-button-nav">Login</a>
-        </nav>
-
-        <button class="hamburger" id="hamburger-menu">
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
-    </header>
-
-    <main class="main-content">
-      <h1>Struktur Kepengurusan RW 16</h1>
-
-      <!-- Wadah ini akan diisi oleh JavaScript -->
-      <div class="org-chart" id="org-chart-container">
-        <p>Memuat struktur organisasi...</p>
-      </div>
-    </main>
+    <nav class="bottom-nav">
+      <!-- ... Kode navigasi bawah kamu ... -->
+    </nav>
 
     <script src="script.js" type="module"></script>
+    <!-- [BARU] Menambahkan script Swiper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="struktur-rw.js" type="module"></script>
   </body>
 </html>

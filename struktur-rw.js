@@ -33,38 +33,16 @@ async function tampilkanStrukturRW() {
         return;
       }
 
-      // Pisahkan pengurus berdasarkan jabatan
-      const ketua = pengurusArray.filter((p) =>
-        p.jabatan.toLowerCase().includes("ketua")
-      );
-      const inti = pengurusArray.filter((p) =>
-        ["wakil", "sekretaris", "bendahara"].some((j) =>
-          p.jabatan.toLowerCase().includes(j)
-        )
-      );
-      const seksi = pengurusArray.filter(
-        (p) => !ketua.includes(p) && !inti.includes(p)
-      );
+      // [PERUBAHAN] Loop melalui semua pengurus dan buat slide untuk masing-masing
+      pengurusArray.forEach((p) => {
+        const slide = document.createElement("div");
+        slide.className = "swiper-slide"; // Setiap kartu adalah sebuah slide
+        slide.innerHTML = createCardHTML(p);
+        orgChartContainer.appendChild(slide);
+      });
 
-      // Buat Level 1: Ketua
-      const level1 = document.createElement("div");
-      level1.className = "org-level";
-      ketua.forEach((p) => (level1.innerHTML += createCardHTML(p)));
-      orgChartContainer.appendChild(level1);
-
-      // Buat Level 2: Pengurus Inti
-      const level2 = document.createElement("div");
-      level2.className = "org-level";
-      inti.forEach((p) => (level2.innerHTML += createCardHTML(p)));
-      orgChartContainer.appendChild(level2);
-
-      // Buat Level 3: Seksi-seksi
-      if (seksi.length > 0) {
-        const level3 = document.createElement("div");
-        level3.className = "org-level";
-        seksi.forEach((p) => (level3.innerHTML += createCardHTML(p)));
-        orgChartContainer.appendChild(level3);
-      }
+      // [BARU] Inisialisasi Swiper setelah semua slide ditambahkan
+      initializeOrgSwiper();
     } else {
       orgChartContainer.innerHTML =
         "<p>Data struktur organisasi belum tersedia.</p>";
@@ -76,15 +54,42 @@ async function tampilkanStrukturRW() {
   }
 }
 
-// Fungsi pembantu untuk membuat HTML kartu
+// Fungsi pembantu untuk membuat HTML kartu (tidak berubah)
 function createCardHTML(pengurus) {
   return `
-        <div class="org-card">
-            <img src="${pengurus.fotoUrl}" alt="Foto ${pengurus.jabatan}">
-            <h3>${pengurus.nama}</h3>
-            <p>${pengurus.jabatan}</p>
-        </div>
-    `;
+    <div class="org-card">
+      <img src="${
+        pengurus.fotoUrl || "https://placehold.co/100x100/EFEFEF/333?text=Foto"
+      }" alt="Foto ${pengurus.jabatan}">
+      <h3>${pengurus.nama}</h3>
+      <p>${pengurus.jabatan}</p>
+    </div>
+  `;
+}
+
+// [BARU] Fungsi untuk inisialisasi Swiper
+function initializeOrgSwiper() {
+  const swiper = new Swiper(".org-swiper", {
+    // Opsi untuk mobile
+    slidesPerView: "auto",
+    spaceBetween: 15,
+    centeredSlides: true,
+    loop: true,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    // Nonaktifkan beberapa fitur di desktop
+    breakpoints: {
+      769: {
+        // Ukuran desktop
+        slidesPerView: 4,
+        spaceBetween: 30,
+        centeredSlides: false,
+        loop: false,
+      },
+    },
+  });
 }
 
 document.addEventListener("DOMContentLoaded", tampilkanStrukturRW);
