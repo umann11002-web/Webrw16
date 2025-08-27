@@ -8,9 +8,9 @@
   --primary-green: #28a745;
   --dark-text: #333;
   --light-text: #666;
-  --bg-light: #f8f9fa; /* Warna latar belakang lebih cerah */
+  --bg-light: #f8f9fa;
   --border-color: #eee;
-  --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Bayangan yang lebih halus */
+  --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 * {
@@ -29,7 +29,6 @@ h1 {
   font-size: 2rem;
   margin-bottom: 0.5rem;
 }
-
 h2 {
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
@@ -120,9 +119,10 @@ header {
 }
 
 /* ================================= */
-/* === KONTEN HALAMAN PUBLIK (DESKTOP) === */
+/* === KONTEN HALAMAN PUBLIK (UMUM) === */
 /* ================================= */
-main {
+main,
+.info-main {
   padding: 1.5rem 5%;
 }
 .hero {
@@ -172,7 +172,6 @@ main {
 .struktur-rt {
   background-color: #17a2b8;
 }
-
 .home-stats {
   padding: 0 5%;
   margin-bottom: 2rem;
@@ -209,7 +208,6 @@ main {
   font-weight: 500;
   text-align: right;
 }
-
 .berita-utama {
   margin-bottom: 2rem;
 }
@@ -227,7 +225,6 @@ main {
   color: var(--primary-green);
   font-weight: 500;
 }
-
 .kartu-berita {
   background: white;
   border-radius: 8px;
@@ -258,6 +255,69 @@ main {
 .konten-kartu h3 {
   font-size: 1rem;
   line-height: 1.4;
+}
+
+/* Style untuk Halaman Informasi Statistik (Desktop) */
+.info-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+.summary-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.summary-card .icon {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: white;
+  flex-shrink: 0;
+}
+.summary-card .icon.total {
+  background-color: #ffc107;
+}
+.summary-card .icon.kk {
+  background-color: #17a2b8;
+}
+.summary-card .icon.wanita {
+  background-color: #dc3545;
+}
+.summary-card .icon.pria {
+  background-color: #007bff;
+}
+.summary-card .text h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+.summary-card .text p {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #343a40;
+}
+.chart-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+.chart-container h2 {
+  border-left: 5px solid var(--primary-green);
+  padding-left: 10px;
+  margin-top: 0;
 }
 
 footer {
@@ -292,27 +352,20 @@ footer {
   color: #ccc;
 }
 
-/* ================================= */
-/* === HALAMAN ADMIN (TIDAK BERUBAH) === */
-/* ================================= */
-/* ... Semua style admin tetap sama seperti sebelumnya ... */
-
 /* #################################### */
 /* ###   ATURAN RESPONSIF (SIHIR)  ### */
 /* #################################### */
-
-/* === [BARU] TAMPILAN MOBILE MODERN (DI BAWAH 768px) === */
 @media (max-width: 768px) {
-  /* Tampilkan kembali hamburger, tapi sembunyikan menu utamanya */
+  /* Navigasi Publik Mobile */
   .hamburger {
-    display: block; /* Tampilkan lagi hamburger di HP */
+    display: block;
   }
   .navbar {
-    display: none; /* Sembunyikan menu secara default */
+    display: none;
     flex-direction: column;
-    align-items: flex-start; /* [FIX] Paksa item rata kiri */
+    align-items: flex-start;
     position: absolute;
-    top: 70px; /* Sesuaikan dengan tinggi header */
+    top: 70px;
     left: 0;
     width: 100%;
     background: white;
@@ -320,7 +373,7 @@ footer {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   .navbar.active {
-    display: flex; /* Ini akan di-trigger oleh JS untuk menampilkan menu */
+    display: flex;
   }
   .navbar a {
     padding: 1rem 5%;
@@ -329,9 +382,8 @@ footer {
   .navbar .dropdown {
     width: 100%;
   }
-  /* [FIX] Atur dropdown toggle agar sama seperti link lainnya */
   .navbar .dropdown .dropdown-toggle {
-    display: block; /* Buat jadi block element */
+    display: block;
     width: 100%;
     padding: 1rem 5%;
   }
@@ -339,15 +391,13 @@ footer {
     position: static;
     box-shadow: none;
     border-top: 1px solid #eee;
-    padding-left: 1rem; /* Beri sedikit indentasi untuk sub-menu */
+    padding-left: 1rem;
   }
-
-  /* Beri ruang di bawah agar konten tidak tertutup bottom-nav */
   .page-wrapper {
     padding-bottom: 80px;
   }
 
-  /* Redesign bagian Hero */
+  /* Redesign Konten Mobile */
   .hero {
     text-align: left;
     padding: 1.5rem;
@@ -362,8 +412,6 @@ footer {
     font-size: 0.9rem;
     color: var(--light-text);
   }
-
-  /* Redesign Tombol Informasi */
   .info-buttons {
     grid-template-columns: 1fr 1fr;
     gap: 0.8rem;
@@ -378,8 +426,6 @@ footer {
   .info-btn i {
     font-size: 1.5rem;
   }
-
-  /* Redesign Kartu Statistik */
   .stats-grid {
     grid-template-columns: 1fr;
     gap: 0.8rem;
@@ -394,10 +440,8 @@ footer {
     font-size: 2rem;
     color: var(--primary-green);
   }
-
-  /* Redesign Header Section Berita */
   .section-header {
-    margin-bottom: 1rem; /* Kurangi margin */
+    margin-bottom: 1rem;
   }
   .section-header h2 {
     font-size: 1.3rem;
@@ -408,16 +452,42 @@ footer {
     color: var(--dark-text);
     text-decoration: underline;
   }
-
-  /* Redesign Kartu Berita */
   .berita-utama .swiper-slide {
-    padding: 0; /* Hapus padding agar kartu penuh */
+    padding: 0;
   }
   .kartu-berita {
     box-shadow: var(--card-shadow);
   }
 
-  /* Redesign Footer */
+  /* Redesign Halaman Informasi Statistik Mobile */
+  .info-summary-grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  .summary-card {
+    padding: 1rem;
+    box-shadow: var(--card-shadow);
+    border-radius: 12px;
+  }
+  .summary-card .icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+  .summary-card .text h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .summary-card .text p {
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+  .chart-container {
+    padding: 1rem;
+  }
+
+  /* Footer Mobile */
   footer {
     background-color: white;
     color: var(--dark-text);
@@ -435,7 +505,7 @@ footer {
     color: var(--light-text);
   }
 
-  /* NAVIGASI BAWAH (BOTTOM NAV) */
+  /* Navigasi Bawah Mobile */
   .bottom-nav {
     display: flex;
     justify-content: space-around;
@@ -469,7 +539,6 @@ footer {
 
 /* Aturan untuk layar yang lebih besar (Tablet ke atas) */
 @media (min-width: 769px) {
-  /* Sembunyikan navigasi bawah di desktop */
   .bottom-nav {
     display: none;
   }
