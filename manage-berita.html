@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelola Berita - Admin</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <style>
+      /* Style khusus untuk halaman kelola berita */
+      .manage-main {
+        padding: 2rem 5%;
+      }
+      .card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: var(--card-shadow);
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-family: "Poppins", sans-serif;
+      }
+      .form-group textarea {
+        min-height: 200px;
+        resize: vertical;
+      }
+      .submit-btn {
+        padding: 0.7rem 1.5rem;
+        border: none;
+        background-color: var(--primary-green);
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .submit-btn:disabled {
+        background-color: #ccc;
+      }
+      /* Style untuk daftar berita yang sudah ada */
+      .berita-list-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .berita-list-item:last-child {
+        border-bottom: none;
+      }
+      .berita-actions button {
+        margin-left: 0.5rem;
+        padding: 0.4rem 0.8rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .btn-edit {
+        background-color: #ffc107;
+      }
+      .btn-delete {
+        background-color: #dc3545;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="admin-nav">
+      <div class="admin-nav-header">
+        <div class="nav-title">
+          <!-- Ganti dengan logo jika mau, atau biarkan teks -->
+          <strong>RW 16 Admin Panel</strong>
+        </div>
+        <button class="hamburger-btn" id="admin-hamburger-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      <div class="nav-links" id="admin-nav-links">
+        <a href="admin.html">Dashboard</a>
+
+        <!-- Dropdown untuk Kelola Data -->
+        <div class="dropdown">
+          <a href="#" class="dropdown-toggle"
+            >Kelola Data <i class="fas fa-chevron-down"></i
+          ></a>
+          <div class="dropdown-menu">
+            <a href="manage-layanan.html">Layanan</a>
+            <a href="manage-galeri.html">Galeri</a>
+            <a href="manage-penduduk.html">Statistik</a>
+          </div>
+        </div>
+
+        <a href="#" id="admin-logout-btn" class="logout-btn">Logout</a>
+      </div>
+    </header>
+
+    <main class="manage-main">
+      <h1>Kelola Berita</h1>
+
+      <div class="card">
+        <h2 id="form-title">Tambah Berita Baru</h2>
+        <form id="berita-form">
+          <!-- Input tersembunyi untuk menyimpan ID saat mode edit -->
+          <input type="hidden" id="berita-id" />
+          <div class="form-group">
+            <label for="berita-judul">Judul Berita</label>
+            <input type="text" id="berita-judul" required />
+          </div>
+          <div class="form-group">
+            <label for="berita-gambar"
+              >Gambar Utama (Kosongkan jika tidak ingin diubah)</label
+            >
+            <input type="file" id="berita-gambar" accept="image/*" />
+          </div>
+          <div class="form-group">
+            <label for="berita-isi">Isi Berita</label>
+            <textarea id="berita-isi" required></textarea>
+          </div>
+          <button type="submit" class="submit-btn" id="submit-berita-btn">
+            Publikasikan Berita
+          </button>
+          <button type="button" id="cancel-edit-btn" style="display: none">
+            Batal Edit
+          </button>
+        </form>
+        <p id="upload-status" style="margin-top: 1rem; font-weight: 600"></p>
+      </div>
+
+      <!-- [BARU] Daftar berita yang sudah ada -->
+      <div class="card">
+        <h2>Daftar Berita</h2>
+        <div id="berita-list-container">
+          <p>Memuat daftar berita...</p>
+        </div>
+      </div>
+    </main>
+
+    <script src="manage-berita.js" type="module"></script>
+    <script src="admin-nav.js" type="module"></script>
+  </body>
+</html>

@@ -6,6 +6,9 @@ import {
   getDocs,
   doc,
   getDoc,
+  query,
+  orderBy,
+  limit,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 import {
   getAuth,
@@ -13,7 +16,7 @@ import {
   signOut,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
-// Konfigurasi Firebase-mu (sudah disesuaikan)
+// Konfigurasi Firebase-mu
 const firebaseConfig = {
   apiKey: "AIzaSyBD4ypi0bq71tJfDdyqgdLL3A_RSye9Q7I",
   authDomain: "rw16cibabat-dbf87.firebaseapp.com",
@@ -28,18 +31,24 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// === SEMUA LOGIKA YANG BERINTERAKSI DENGAN DOM KITA MASUKKAN KE SINI ===
 document.addEventListener("DOMContentLoaded", () => {
   // --- Logika Status Login & Navigasi ---
   const loginButtonNav = document.getElementById("login-button-nav");
   const profilDropdown = document.getElementById("profil-dropdown");
+  const bottomNavLogin = document.getElementById("bottom-nav-login");
+  const bottomNavProfil = document.getElementById("bottom-nav-profil");
+
   onAuthStateChanged(auth, (user) => {
     if (user) {
       if (loginButtonNav) loginButtonNav.style.display = "none";
       if (profilDropdown) profilDropdown.style.display = "inline-block";
+      if (bottomNavLogin) bottomNavLogin.style.display = "none";
+      if (bottomNavProfil) bottomNavProfil.style.display = "flex";
     } else {
       if (loginButtonNav) loginButtonNav.style.display = "inline-block";
       if (profilDropdown) profilDropdown.style.display = "none";
+      if (bottomNavLogin) bottomNavLogin.style.display = "flex";
+      if (bottomNavProfil) bottomNavProfil.style.display = "none";
     }
   });
 
@@ -48,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     tampilkanBerita();
   }
 
-  // --- LOGIKA BARU UNTUK STATISTIK DI HOME ---
+  // --- Logika untuk Statistik di Home ---
   if (document.getElementById("home-total-penduduk")) {
     loadHomeStats();
   }
@@ -109,7 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // === FUNGSI-FUNGSI PEMBANTU ===
 
-// FUNGSI BARU UNTUK MEMUAT STATISTIK DI HOME
 async function loadHomeStats() {
   try {
     const docRef = doc(db, "statistik", "data_penduduk");
@@ -127,7 +135,6 @@ async function loadHomeStats() {
       });
       const totalPenduduk = totalPria + totalWanita;
 
-      // Update elemen di index.html
       document.getElementById("home-total-penduduk").textContent =
         totalPenduduk;
       document.getElementById("home-kepala-keluarga").textContent =
@@ -142,21 +149,40 @@ async function loadHomeStats() {
   }
 }
 
+// [MODIFIKASI] Fungsi untuk menampilkan berita di slider
 async function tampilkanBerita() {
   const beritaContainer = document.getElementById("berita-container");
   try {
-    const querySnapshot = await getDocs(collection(db, "berita"));
+    // Mengambil 5 berita terbaru
+    const q = query(
+      collection(db, "berita"),
+      orderBy("tanggal", "desc"),
+      limit(5)
+    );
+    const querySnapshot = await getDocs(q);
+
     beritaContainer.innerHTML = "";
     querySnapshot.forEach((doc) => {
       const berita = doc.data();
+      const beritaId = doc.id;
+
+      // [FIX] Mengubah Timestamp menjadi format tanggal yang bisa dibaca
+      const tanggalFormatted = berita.tanggal
+        .toDate()
+        .toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+
       const kartuHTML = `
-        <article class="kartu-berita">
+        <a href="berita-detail.html?id=${beritaId}" class="kartu-berita">
             <img src="${berita.gambarUrl}" alt="Gambar Berita">
             <div class="konten-kartu">
-                <span class="tanggal">${berita.tanggal}</span>
+                <span class="tanggal">${tanggalFormatted}</span>
                 <h3>${berita.judul}</h3>
             </div>
-        </article>
+        </a>
       `;
       const slideWrapper = document.createElement("div");
       slideWrapper.className = "swiper-slide";

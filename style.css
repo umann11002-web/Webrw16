@@ -20,7 +20,6 @@
   font-family: "Poppins", sans-serif;
 }
 
-/* [PERBAIKAN] Mengatur struktur halaman agar footer menempel di bawah */
 html,
 body {
   height: 100%;
@@ -28,17 +27,14 @@ body {
 body {
   display: flex;
   flex-direction: column;
+  background-color: var(--bg-light);
+  color: var(--dark-text);
 }
 .page-wrapper {
   flex: 1 0 auto;
 }
 footer {
   flex-shrink: 0;
-}
-
-body {
-  background-color: var(--bg-light);
-  color: var(--dark-text);
 }
 
 h1 {
@@ -242,8 +238,6 @@ main,
   color: var(--primary-green);
   font-weight: 500;
 }
-
-/* Style Kartu Berita yang lebih detail */
 .kartu-berita {
   background: white;
   border-radius: 8px;
@@ -294,8 +288,6 @@ main,
   align-items: center;
   gap: 0.4rem;
 }
-
-/* Style untuk Halaman Informasi Statistik (Desktop) */
 .info-summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -357,6 +349,11 @@ main,
   padding-left: 10px;
   margin-top: 0;
 }
+.berita-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
 
 footer {
   background-color: #343a40;
@@ -390,11 +387,132 @@ footer {
   color: #ccc;
 }
 
-/* Style untuk Halaman Daftar Berita */
-.berita-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
+/* ================================= */
+/* === HALAMAN ADMIN (UMUM) === */
+/* ================================= */
+.admin-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 5%;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.admin-nav .nav-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.admin-nav .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.admin-nav .nav-links a {
+  text-decoration: none;
+  color: var(--dark-text);
+  padding: 0.5rem;
+}
+.admin-nav .logout-btn {
+  background-color: #dc3545;
+  color: white !important;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 4px;
+}
+.admin-nav .hamburger-btn {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.admin-main,
+.manage-main {
+  padding: 2rem 5%;
+}
+.admin-main h1 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+}
+th,
+td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  vertical-align: middle;
+}
+thead tr {
+  background-color: #f2f2f2;
+}
+th select {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+  display: block;
+  width: 100%;
+}
+.action-btn {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+.btn-approve {
+  background-color: var(--primary-green);
+}
+.btn-reject {
+  background-color: #6c757d;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.close-btn {
+  font-size: 1.5rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.form-group {
+  margin: 1rem 0;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.form-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 /* #################################### */
@@ -503,13 +621,9 @@ footer {
   .kartu-berita {
     box-shadow: var(--card-shadow);
   }
-
-  /* Atur grid berita menjadi 1 kolom di HP */
   .berita-grid {
     grid-template-columns: 1fr;
   }
-
-  /* Redesign Halaman Informasi Statistik Mobile */
   .info-summary-grid {
     grid-template-columns: 1fr;
     gap: 0.8rem;
@@ -535,6 +649,40 @@ footer {
   }
   .chart-container {
     padding: 1rem;
+  }
+
+  /* Navigasi Admin Mobile */
+  .admin-nav {
+    flex-wrap: wrap;
+  }
+  .admin-nav .hamburger-btn {
+    display: block;
+  }
+  .admin-nav .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+    margin-top: 1rem;
+    gap: 0;
+  }
+  .admin-nav .nav-links.active {
+    display: flex;
+  }
+  .admin-nav .nav-links a {
+    padding: 0.8rem 0;
+    text-align: left;
+    border-top: 1px solid #eee;
+  }
+  .admin-nav .dropdown {
+    width: 100%;
+  }
+  .admin-nav .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    border-top: 1px dashed #ccc;
+    padding-left: 1rem;
+    background-color: #f8f9fa;
   }
 
   /* Footer Mobile */
