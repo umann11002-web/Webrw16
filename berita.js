@@ -23,7 +23,7 @@ const beritaGridContainer = document.getElementById("berita-grid-container");
 
 async function tampilkanSemuaBerita() {
   try {
-    const q = query(collection(db, "berita"), orderBy("tanggal", "desc")); // Urutkan berdasarkan tanggal
+    const q = query(collection(db, "berita"), orderBy("tanggal", "desc"));
     const querySnapshot = await getDocs(q);
 
     beritaGridContainer.innerHTML = "";
@@ -36,16 +36,33 @@ async function tampilkanSemuaBerita() {
 
     querySnapshot.forEach((doc) => {
       const berita = doc.data();
+      const beritaId = doc.id;
+
+      // Membuat cuplikan berita (sekitar 100 karakter)
+      const cuplikan = berita.isi.substring(0, 100) + "...";
+
+      // Format tanggal
+      const tanggal = new Date(berita.tanggal).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
 
       const kartuHTML = `
-                <a href="#" class="kartu-berita">
-                    <img src="${berita.gambarUrl}" alt="Gambar Berita">
-                    <div class="konten-kartu">
-                        <span class="tanggal">${berita.tanggal}</span>
-                        <h3>${berita.judul}</h3>
-                    </div>
-                </a>
-            `;
+        <a href="berita-detail.html?id=${beritaId}" class="kartu-berita">
+            <img src="${berita.gambarUrl}" alt="Gambar Berita">
+            <div class="konten-kartu">
+                <h3>${berita.judul}</h3>
+                <p class="cuplikan">${cuplikan}</p>
+                <div class="meta-info-kartu">
+                    <span><i class="fas fa-calendar-alt"></i> ${tanggal}</span>
+                    <span><i class="fas fa-eye"></i> ${
+                      berita.dilihat || 0
+                    }</span>
+                </div>
+            </div>
+        </a>
+      `;
       beritaGridContainer.innerHTML += kartuHTML;
     });
   } catch (error) {
