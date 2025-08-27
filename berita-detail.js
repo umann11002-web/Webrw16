@@ -41,7 +41,6 @@ async function tampilkanDetailBerita() {
       const berita = docSnap.data();
       document.title = `${berita.judul || "Berita"} - RW 16`;
 
-      // [FIX] Pengecekan tanggal yang lebih kuat
       let tanggalFormatted = "Tanggal tidak tersedia";
       if (berita.tanggal && typeof berita.tanggal.toDate === "function") {
         tanggalFormatted = berita.tanggal.toDate().toLocaleDateString("id-ID", {
@@ -50,10 +49,9 @@ async function tampilkanDetailBerita() {
           year: "numeric",
         });
       } else if (berita.tanggal) {
-        tanggalFormatted = berita.tanggal; // Tampilkan sebagai teks jika bukan timestamp
+        tanggalFormatted = berita.tanggal;
       }
 
-      // [FIX] Pengecekan isi berita yang lebih kuat
       const isiBerita = berita.isi || "<p>[Isi berita tidak tersedia]</p>";
 
       beritaContainer.innerHTML = `
@@ -73,10 +71,18 @@ async function tampilkanDetailBerita() {
         </div>
       `;
 
-      // Update jumlah 'dilihat'
-      await updateDoc(docRef, {
-        dilihat: increment(1),
-      });
+      // [FIX] Update jumlah 'dilihat' dibungkus dalam try...catch sendiri
+      // Jadi jika gagal (karena bukan admin), tidak akan merusak tampilan
+      try {
+        await updateDoc(docRef, {
+          dilihat: increment(1),
+        });
+      } catch (updateError) {
+        // Abaikan error ini di sisi pengguna, tapi catat di console untuk developer
+        console.log(
+          "Gagal mengupdate jumlah dilihat (ini wajar untuk non-admin)."
+        );
+      }
     } else {
       beritaContainer.innerHTML = "<p>Berita tidak ditemukan.</p>";
     }
