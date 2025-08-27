@@ -38,11 +38,12 @@ async function tampilkanSemuaBerita() {
       const berita = doc.data();
       const beritaId = doc.id;
 
-      // Membuat cuplikan berita (sekitar 100 karakter)
-      const cuplikan = berita.isi.substring(0, 100) + "...";
+      // [FIX] Cek dulu apakah 'berita.isi' ada sebelum membuat cuplikan
+      // Jika tidak ada, beri string kosong agar tidak error.
+      const cuplikan = berita.isi ? berita.isi.substring(0, 100) + "..." : "";
 
-      // Format tanggal
-      const tanggal = new Date(berita.tanggal).toLocaleDateString("id-ID", {
+      // Menggunakan .toDate() untuk mengubah Firebase Timestamp menjadi JavaScript Date
+      const tanggal = berita.tanggal.toDate().toLocaleDateString("id-ID", {
         day: "numeric",
         month: "long",
         year: "numeric",
