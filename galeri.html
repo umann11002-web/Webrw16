@@ -101,7 +101,7 @@
       <div class="header-content">
         <div class="logo">
           <img src="images/logo16.png" alt="Logo RW 16" />
-          <span>RW 16 Kel. Cibabat</span>
+          <span>RW 16 Kel. Cibat</span>
         </div>
 
         <nav class="navbar">
@@ -109,8 +109,6 @@
           <a href="berita.html">Berita</a>
           <a href="layanan.html">Layanan</a>
           <a href="informasi.html">Informasi</a>
-
-          <!-- Dropdown untuk Tentang Kami -->
           <div class="dropdown">
             <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
               >Tentang Kami <i class="fas fa-chevron-down"></i
@@ -121,6 +119,24 @@
               <a href="galeri.html">Galeri</a>
             </div>
           </div>
+          <div class="dropdown" id="profil-dropdown" style="display: none">
+            <a href="#" class="dropdown-toggle" id="profil-toggle"
+              >Profil <i class="fas fa-chevron-down"></i
+            ></a>
+            <div class="dropdown-menu" id="profil-menu">
+              <a href="riwayat.html">Riwayat Saya</a>
+              <a href="#" id="logout-link-nav">Logout</a>
+              <a href="profil.html">Edit Profil</a>
+            </div>
+          </div>
+          <a href="login.html" id="login-button-nav">Login</a>
+        </nav>
+
+        <button class="hamburger" id="hamburger-menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </header>
 
           <!-- Dropdown untuk Profil Pengguna (disembunyikan dulu) -->
           <div class="dropdown" id="profil-dropdown" style="display: none">
@@ -164,6 +180,47 @@
         <img src="" alt="Tampilan foto" id="lightbox-image" />
       </div>
     </div>
+
+    <footer>
+        <div class="info-kantor">
+          <div class="nomor-rw">16</div>
+          <div class="alamat">
+            <h4>KANTOR RW 16</h4>
+            <p>
+              Jl. Pesantren No. KM.2, RW 16, Cibabat, Kec. Cimahi Utara, Kota
+              Cimahi, Jawa Barat 40513
+            </p>
+          </div>
+        </div>
+      </footer>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="bottom-nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Beranda</span>
+      </a>
+      <a href="layanan.html" class="bottom-nav-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Layanan</span>
+      </a>
+      <a href="berita.html" class="bottom-nav-item">
+        <i class="fas fa-newspaper"></i>
+        <span>Berita</span>
+      </a>
+      <a href="login.html" class="bottom-nav-item" id="bottom-nav-login">
+        <i class="fas fa-user"></i>
+        <span>Login</span>
+      </a>
+      <a
+        href="#"
+        class="bottom-nav-item"
+        id="bottom-nav-profil"
+        style="display: none"
+      >
+        <i class="fas fa-user"></i>
+        <span>Profil</span>
+      </a>
+    </nav>
 
     <script src="script.js" type="module"></script>
     <script src="galeri.js" type="module"></script>

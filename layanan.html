@@ -4,70 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Layanan Administrasi - RW 16</title>
+    <!-- CSS sekarang hanya dari file eksternal -->
     <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
-    <style>
-      .layanan-container {
-        padding: 2rem 5%;
-      }
-      .layanan-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 1.5rem;
-      }
-      .kartu-layanan {
-        background: white;
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        padding: 1.5rem;
-        transition: transform 0.2s, box-shadow 0.2s;
-      }
-      .kartu-layanan:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      }
-      .kartu-layanan h3 {
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
-      }
-      .kartu-layanan p {
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-      }
-      .kartu-layanan ul {
-        list-style: none;
-        padding-left: 0;
-      }
-      .kartu-layanan li {
-        margin-bottom: 0.3rem;
-        color: var(--light-text);
-      }
-      .kartu-layanan li i {
-        margin-right: 8px;
-        color: var(--primary-green);
-      }
-      .tombol-ajukan {
-        display: inline-block;
-        margin-top: 1.5rem;
-        padding: 0.6rem 1.2rem;
-        background-color: var(--primary-green);
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-        font-weight: 600;
-      }
-    </style>
+    <!-- BLOK <style>...</style> SUDAH DIHAPUS DARI SINI -->
   </head>
   <body>
     <header>
       <div class="header-content">
         <div class="logo">
           <img src="images/logo16.png" alt="Logo RW 16" />
-          <span>RW 16 Kel. Cibabat</span>
+          <span>RW 16 Kel. Cibat</span>
         </div>
+
         <nav class="navbar">
           <a href="index.html">Home</a>
           <a href="berita.html">Berita</a>
@@ -90,10 +42,12 @@
             <div class="dropdown-menu" id="profil-menu">
               <a href="riwayat.html">Riwayat Saya</a>
               <a href="#" id="logout-link-nav">Logout</a>
+              <a href="profil.html">Edit Profil</a>
             </div>
           </div>
           <a href="login.html" id="login-button-nav">Login</a>
         </nav>
+
         <button class="hamburger" id="hamburger-menu">
           <i class="fas fa-bars"></i>
         </button>
@@ -110,6 +64,47 @@
         <p>Memuat daftar layanan...</p>
       </div>
     </main>
+
+    <footer>
+      <div class="info-kantor">
+        <div class="nomor-rw">16</div>
+        <div class="alamat">
+          <h4>KANTOR RW 16</h4>
+          <p>
+            Jl. Pesantren No. KM.2, RW 16, Cibabat, Kec. Cimahi Utara, Kota
+            Cimahi, Jawa Barat 40513
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="bottom-nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Beranda</span>
+      </a>
+      <a href="layanan.html" class="bottom-nav-item">
+        <i class="fas fa-file-alt"></i>
+        <span>Layanan</span>
+      </a>
+      <a href="berita.html" class="bottom-nav-item">
+        <i class="fas fa-newspaper"></i>
+        <span>Berita</span>
+      </a>
+      <a href="login.html" class="bottom-nav-item" id="bottom-nav-login">
+        <i class="fas fa-user"></i>
+        <span>Login</span>
+      </a>
+      <a
+        href="#"
+        class="bottom-nav-item"
+        id="bottom-nav-profil"
+        style="display: none"
+      >
+        <i class="fas fa-user"></i>
+        <span>Profil</span>
+      </a>
+    </nav>
 
     <!-- Memuat skrip untuk halaman ini -->
     <script src="layanan.js" type="module"></script>
