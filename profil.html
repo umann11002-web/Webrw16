@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profil Saya - RW 16</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <header>
+        <!-- ... Kode header dan navigasi kamu ... -->
+      </header>
+
+      <main class="main-content">
+        <div class="profile-container">
+          <!-- Bagian Header Profil -->
+          <div class="profile-header">
+            <div class="profile-pic-container">
+              <img
+                src="https://placehold.co/120x120/EFEFEF/333?text=Foto"
+                alt="Foto Profil"
+                id="profile-pic"
+              />
+              <button class="edit-pic-btn" id="edit-pic-btn">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <!-- [BARU] Menu Opsi untuk Foto -->
+              <div class="edit-pic-menu" id="edit-pic-menu">
+                <!-- Opsi akan diisi oleh JavaScript -->
+              </div>
+            </div>
+            <div class="profile-info">
+              <h2 id="profile-name">Memuat nama...</h2>
+              <p>
+                <i class="fas fa-envelope"></i>
+                <span id="profile-email">...</span>
+              </p>
+              <p>
+                <i class="fas fa-phone"></i> <span id="profile-nohp">...</span>
+              </p>
+              <a href="profil-edit.html" class="lengkapi-biodata-btn"
+                >Lengkapi Biodata</a
+              >
+            </div>
+          </div>
+
+          <!-- Input file yang disembunyikan -->
+          <input
+            type="file"
+            id="photo-upload-input"
+            style="display: none"
+            accept="image/*"
+          />
+
+          <!-- Bagian Riwayat Pengajuan -->
+          <div class="profile-history">
+            <h2>Riwayat Pengajuan Surat Anda</h2>
+            <p>Lacak status semua surat yang pernah Anda ajukan di sini.</p>
+            <div style="overflow-x: auto">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tanggal</th>
+                    <th>Jenis Surat</th>
+                    <th>Keperluan</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="history-table-body">
+                  <!-- Riwayat akan diisi oleh JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <!-- ... Kode footer kamu ... -->
+      </footer>
+    </div>
+
+    <nav class="bottom-nav">
+      <!-- ... Kode navigasi bawah kamu ... -->
+    </nav>
+
+    <script src="script.js" type="module"></script>
+    <script src="profil.js" type="module"></script>
+  </body>
+</html>
