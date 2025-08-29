@@ -652,6 +652,55 @@ th select {
   color: var(--light-text);
   margin-bottom: 1.5rem;
 }
+.layanan-container {
+  padding: 2rem 5%;
+}
+.layanan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+.kartu-layanan {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.kartu-layanan:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.kartu-layanan h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+.kartu-layanan p {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.kartu-layanan ul {
+  list-style: none;
+  padding-left: 0;
+}
+.kartu-layanan li {
+  margin-bottom: 0.3rem;
+  color: var(--light-text);
+}
+.kartu-layanan li i {
+  margin-right: 8px;
+  color: var(--primary-green);
+}
+.tombol-ajukan {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--primary-green);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+}
 
 /* #################################### */
 /* ###   ATURAN RESPONSIF (SIHIR)  ### */
