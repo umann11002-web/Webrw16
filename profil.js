@@ -92,7 +92,7 @@ async function loadHistoryData(uid) {
     const tanggal = data.tanggalPengajuan.toDate().toLocaleDateString("id-ID");
     const aksi =
       data.status === "Selesai"
-        ? `<a href="${data.fileSuratJadiUrl}" target="_blank">Unduh Surat</a>`
+        ? `<a href="${data.fileSuratJadiUrl}" class="btn-download" target="_blank">Download</a>`
         : "-";
 
     const row = `
