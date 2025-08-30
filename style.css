@@ -841,6 +841,17 @@ th select {
     background: var(--primary-green);
   }
 
+  /* Perbaikan untuk Profil di HP */
+  .profile-header {
+    flex-direction: column; /* Ubah jadi tumpukan vertikal */
+    text-align: center; /* Pusatkan teks */
+    gap: 1rem; /* Kurangi jarak */
+  }
+
+  .profile-info p {
+    justify-content: center; /* Pusatkan ikon dan teks di dalamnya */
+  }
+
   /* Navigasi Admin Mobile */
   .admin-nav {
     flex-wrap: wrap;
