@@ -847,9 +847,45 @@ th select {
     text-align: center; /* Pusatkan teks */
     gap: 1rem; /* Kurangi jarak */
   }
-
   .profile-info p {
     justify-content: center; /* Pusatkan ikon dan teks di dalamnya */
+  }
+
+  /* [BARU] Perbaikan untuk Tabel Riwayat di HP */
+  .profile-history table,
+  .profile-history thead,
+  .profile-history tbody,
+  .profile-history th,
+  .profile-history td,
+  .profile-history tr {
+    display: block;
+  }
+  .profile-history thead {
+    display: none; /* Sembunyikan header tabel */
+  }
+  .profile-history tr {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
+  .profile-history td {
+    border: none;
+    padding: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: right;
+    border-bottom: 1px dashed var(--border-color);
+  }
+  .profile-history td:last-child {
+    border-bottom: none;
+  }
+  .profile-history td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    text-align: left;
+    margin-right: 1rem;
   }
 
   /* Navigasi Admin Mobile */
