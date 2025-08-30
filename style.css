@@ -847,9 +847,24 @@ th select {
     text-align: center; /* Pusatkan teks */
     gap: 1rem; /* Kurangi jarak */
   }
-
   .profile-info p {
     justify-content: center; /* Pusatkan ikon dan teks di dalamnya */
+  }
+
+  /* [PERBAIKAN] Tabel Riwayat di HP (Tetap Tabel, Ukuran Disesuaikan) */
+  /* [PERBAIKAN] Membuat Tabel Riwayat Bisa di-Scroll di HP */
+  .tabel-container {
+    overflow-x: auto; /* 1. Ini akan mengaktifkan scroll horizontal */
+    -webkit-overflow-scrolling: touch; /* Membuat scroll lebih mulus di perangkat Apple */
+  }
+
+  .profile-history table {
+    min-width: 600px; /* 2. Beri lebar minimal agar tabel tidak "memaksa" masuk */
+  }
+
+  .profile-history th,
+  .profile-history td {
+    white-space: nowrap; /* 3. PENTING: Mencegah teks turun ke baris baru */
   }
 
   /* Navigasi Admin Mobile */
