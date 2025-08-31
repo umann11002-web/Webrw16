@@ -17,6 +17,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// [BARU] Variabel untuk menyimpan instance diagram agar bisa dihancurkan
+let myChart = null;
+
 // Fungsi utama untuk memuat semua data statistik
 async function loadStatistik() {
   try {
@@ -27,7 +30,6 @@ async function loadStatistik() {
       const data = docSnap.data();
       const kelompokUmur = data.kelompokUmur || {};
 
-      // --- PENGHITUNGAN TOTAL OTOMATIS ---
       let totalPria = 0;
       let totalWanita = 0;
       Object.values(kelompokUmur).forEach((kelompok) => {
@@ -36,7 +38,6 @@ async function loadStatistik() {
       });
       const totalPenduduk = totalPria + totalWanita;
 
-      // --- UPDATE KARTU RINGKASAN ---
       document.getElementById("total-penduduk").textContent =
         totalPenduduk + " Jiwa";
       document.getElementById("kepala-keluarga").textContent =
@@ -45,13 +46,19 @@ async function loadStatistik() {
         totalWanita + " Jiwa";
       document.getElementById("jumlah-pria").textContent = totalPria + " Jiwa";
 
-      // --- BUAT PIRAMIDA PENDUDUK ---
       const labels = Object.keys(kelompokUmur).sort(
         (a, b) => parseInt(a.split("-")[0]) - parseInt(b.split("-")[0])
       );
       const dataPria = labels.map((label) => kelompokUmur[label].pria);
       const dataWanita = labels.map((label) => kelompokUmur[label].wanita);
-      buatPiramida(labels, dataPria, dataWanita);
+
+      // [BARU] Panggil fungsi untuk menggambar/memperbarui diagram
+      gambarDiagramResponsif(labels, dataPria, dataWanita);
+
+      // [BARU] Tambahkan event listener untuk mengubah diagram saat ukuran layar berubah
+      window.addEventListener("resize", () => {
+        gambarDiagramResponsif(labels, dataPria, dataWanita);
+      });
     } else {
       console.log("Dokumen statistik tidak ditemukan!");
     }
@@ -60,67 +67,104 @@ async function loadStatistik() {
   }
 }
 
-// Fungsi untuk membuat grafik piramida (tidak berubah)
-function buatPiramida(labels, dataPria, dataWanita) {
+// [BARU] Fungsi pintar untuk menggambar diagram berdasarkan lebar layar
+function gambarDiagramResponsif(labels, dataPria, dataWanita) {
   const ctx = document
     .getElementById("piramida-penduduk-chart")
     .getContext("2d");
-  new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: "Laki-Laki",
-          data: dataPria.map((num) => -num),
-          backgroundColor: "rgba(54, 162, 235, 0.6)",
-          borderColor: "rgba(54, 162, 235, 1)",
-          borderWidth: 1,
-          barPercentage: 0.9,
-          categoryPercentage: 0.8,
-        },
-        {
-          label: "Perempuan",
-          data: dataWanita,
-          backgroundColor: "rgba(255, 99, 132, 0.6)",
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 1,
-          barPercentage: 0.9,
-          categoryPercentage: 0.8,
-        },
-      ],
-    },
-    options: {
-      indexAxis: "y",
-      responsive: true,
-      scales: {
-        x: {
-          stacked: true,
-          min: -100,
-          max: 100,
-          ticks: { callback: (value) => Math.abs(value) },
-        },
-        y: {
-          stacked: true,
-          beginAtZero: true,
-          ticks: {
-            autoSkip: false,
-            font: {
-              size: 7, // Anda bisa coba angka 8 atau 10 jika perlu
+
+  // Hancurkan diagram lama jika sudah ada, untuk mencegah tumpang tindih
+  if (myChart) {
+    myChart.destroy();
+  }
+
+  // Cek lebar layar
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    // Jika layar HP, buat diagram batang horizontal biasa
+    myChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Laki-Laki",
+            data: dataPria, // Data positif biasa
+            backgroundColor: "rgba(54, 162, 235, 0.6)",
+            borderColor: "rgba(54, 162, 235, 1)",
+            borderWidth: 1,
+          },
+          {
+            label: "Perempuan",
+            data: dataWanita, // Data positif biasa
+            backgroundColor: "rgba(255, 99, 132, 0.6)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        indexAxis: "y", // Sumbu Y untuk kategori (usia)
+        responsive: true,
+        maintainAspectRatio: false, // Penting agar CSS bisa mengatur tinggi
+        scales: {
+          x: {
+            beginAtZero: true, // Sumbu X mulai dari 0
+          },
+          y: {
+            ticks: {
+              autoSkip: false,
+              font: { size: 9 },
             },
           },
         },
       },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: (context) =>
-              `${context.dataset.label || ""}: ${Math.abs(context.raw)}`,
+    });
+  } else {
+    // Jika layar Desktop, buat diagram piramida seperti sebelumnya
+    myChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Laki-Laki",
+            data: dataPria.map((num) => -num), // Data negatif untuk piramida
+            backgroundColor: "rgba(54, 162, 235, 0.6)",
+            borderColor: "rgba(54, 162, 235, 1)",
+            borderWidth: 1,
+          },
+          {
+            label: "Perempuan",
+            data: dataWanita,
+            backgroundColor: "rgba(255, 99, 132, 0.6)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        indexAxis: "y",
+        responsive: true,
+        scales: {
+          x: {
+            stacked: true,
+            ticks: { callback: (value) => Math.abs(value) },
+          },
+          y: { stacked: true },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (context) =>
+                `${context.dataset.label || ""}: ${Math.abs(context.raw)}`,
+            },
           },
         },
       },
-    },
-  });
+    });
+  }
 }
 
 document.addEventListener("DOMContentLoaded", loadStatistik);
