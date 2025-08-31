@@ -106,7 +106,7 @@ function buatPiramida(labels, dataPria, dataWanita) {
           ticks: {
             autoSkip: false,
             font: {
-              size: 9, // Anda bisa coba angka 8 atau 10 jika perlu
+              size: 7, // Anda bisa coba angka 8 atau 10 jika perlu
             },
           },
         },
