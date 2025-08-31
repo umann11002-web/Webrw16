@@ -515,7 +515,6 @@ th select {
   background-color: #6c757d;
 }
 
-/* [BARU] Styling untuk Tombol Download di Tabel */
 .btn-download {
   display: inline-block;
   padding: 8px 12px;
@@ -626,7 +625,6 @@ th select {
   align-items: center;
   justify-content: center;
 }
-/* Menu Opsi Edit Foto */
 .edit-pic-menu {
   display: none;
   position: absolute;
@@ -881,30 +879,24 @@ th select {
 
   /* Perbaikan untuk Profil di HP */
   .profile-header {
-    flex-direction: column; /* Ubah jadi tumpukan vertikal */
-    text-align: center; /* Pusatkan teks */
-    gap: 1rem; /* Kurangi jarak */
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
   }
   .profile-info p {
-    justify-content: center; /* Pusatkan ikon dan teks di dalamnya */
+    justify-content: center;
   }
-
-  /* [BARU] Perbaikan untuk Tabel Riwayat di HP (Scrollable) */
   .tabel-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
-
   .profile-history table {
-    min-width: 600px; /* Beri lebar minimal agar tidak terpotong */
+    min-width: 600px;
   }
-
   .profile-history th,
   .profile-history td {
-    white-space: nowrap; /* Mencegah teks turun baris */
+    white-space: nowrap;
   }
-
-  /* [BARU] Penyesuaian Tombol Download di HP */
   .profile-history td .btn-download {
     padding: 6px 10px;
     font-size: 0.8em;
@@ -1010,5 +1002,61 @@ th select {
   }
   .org-swiper .swiper-pagination {
     display: none;
+  }
+}
+
+/* ================================================= */
+/* === HALAMAN KELOLA STATISTIK PENDUDUK === */
+/* ================================================= */
+
+.form-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.form-card h1,
+.form-card h2 {
+  margin-top: 0;
+}
+.age-group-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+.age-group-row label {
+  font-weight: normal;
+}
+.submit-btn {
+  padding: 0.8rem 2rem;
+  border: none;
+  background-color: var(--primary-green);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/* ======================================================== */
+/* === ATURAN RESPONSIF KELOLA STATISTIK PENDUDUK === */
+/* ======================================================== */
+@media (max-width: 768px) {
+  .manage-main .form-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .manage-main .age-group-row {
+    grid-template-columns: 1fr; /* Layout jadi 1 kolom di HP */
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .manage-main .age-group-row label {
+    font-weight: 600; /* Tebalkan label rentang usia (0-4) */
+    margin-bottom: 0.2rem;
   }
 }
