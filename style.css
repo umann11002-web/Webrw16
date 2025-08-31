@@ -870,19 +870,17 @@ th select {
     font-size: 1.6rem;
     font-weight: 700;
   }
-  .chart-container {
-    padding: 1rem;
-  }
-  .org-swiper .swiper-pagination-bullet-active {
-    background: var(--primary-green);
+
+  /* [PERBAIKAN FINAL] Perbaikan untuk Diagram di HP */
+  .info-main .chart-container {
+    position: relative;
+    height: 80vh; /* Tinggi diagram 80% dari tinggi layar HP */
+    width: 100%;
+    padding: 0.5rem;
   }
 
-  /* Perbaikan untuk Diagram Piramida di HP */
-  .info-main .chart-container {
-    position: relative; /* Wajib untuk menjaga rasio aspek */
-    height: 80vh; /* Tinggi diagram adalah 80% dari tinggi layar HP */
-    width: 100%; /* Lebar penuh */
-    padding: 0.5rem; /* Kurangi padding agar lebih luas */
+  .org-swiper .swiper-pagination-bullet-active {
+    background: var(--primary-green);
   }
 
   /* Perbaikan untuk Profil di HP */
