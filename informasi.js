@@ -17,7 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// [BARU] Variabel untuk menyimpan instance diagram agar bisa dihancurkan
+// Variabel untuk menyimpan instance diagram agar bisa dihancurkan
 let myChart = null;
 
 // Fungsi utama untuk memuat semua data statistik
@@ -52,10 +52,8 @@ async function loadStatistik() {
       const dataPria = labels.map((label) => kelompokUmur[label].pria);
       const dataWanita = labels.map((label) => kelompokUmur[label].wanita);
 
-      // [BARU] Panggil fungsi untuk menggambar/memperbarui diagram
       gambarDiagramResponsif(labels, dataPria, dataWanita);
 
-      // [BARU] Tambahkan event listener untuk mengubah diagram saat ukuran layar berubah
       window.addEventListener("resize", () => {
         gambarDiagramResponsif(labels, dataPria, dataWanita);
       });
@@ -67,18 +65,16 @@ async function loadStatistik() {
   }
 }
 
-// [BARU] Fungsi pintar untuk menggambar diagram berdasarkan lebar layar
+// Fungsi pintar untuk menggambar diagram berdasarkan lebar layar
 function gambarDiagramResponsif(labels, dataPria, dataWanita) {
   const ctx = document
     .getElementById("piramida-penduduk-chart")
     .getContext("2d");
 
-  // Hancurkan diagram lama jika sudah ada, untuk mencegah tumpang tindih
   if (myChart) {
     myChart.destroy();
   }
 
-  // Cek lebar layar
   const isMobile = window.innerWidth <= 768;
 
   if (isMobile) {
@@ -90,14 +86,14 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
         datasets: [
           {
             label: "Laki-Laki",
-            data: dataPria, // Data positif biasa
+            data: dataPria,
             backgroundColor: "rgba(54, 162, 235, 0.6)",
             borderColor: "rgba(54, 162, 235, 1)",
             borderWidth: 1,
           },
           {
             label: "Perempuan",
-            data: dataWanita, // Data positif biasa
+            data: dataWanita,
             backgroundColor: "rgba(255, 99, 132, 0.6)",
             borderColor: "rgba(255, 99, 132, 1)",
             borderWidth: 1,
@@ -105,12 +101,17 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
         ],
       },
       options: {
-        indexAxis: "y", // Sumbu Y untuk kategori (usia)
+        indexAxis: "y",
         responsive: true,
-        maintainAspectRatio: false, // Penting agar CSS bisa mengatur tinggi
+        maintainAspectRatio: true, // Biarkan Chart.js yang menjaga rasio
+
+        // [KUNCI PERBAIKAN] Atur bentuk diagram agar tinggi dan ramping
+        // Nilai lebih kecil = diagram lebih tinggi. Coba 0.4, 0.5, atau 0.6
+        aspectRatio: 0.5,
+
         scales: {
           x: {
-            beginAtZero: true, // Sumbu X mulai dari 0
+            beginAtZero: true,
           },
           y: {
             ticks: {
@@ -130,7 +131,7 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
         datasets: [
           {
             label: "Laki-Laki",
-            data: dataPria.map((num) => -num), // Data negatif untuk piramida
+            data: dataPria.map((num) => -num),
             backgroundColor: "rgba(54, 162, 235, 0.6)",
             borderColor: "rgba(54, 162, 235, 1)",
             borderWidth: 1,
