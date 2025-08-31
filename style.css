@@ -851,10 +851,6 @@ th select {
     grid-template-columns: 1fr;
     gap: 0.8rem;
   }
-  .info-main .chart-container {
-    min-height: 600px; /* Beri tinggi minimal agar semua label muat */
-    padding: 1rem; /* Kurangi padding di HP agar area diagram lebih luas */
-  }
   .summary-card {
     padding: 1rem;
     box-shadow: var(--card-shadow);
@@ -879,6 +875,12 @@ th select {
   }
   .org-swiper .swiper-pagination-bullet-active {
     background: var(--primary-green);
+  }
+
+  /* Perbaikan untuk Diagram Piramida di HP */
+  .info-main .chart-container {
+    min-height: 600px; /* Beri tinggi minimal agar semua label muat */
+    padding: 1rem;
   }
 
   /* Perbaikan untuk Profil di HP */
