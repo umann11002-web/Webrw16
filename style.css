@@ -874,7 +874,7 @@ th select {
   /* [PERBAIKAN FINAL] Perbaikan untuk Diagram di HP */
   .info-main .chart-container {
     position: relative;
-    height: 80vh; /* Tinggi diagram 80% dari tinggi layar HP */
+    height: 150vh; /* Tinggi diagram 150% dari tinggi layar HP */
     width: 100%;
     padding: 0.5rem;
   }
