@@ -879,8 +879,10 @@ th select {
 
   /* Perbaikan untuk Diagram Piramida di HP */
   .info-main .chart-container {
-    min-height: 600px; /* Beri tinggi minimal agar semua label muat */
-    padding: 1rem;
+    position: relative; /* Wajib untuk menjaga rasio aspek */
+    height: 70vh; /* Tinggi diagram adalah 70% dari tinggi layar HP */
+    width: 100%; /* Lebar penuh */
+    padding: 0.5rem; /* Kurangi padding agar lebih luas */
   }
 
   /* Perbaikan untuk Profil di HP */
