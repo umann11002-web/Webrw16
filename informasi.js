@@ -91,7 +91,6 @@ function buatPiramida(labels, dataPria, dataWanita) {
       ],
     },
     options: {
-      maintainAspectRatio: false,
       indexAxis: "y",
       responsive: true,
       scales: {
