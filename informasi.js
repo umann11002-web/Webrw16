@@ -91,6 +91,7 @@ function buatPiramida(labels, dataPria, dataWanita) {
       ],
     },
     options: {
+      maintainAspectRatio: false,
       indexAxis: "y",
       responsive: true,
       scales: {
@@ -100,7 +101,13 @@ function buatPiramida(labels, dataPria, dataWanita) {
           max: 100,
           ticks: { callback: (value) => Math.abs(value) },
         },
-        y: { stacked: true, beginAtZero: true },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          ticks: {
+            autoSkip: false,
+          },
+        },
       },
       plugins: {
         tooltip: {
