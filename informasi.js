@@ -103,12 +103,8 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
       options: {
         indexAxis: "y",
         responsive: true,
-        maintainAspectRatio: true, // Biarkan Chart.js yang menjaga rasio
-
-        // [KUNCI PERBAIKAN] Atur bentuk diagram agar tinggi dan ramping
-        // Nilai lebih kecil = diagram lebih tinggi. Coba 0.4, 0.5, atau 0.6
+        maintainAspectRatio: true,
         aspectRatio: 0.5,
-
         scales: {
           x: {
             beginAtZero: true,
@@ -151,6 +147,9 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
         scales: {
           x: {
             stacked: true,
+            // [PERBAIKAN] Kembalikan batas min/max agar skala tetap 100
+            min: -100,
+            max: 100,
             ticks: { callback: (value) => Math.abs(value) },
           },
           y: { stacked: true },
