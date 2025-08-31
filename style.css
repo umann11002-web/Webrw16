@@ -880,7 +880,7 @@ th select {
   /* Perbaikan untuk Diagram Piramida di HP */
   .info-main .chart-container {
     position: relative; /* Wajib untuk menjaga rasio aspek */
-    height: 120vh; /* Tinggi diagram adalah 70% dari tinggi layar HP */
+    height: 80vh; /* Tinggi diagram adalah 80% dari tinggi layar HP */
     width: 100%; /* Lebar penuh */
     padding: 0.5rem; /* Kurangi padding agar lebih luas */
   }
