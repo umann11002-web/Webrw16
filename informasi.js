@@ -206,7 +206,7 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
             },
           },
           datalabels: {
-            color: "#fff",
+            color: "#070000ff",
             font: { weight: "bold", size: 10 },
             formatter: (value) => (Math.abs(value) > 0 ? Math.abs(value) : ""),
             align: (context) =>
