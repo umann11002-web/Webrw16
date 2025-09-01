@@ -350,7 +350,6 @@ main,
   margin-top: 0;
 }
 
-/* [BARU] Gaya untuk Kartu Analisis Data */
 .analisis-container {
   margin-top: 2rem;
   display: grid;
@@ -373,38 +372,6 @@ main,
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
-}
-
-footer {
-  background-color: #343a40;
-  color: white;
-  padding: 2rem 5%;
-}
-.info-kantor {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-.nomor-rw {
-  font-size: 3rem;
-  font-weight: 700;
-  padding: 1rem;
-  border: 2px solid white;
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.alamat h4 {
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-}
-.alamat p {
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: #ccc;
 }
 
 /* Style untuk Halaman Struktur Organisasi */
@@ -758,6 +725,100 @@ th select {
   font-weight: 600;
 }
 
+/* ================================= */
+/* === FOOTER BARU === */
+/* ================================= */
+
+footer {
+  background-color: #2c3e50; /* Warna gelap baru */
+  color: #ecf0f1;
+  padding: 3rem 5% 1rem;
+}
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+.footer-column h4 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-green);
+  display: inline-block;
+}
+.info-rw {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.info-rw img {
+  width: 60px;
+  height: auto;
+}
+.info-rw p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #bdc3c7;
+}
+.alamat-footer {
+  font-size: 0.9rem;
+  color: #bdc3c7;
+  line-height: 1.6;
+}
+.kontak-list,
+.link-list {
+  list-style: none;
+  padding: 0;
+}
+.kontak-item,
+.link-list a {
+  color: #ecf0f1;
+  text-decoration: none;
+  margin-bottom: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: color 0.3s;
+}
+.kontak-item:hover,
+.link-list a:hover {
+  color: var(--primary-green);
+}
+.kontak-item i {
+  color: var(--primary-green);
+  width: 20px;
+  text-align: center;
+}
+.sosmed {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.sosmed a {
+  color: #ecf0f1;
+  font-size: 1.2rem;
+  transition: transform 0.3s, color 0.3s;
+}
+.sosmed a:hover {
+  transform: scale(1.2);
+  color: var(--primary-green);
+}
+.footer-bottom {
+  border-top: 1px solid #34495e;
+  padding-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #bdc3c7;
+}
+
 /* #################################### */
 /* ###   ATURAN RESPONSIF (SIHIR)   ### */
 /* #################################### */
@@ -894,7 +955,6 @@ th select {
   /* [PERBAIKAN FINAL] Diagram di HP */
   .info-main .chart-container {
     padding: 0.5rem;
-    /* Tinggi tidak lagi dipaksa dari CSS, biarkan JS yg mengatur */
   }
 
   .org-swiper .swiper-pagination-bullet-active {
@@ -960,24 +1020,6 @@ th select {
     background-color: #f8f9fa;
   }
 
-  /* Footer Mobile */
-  footer {
-    background-color: white;
-    color: var(--dark-text);
-    border-top: 1px solid var(--border-color);
-  }
-  .info-kantor {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .nomor-rw {
-    color: var(--primary-green);
-    border-color: var(--primary-green);
-  }
-  .alamat p {
-    color: var(--light-text);
-  }
-
   /* Navigasi Bawah Mobile */
   .bottom-nav {
     display: flex;
@@ -1007,6 +1049,22 @@ th select {
   }
   .bottom-nav-item.active {
     color: var(--primary-green);
+  }
+
+  /* [BARU] Responsif Footer */
+  .footer-grid {
+    grid-template-columns: 1fr; /* Satu kolom di HP */
+    text-align: center;
+  }
+  .info-rw {
+    justify-content: center;
+  }
+  .footer-column h4 {
+    border-bottom: none;
+  }
+  .kontak-item,
+  .sosmed {
+    justify-content: center;
   }
 }
 
