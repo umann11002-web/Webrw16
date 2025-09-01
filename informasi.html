@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Informasi Kependudukan - RW 16</title>
-    <!-- CSS sekarang HANYA dari file eksternal -->
     <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
@@ -58,7 +57,6 @@
         <h1>Statistik Penduduk RW 16</h1>
 
         <div class="info-summary-grid">
-          <!-- [FIX] KARTU TOTAL PENDUDUK DIKEMBALIKAN -->
           <div class="summary-card">
             <div class="icon total"><i class="fas fa-users"></i></div>
             <div class="text">
@@ -94,7 +92,6 @@
           <canvas id="piramida-penduduk-chart"></canvas>
         </div>
 
-        <!-- [BARU] Wadah untuk Teks Analisis Data -->
         <div class="analisis-container">
           <div class="kartu-analisis" id="analisis-pria">
             <p>Menganalisis data laki-laki...</p>
@@ -103,12 +100,9 @@
             <p>Menganalisis data perempuan...</p>
           </div>
         </div>
-        <!-- Penutup Wadah Analisis -->
       </main>
     </div>
-    <!-- Penutup .page-wrapper -->
 
-    <!-- Navigasi Bawah untuk Mobile -->
     <nav class="bottom-nav">
       <a href="index.html" class="bottom-nav-item">
         <i class="fas fa-home"></i>
@@ -138,6 +132,8 @@
     </nav>
 
     <script src="script.js" type="module"></script>
+    <!-- [BARU] Script untuk plugin datalabels -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <script src="informasi.js" type="module"></script>
   </body>
 </html>

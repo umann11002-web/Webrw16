@@ -5,6 +5,9 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
+// [WAJIB] Daftarkan plugin datalabels secara global
+Chart.register(ChartDataLabels);
+
 const firebaseConfig = {
   apiKey: "AIzaSyBD4ypi0bq71tJfDdyqgdLL3A_RSye9Q7I",
   authDomain: "rw16cibabat-dbf87.firebaseapp.com",
@@ -77,9 +80,8 @@ function tampilkanAnalisisData(
   totalPria,
   totalWanita
 ) {
-  if (totalPria === 0 || totalWanita === 0) return; // Jangan tampilkan jika tidak ada data
+  if (totalPria === 0 || totalWanita === 0) return;
 
-  // --- Analisis Data Laki-Laki ---
   const maxPria = Math.max(...dataPria);
   const minPria = Math.min(...dataPria.filter((p) => p > 0));
   const indexMaxPria = dataPria.indexOf(maxPria);
@@ -93,7 +95,6 @@ function tampilkanAnalisisData(
     `;
   document.getElementById("analisis-pria").innerHTML = teksAnalisisPria;
 
-  // --- Analisis Data Perempuan ---
   const maxWanita = Math.max(...dataWanita);
   const minWanita = Math.min(...dataWanita.filter((w) => w > 0));
   const indexMaxWanita = dataWanita.indexOf(maxWanita);
@@ -120,6 +121,7 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
   const isMobile = window.innerWidth <= 768;
 
   if (isMobile) {
+    // --- KONFIGURASI MOBILE ---
     myChart = new Chart(ctx, {
       type: "bar",
       data: {
@@ -150,9 +152,19 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
           x: { beginAtZero: true },
           y: { ticks: { autoSkip: false, font: { size: 9 } } },
         },
+        plugins: {
+          datalabels: {
+            color: "#333",
+            anchor: "end",
+            align: "end",
+            font: { size: 9, weight: "bold" },
+            formatter: (value) => (value > 0 ? value : ""),
+          },
+        },
       },
     });
   } else {
+    // --- KONFIGURASI DESKTOP ---
     myChart = new Chart(ctx, {
       type: "bar",
       data: {
@@ -192,6 +204,13 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
               label: (context) =>
                 `${context.dataset.label || ""}: ${Math.abs(context.raw)}`,
             },
+          },
+          datalabels: {
+            color: "#fff",
+            font: { weight: "bold", size: 10 },
+            formatter: (value) => (Math.abs(value) > 0 ? Math.abs(value) : ""),
+            align: (context) =>
+              context.dataset.data[context.dataIndex] < 0 ? "start" : "end",
           },
         },
       },
