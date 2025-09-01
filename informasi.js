@@ -17,10 +17,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Variabel untuk menyimpan instance diagram agar bisa dihancurkan
 let myChart = null;
 
-// Fungsi utama untuk memuat semua data statistik
 async function loadStatistik() {
   try {
     const docRef = doc(db, "statistik", "data_penduduk");
@@ -53,6 +51,13 @@ async function loadStatistik() {
       const dataWanita = labels.map((label) => kelompokUmur[label].wanita);
 
       gambarDiagramResponsif(labels, dataPria, dataWanita);
+      tampilkanAnalisisData(
+        labels,
+        dataPria,
+        dataWanita,
+        totalPria,
+        totalWanita
+      );
 
       window.addEventListener("resize", () => {
         gambarDiagramResponsif(labels, dataPria, dataWanita);
@@ -65,7 +70,44 @@ async function loadStatistik() {
   }
 }
 
-// Fungsi pintar untuk menggambar diagram berdasarkan lebar layar
+function tampilkanAnalisisData(
+  labels,
+  dataPria,
+  dataWanita,
+  totalPria,
+  totalWanita
+) {
+  if (totalPria === 0 || totalWanita === 0) return; // Jangan tampilkan jika tidak ada data
+
+  // --- Analisis Data Laki-Laki ---
+  const maxPria = Math.max(...dataPria);
+  const minPria = Math.min(...dataPria.filter((p) => p > 0));
+  const indexMaxPria = dataPria.indexOf(maxPria);
+  const indexMinPria = dataPria.indexOf(minPria);
+
+  const persenMaxPria = ((maxPria / totalPria) * 100).toFixed(2);
+  const persenMinPria = ((minPria / totalPria) * 100).toFixed(2);
+
+  const teksAnalisisPria = `
+        Untuk jenis kelamin <strong>laki-laki</strong>, kelompok umur <strong>${labels[indexMaxPria]}</strong> adalah kelompok umur tertinggi dengan jumlah <strong>${maxPria} orang</strong> atau <strong>${persenMaxPria}%</strong>. Sedangkan, kelompok umur terendah adalah <strong>${labels[indexMinPria]}</strong> dengan jumlah <strong>${minPria} orang</strong> atau <strong>${persenMinPria}%</strong>.
+    `;
+  document.getElementById("analisis-pria").innerHTML = teksAnalisisPria;
+
+  // --- Analisis Data Perempuan ---
+  const maxWanita = Math.max(...dataWanita);
+  const minWanita = Math.min(...dataWanita.filter((w) => w > 0));
+  const indexMaxWanita = dataWanita.indexOf(maxWanita);
+  const indexMinWanita = dataWanita.indexOf(minWanita);
+
+  const persenMaxWanita = ((maxWanita / totalWanita) * 100).toFixed(2);
+  const persenMinWanita = ((minWanita / totalWanita) * 100).toFixed(2);
+
+  const teksAnalisisWanita = `
+        Untuk jenis kelamin <strong>perempuan</strong>, kelompok umur <strong>${labels[indexMaxWanita]}</strong> adalah kelompok umur tertinggi dengan jumlah <strong>${maxWanita} orang</strong> atau <strong>${persenMaxWanita}%</strong>. Sedangkan, kelompok umur terendah adalah <strong>${labels[indexMinWanita]}</strong> dengan jumlah <strong>${minWanita} orang</strong> atau <strong>${persenMinWanita}%</strong>.
+    `;
+  document.getElementById("analisis-wanita").innerHTML = teksAnalisisWanita;
+}
+
 function gambarDiagramResponsif(labels, dataPria, dataWanita) {
   const ctx = document
     .getElementById("piramida-penduduk-chart")
@@ -78,11 +120,10 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
   const isMobile = window.innerWidth <= 768;
 
   if (isMobile) {
-    // Jika layar HP, buat diagram batang horizontal biasa
     myChart = new Chart(ctx, {
       type: "bar",
       data: {
-        labels: labels,
+        labels,
         datasets: [
           {
             label: "Laki-Laki",
@@ -106,24 +147,16 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
         maintainAspectRatio: true,
         aspectRatio: 0.5,
         scales: {
-          x: {
-            beginAtZero: true,
-          },
-          y: {
-            ticks: {
-              autoSkip: false,
-              font: { size: 9 },
-            },
-          },
+          x: { beginAtZero: true },
+          y: { ticks: { autoSkip: false, font: { size: 9 } } },
         },
       },
     });
   } else {
-    // Jika layar Desktop, buat diagram piramida seperti sebelumnya
     myChart = new Chart(ctx, {
       type: "bar",
       data: {
-        labels: labels,
+        labels,
         datasets: [
           {
             label: "Laki-Laki",
@@ -147,7 +180,6 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
         scales: {
           x: {
             stacked: true,
-            // [PERBAIKAN] Kembalikan batas min/max agar skala tetap 100
             min: -100,
             max: 100,
             ticks: { callback: (value) => Math.abs(value) },

@@ -349,6 +349,26 @@ main,
   padding-left: 10px;
   margin-top: 0;
 }
+
+/* [BARU] Gaya untuk Kartu Analisis Data */
+.analisis-container {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1.5rem;
+}
+.kartu-analisis {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  line-height: 1.7;
+  font-size: 0.95rem;
+  border-left: 5px solid var(--primary-green);
+}
+.kartu-analisis strong {
+  color: var(--dark-text);
+}
+
 .berita-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -871,9 +891,10 @@ th select {
     font-weight: 700;
   }
 
-  /* [PERBAIKAN FINAL] Perbaikan untuk Diagram di HP */
+  /* [PERBAIKAN FINAL] Diagram di HP */
   .info-main .chart-container {
     padding: 0.5rem;
+    /* Tinggi tidak lagi dipaksa dari CSS, biarkan JS yg mengatur */
   }
 
   .org-swiper .swiper-pagination-bullet-active {
