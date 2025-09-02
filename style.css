@@ -876,7 +876,9 @@ th select {
 }
 
 /* Tombol Aksi Mengambang (FAB) */
-.fab {
+/* Tombol Aksi Mengambang (FAB) */
+/* [DIUBAH] Hanya tampil jika berada setelah .manage-main */
+.manage-main + .fab {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
@@ -895,13 +897,13 @@ th select {
   z-index: 1001;
   transition: transform 0.2s;
 }
-.fab:hover {
+.manage-main + .fab:hover {
   transform: scale(1.1);
 }
 
-/* ======================================= */
+/* ========================= */
 /* === HALAMAN DETAIL ALBUM ADMIN === */
-/* ======================================= */
+/* ========================= */
 
 .back-link {
   display: inline-block;
