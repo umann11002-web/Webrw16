@@ -374,25 +374,108 @@ main,
   gap: 1.5rem;
 }
 
-/* Style untuk Halaman Struktur Organisasi */
-.org-swiper {
-  width: 100%;
-  padding-bottom: 40px;
+/* ================================= */
+/* === BAGAN ORGANISASI === */
+/* ================================= */
+
+.org-chart-container {
+  overflow-x: auto;
+  padding: 1rem;
+  text-align: center; /* Pusatkan bagan */
 }
-.org-swiper .swiper-slide {
-  width: 250px;
+
+.org-chart {
+  display: inline-block;
+  min-width: 100%;
 }
-.org-card {
+
+.org-chart ul {
+  padding-top: 20px;
+  position: relative;
+  transition: all 0.5s;
+  display: flex; /* Gunakan flexbox untuk alignment */
+  justify-content: center; /* Pusatkan anak-anaknya */
+}
+
+.org-chart li {
+  float: left;
+  text-align: center;
+  list-style-type: none;
+  position: relative;
+  padding: 20px 5px 0 5px;
+  transition: all 0.5s;
+}
+
+/* Garis penghubung */
+.org-chart li::before,
+.org-chart li::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 50%;
+  border-top: 2px solid #ccc;
+  width: 50%;
+  height: 20px;
+}
+.org-chart li::after {
+  right: auto;
+  left: 50%;
+  border-left: 2px solid #ccc;
+}
+
+/* Hapus garis yg tidak perlu */
+.org-chart li:only-child::after,
+.org-chart li:only-child::before {
+  display: none;
+}
+.org-chart > ul > li::before,
+.org-chart > ul > li::after {
+  border: 0 none; /* Hapus garis untuk elemen paling atas (root) */
+}
+.org-chart li:first-child::before,
+.org-chart li:last-child::after {
+  border: 0 none;
+}
+.org-chart li:last-child::before {
+  border-right: 2px solid #ccc;
+  border-radius: 0 5px 0 0;
+}
+.org-chart li:first-child::after {
+  border-radius: 5px 0 0 0;
+}
+
+/* Garis vertikal dari parent ke children */
+.org-chart ul ul::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  border-left: 2px solid #ccc;
+  width: 0;
+  height: 20px;
+}
+
+/* Kartu di dalam bagan */
+.org-card-link {
+  text-decoration: none; /* [BARU] Hapus garis bawah link */
+  color: inherit;
+}
+.org-chart li .org-card {
   background: white;
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: var(--card-shadow);
   text-align: center;
-  transition: transform 0.2s;
-  height: 100%;
+  transition: transform 0.2s, border 0.2s;
+  display: inline-block;
+  min-width: 180px;
+  margin: 0 10px;
+  border: 2px solid transparent; /* Border awal transparan */
 }
-.org-card:hover {
+.org-chart li .org-card:hover {
   transform: translateY(-5px);
+  border: 2px solid var(--primary-green);
+  cursor: pointer;
 }
 .org-card img {
   width: 100px;
@@ -410,6 +493,48 @@ main,
   margin: 0;
   color: #6c757d;
   font-weight: 500;
+}
+
+/* ================================= */
+/* === HALAMAN DETAIL PENGURUS === */
+/* ================================= */
+.detail-pengurus-container {
+  max-width: 800px;
+  margin: 2rem auto;
+}
+.bio-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+.bio-card img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid var(--bg-light);
+  margin-bottom: 1.5rem;
+}
+.bio-info h1 {
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+.bio-info .jabatan {
+  font-size: 1.1rem;
+  color: var(--primary-green);
+  font-weight: 600;
+  margin-top: 0.2rem;
+  margin-bottom: 1.5rem;
+}
+.bio-text {
+  color: var(--light-text);
+  line-height: 1.8;
 }
 
 /* ================================= */
@@ -957,8 +1082,49 @@ footer {
     padding: 0.5rem;
   }
 
-  .org-swiper .swiper-pagination-bullet-active {
-    background: var(--primary-green);
+  /* Responsif Bagan Organisasi */
+  .org-chart {
+    display: block;
+    text-align: left;
+  }
+  .org-chart ul,
+  .org-chart li {
+    display: block;
+    float: none;
+    width: 100%;
+    padding-left: 20px;
+  }
+  .org-chart li {
+    padding-top: 20px;
+  }
+  .org-chart ul ul::before {
+    display: none; /* Sembunyikan garis utama */
+  }
+  .org-chart li::before,
+  .org-chart li::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -10px;
+    border-left: 2px solid #ccc;
+    width: 0;
+    height: 100%;
+  }
+  .org-chart li::after {
+    content: "";
+    position: absolute;
+    top: 30px; /* Sesuaikan dengan tinggi kartu */
+    left: 0px;
+    border-top: 2px solid #ccc;
+    width: 20px;
+    height: 0;
+  }
+  .org-chart ul > li:last-child::before {
+    height: 40px; /* Garis vertikal terakhir lebih pendek */
+  }
+  .bio-card {
+    flex-direction: column;
+    text-align: center;
   }
 
   /* Perbaikan untuk Profil di HP */
@@ -1051,7 +1217,7 @@ footer {
     color: var(--primary-green);
   }
 
-  /* [BARU] Responsif Footer */
+  /* Responsif Footer */
   .footer-grid {
     grid-template-columns: 1fr; /* Satu kolom di HP */
     text-align: center;
@@ -1071,18 +1237,6 @@ footer {
 /* Aturan untuk layar yang lebih besar (Tablet ke atas) */
 @media (min-width: 769px) {
   .bottom-nav {
-    display: none;
-  }
-  .org-swiper .swiper-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
-  }
-  .org-swiper .swiper-slide {
-    width: 250px;
-  }
-  .org-swiper .swiper-pagination {
     display: none;
   }
 }

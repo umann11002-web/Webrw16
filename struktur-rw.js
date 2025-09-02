@@ -17,79 +17,123 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const orgChartContainer = document.getElementById("org-chart-container");
-const rwDocRef = doc(db, "struktur_organisasi", "rw");
+/**
+ * [BARU] Fungsi helper untuk membuat ID yang ramah URL.
+ * Harus sama persis dengan yang ada di detail-pengurus.js
+ */
+function slugify(nama, jabatan) {
+  const combined = `${nama} ${jabatan}`;
+  return combined
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "");
+}
 
-async function tampilkanStrukturRW() {
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("org-chart-wrapper");
+  if (!container) return;
+
   try {
-    const docSnap = await getDoc(rwDocRef);
-    orgChartContainer.innerHTML = ""; // Kosongkan kontainer
+    const docRef = doc(db, "struktur_organisasi", "rw");
+    const docSnap = await getDoc(docRef);
 
     if (docSnap.exists() && docSnap.data().pengurus) {
       const pengurusArray = docSnap.data().pengurus;
 
       if (pengurusArray.length === 0) {
-        orgChartContainer.innerHTML = "<p>Belum ada data pengurus.</p>";
+        container.innerHTML = "<p>Belum ada data pengurus.</p>";
         return;
       }
 
-      // [PERUBAHAN] Loop melalui semua pengurus dan buat slide untuk masing-masing
-      pengurusArray.forEach((p) => {
-        const slide = document.createElement("div");
-        slide.className = "swiper-slide"; // Setiap kartu adalah sebuah slide
-        slide.innerHTML = createCardHTML(p);
-        orgChartContainer.appendChild(slide);
-      });
+      const hierarchy = buildHierarchy(pengurusArray);
 
-      // [BARU] Inisialisasi Swiper setelah semua slide ditambahkan
-      initializeOrgSwiper();
+      if (hierarchy) {
+        const chartHTML = `<div class="org-chart"><ul>${buildChartHTML(
+          hierarchy
+        )}</ul></div>`;
+        container.innerHTML = chartHTML;
+      } else {
+        container.innerHTML =
+          "<p>Struktur tidak valid (Ketua RW tidak ditemukan dalam data).</p>";
+      }
     } else {
-      orgChartContainer.innerHTML =
-        "<p>Data struktur organisasi belum tersedia.</p>";
+      container.innerHTML = "<p>Data struktur organisasi belum tersedia.</p>";
     }
   } catch (error) {
     console.error("Error memuat struktur RW: ", error);
-    orgChartContainer.innerHTML =
-      '<p style="color:red;">Gagal memuat data.</p>';
+    container.innerHTML = '<p style="color:red;">Gagal memuat data.</p>';
   }
-}
+});
 
-// Fungsi pembantu untuk membuat HTML kartu (tidak berubah)
-function createCardHTML(pengurus) {
-  return `
-    <div class="org-card">
-      <img src="${
-        pengurus.fotoUrl || "https://placehold.co/100x100/EFEFEF/333?text=Foto"
-      }" alt="Foto ${pengurus.jabatan}">
-      <h3>${pengurus.nama}</h3>
-      <p>${pengurus.jabatan}</p>
-    </div>
-  `;
-}
+function buildHierarchy(pengurusArray) {
+  const pengurusMap = new Map(
+    pengurusArray.map((p) => [p.jabatan, { ...p, children: [] }])
+  );
 
-// [BARU] Fungsi untuk inisialisasi Swiper
-function initializeOrgSwiper() {
-  const swiper = new Swiper(".org-swiper", {
-    // Opsi untuk mobile
-    slidesPerView: "auto",
-    spaceBetween: 15,
-    centeredSlides: true,
-    loop: true,
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
-    },
-    // Nonaktifkan beberapa fitur di desktop
-    breakpoints: {
-      769: {
-        // Ukuran desktop
-        slidesPerView: 4,
-        spaceBetween: 30,
-        centeredSlides: false,
-        loop: false,
-      },
-    },
+  const root = pengurusMap.get("Ketua RW");
+  if (!root) {
+    console.error("Ketua RW tidak ditemukan dalam data.");
+    return null;
+  }
+
+  const directReports = [
+    "Wakil RW",
+    "Sekertaris RW",
+    "Bendahara RW",
+    "Anggota",
+  ];
+  directReports.forEach((jabatan) => {
+    if (pengurusMap.has(jabatan) && jabatan !== "Ketua RW") {
+      root.children.push(pengurusMap.get(jabatan));
+    }
   });
+
+  const sekNode = root.children.find(
+    (child) => child.jabatan === "Sekertaris RW"
+  );
+  if (sekNode) {
+    const sekReports = ["Wakil Sekertaris"];
+    sekReports.forEach((jabatan) => {
+      if (pengurusMap.has(jabatan)) {
+        sekNode.children.push(pengurusMap.get(jabatan));
+      }
+    });
+  }
+  return root;
 }
 
-document.addEventListener("DOMContentLoaded", tampilkanStrukturRW);
+/**
+ * [MODIFIKASI] Membuat string HTML untuk bagan, sekarang dengan link.
+ */
+function buildChartHTML(node) {
+  // Buat ID unik untuk link
+  const linkId = slugify(node.nama, node.jabatan);
+
+  let html = `
+        <li>
+            <!-- [PERUBAHAN] Kartu sekarang dibungkus dengan tag <a> -->
+            <a href="detail-pengurus.html?id=${linkId}" class="org-card-link">
+                <div class="org-card">
+                    <img src="${
+                      node.fotoUrl ||
+                      "https://placehold.co/100x100/ccc/333?text=Foto"
+                    }" alt="Foto ${
+    node.nama
+  }" onerror="this.src='https://placehold.co/100x100/ccc/333?text=Error';">
+                    <h3>${node.nama}</h3>
+                    <p>${node.jabatan}</p>
+                </div>
+            </a>
+    `;
+
+  if (node.children && node.children.length > 0) {
+    html += "<ul>";
+    for (const child of node.children) {
+      html += buildChartHTML(child);
+    }
+    html += "</ul>";
+  }
+
+  html += "</li>";
+  return html;
+}
