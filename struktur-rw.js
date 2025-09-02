@@ -61,40 +61,38 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+/**
+ * [ROMBAK TOTAL] Fungsi ini sekarang lebih kuat dan bisa menangani
+ * beberapa pengurus dengan jabatan yang sama.
+ */
 function buildHierarchy(pengurusArray) {
-  const pengurusMap = new Map(
-    pengurusArray.map((p) => [p.jabatan, { ...p, children: [] }])
-  );
+  // Buat salinan data agar bisa dimodifikasi dengan aman
+  const nodes = pengurusArray.map((p) => ({ ...p, children: [] }));
 
-  const root = pengurusMap.get("Ketua RW");
+  const root = nodes.find((p) => p.jabatan === "Ketua RW");
   if (!root) {
     console.error("Ketua RW tidak ditemukan dalam data.");
     return null;
-  } // [PERBAIKAN] Ejaan "Sekertaris" diubah menjadi "Sekertaris"
-
-  const directReports = [
-    "Wakil RW",
-    "Sekertaris RW",
-    "Bendahara RW",
-    "Anggota",
-  ];
-  directReports.forEach((jabatan) => {
-    if (pengurusMap.has(jabatan) && jabatan !== "Ketua RW") {
-      root.children.push(pengurusMap.get(jabatan));
-    }
-  }); // [PERBAIKAN] Ejaan di sini juga diubah
-
-  const sekNode = root.children.find(
-    (child) => child.jabatan === "Sekertaris RW"
-  );
-  if (sekNode) {
-    const sekReports = ["Wakil Sekertaris"]; // Pastikan ejaan ini juga benar
-    sekReports.forEach((jabatan) => {
-      if (pengurusMap.has(jabatan)) {
-        sekNode.children.push(pengurusMap.get(jabatan));
-      }
-    });
   }
+
+  // Kelompokkan semua pengurus selain Ketua RW
+  const otherMembers = nodes.filter((p) => p.jabatan !== "Ketua RW");
+
+  otherMembers.forEach((member) => {
+    // Logika sederhana: semua jabatan selain Ketua RW dianggap bawahan langsung
+    // Ini akan menangani beberapa Wakil, Sekretaris, Bendahara, dan Anggota
+    if (
+      member.jabatan.includes("Wakil") ||
+      member.jabatan.includes("Sekertaris") || // Pakai ejaan dari database Anda
+      member.jabatan.includes("Bendahara") ||
+      member.jabatan.includes("Anggota")
+    ) {
+      root.children.push(member);
+    }
+    // Anda bisa menambahkan logika lebih kompleks di sini jika ada sub-jabatan
+    // Contoh: if (member.jabatan === "Wakil Sekertaris") { ... }
+  });
+
   return root;
 }
 
