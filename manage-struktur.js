@@ -1,14 +1,17 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import {
-  getAuth,
-  onAuthStateChanged,
-} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-import {
   getFirestore,
   doc,
   getDoc,
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+// [BARU] Import modul untuk Firebase Storage
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBD4ypi0bq71tJfDdyqgdLL3A_RSye9Q7I",
@@ -20,162 +23,163 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app); // [BARU] Inisialisasi Storage
 
-const pengurusListDiv = document.getElementById("pengurus-list");
-const addPengurusForm = document.getElementById("add-pengurus-form");
-const formTitle = document.getElementById("form-title");
-const submitButton = document.getElementById("submit-btn");
-const currentPhotoContainer = document.getElementById(
-  "current-photo-container"
-);
-const currentPhotoImg = document.getElementById("current-photo");
-const rwDocRef = doc(db, "struktur_organisasi", "rw");
+document.addEventListener("DOMContentLoaded", () => {
+  const rwDocRef = doc(db, "struktur_organisasi", "rw");
+  let pengurusData = [];
 
-let currentlyEditing = null;
+  const tableBody = document.getElementById("pengurus-table-body");
+  const modal = document.getElementById("edit-modal");
+  const closeModalBtn = document.getElementById("close-modal-btn");
+  const editForm = document.getElementById("edit-form");
+  const statusMessage = document.getElementById("status-message");
 
-// Satpam
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    if (userDoc.exists() && userDoc.data().role === "admin") {
-      loadPengurus();
-    } else {
-      window.location.href = "index.html";
-    }
-  } else {
-    window.location.href = "login.html";
+  // Elemen untuk progress upload
+  const progressContainer = document.getElementById(
+    "upload-progress-container"
+  );
+  const progressBar = document.getElementById("upload-progress");
+  const uploadStatus = document.getElementById("upload-status");
+  const saveButton = document.getElementById("save-button");
+
+  function showStatusMessage(message, isError = false) {
+    if (!statusMessage) return;
+    statusMessage.textContent = message;
+    statusMessage.style.color = isError ? "#dc3545" : "var(--primary-green)";
+    setTimeout(() => {
+      statusMessage.textContent = "";
+    }, 4000);
   }
-});
 
-// Memuat dan menampilkan daftar pengurus
-async function loadPengurus() {
-  try {
-    const docSnap = await getDoc(rwDocRef);
-    pengurusListDiv.innerHTML = "";
-    if (docSnap.exists() && docSnap.data().pengurus) {
-      const pengurusArray = docSnap.data().pengurus;
-      pengurusArray.forEach((p) => {
-        const item = document.createElement("div");
-        item.className = "pengurus-list-item";
-        item.innerHTML = `
-                    <span><strong>${p.nama}</strong> - ${p.jabatan}</span>
-                    <div>
-                        <button class="edit-btn" style="margin-right: 10px;">Edit</button>
-                        <button class="delete-btn">Hapus</button>
-                    </div>
-                `;
-        item.querySelector(".edit-btn").onclick = () => populateFormForEdit(p);
-        item.querySelector(".delete-btn").onclick = () => deletePengurus(p);
-        pengurusListDiv.appendChild(item);
-      });
-    }
-  } catch (error) {
-    console.error("Error memuat pengurus: ", error);
-  }
-}
-
-// Mengisi form untuk diedit
-function populateFormForEdit(pengurusObject) {
-  document.getElementById("nama-pengurus").value = pengurusObject.nama;
-  document.getElementById("jabatan-pengurus").value = pengurusObject.jabatan;
-
-  currentPhotoImg.src = pengurusObject.fotoUrl;
-  currentPhotoContainer.style.display = "block";
-
-  formTitle.textContent = "Edit Pengurus";
-  submitButton.textContent = "Update";
-  currentlyEditing = pengurusObject;
-}
-
-// Menambah atau mengedit pengurus
-addPengurusForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const nama = document.getElementById("nama-pengurus").value;
-  const jabatan = document.getElementById("jabatan-pengurus").value;
-  const file = document.getElementById("foto-file").files[0];
-  let fotoUrl = currentlyEditing
-    ? currentlyEditing.fotoUrl
-    : "https://placehold.co/100x100";
-
-  submitButton.disabled = true;
-  submitButton.textContent = "Menyimpan...";
-
-  try {
-    // Jika ada file baru yang dipilih, unggah dulu
-    if (file) {
-      submitButton.textContent = "Mengunggah foto...";
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "yd99selh"); // GANTI DENGAN NAMA PRESET-MU
-
-      const cloudName = "do1ba7gkn"; // GANTI JIKA BEDA
-      const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-      const uploadResponse = await fetch(uploadUrl, {
-        method: "POST",
-        body: formData,
-      });
-      const uploadData = await uploadResponse.json();
-      if (uploadData.error) throw new Error(uploadData.error.message);
-      fotoUrl = uploadData.secure_url;
-    }
-
-    const newPengurusData = { nama, jabatan, fotoUrl };
-
-    const docSnap = await getDoc(rwDocRef);
-    let currentPengurus = docSnap.exists() ? docSnap.data().pengurus : [];
-
-    if (currentlyEditing) {
-      const index = currentPengurus.findIndex(
-        (p) =>
-          p.nama === currentlyEditing.nama &&
-          p.jabatan === currentlyEditing.jabatan
-      );
-      if (index > -1) {
-        currentPengurus[index] = newPengurusData;
-      }
-    } else {
-      currentPengurus.push(newPengurusData);
-    }
-
-    await updateDoc(rwDocRef, { pengurus: currentPengurus });
-
-    resetForm();
-    loadPengurus();
-  } catch (error) {
-    console.error("Error menyimpan pengurus: ", error);
-    alert(`Gagal menyimpan data: ${error.message}`);
-  } finally {
-    submitButton.disabled = false;
-    resetForm();
-  }
-});
-
-// Menghapus pengurus
-async function deletePengurus(pengurusObject) {
-  if (confirm(`Yakin ingin menghapus ${pengurusObject.nama}?`)) {
+  async function loadPengurus() {
+    if (!tableBody) return;
     try {
       const docSnap = await getDoc(rwDocRef);
-      const currentPengurus = docSnap.data().pengurus;
-      const updatedPengurus = currentPengurus.filter(
-        (p) =>
-          p.nama !== pengurusObject.nama || p.jabatan !== pengurusObject.jabatan
-      );
-      await updateDoc(rwDocRef, { pengurus: updatedPengurus });
-      loadPengurus();
+      if (docSnap.exists() && docSnap.data().pengurus) {
+        pengurusData = docSnap.data().pengurus;
+        renderTable();
+      } else {
+        tableBody.innerHTML = `<tr><td colspan="4">Data tidak ditemukan.</td></tr>`;
+      }
     } catch (error) {
-      console.error("Error menghapus pengurus: ", error);
-      alert("Gagal menghapus data.");
+      console.error("Error loading data: ", error);
+      tableBody.innerHTML = `<tr><td colspan="4" style="color:red;">Gagal memuat data.</td></tr>`;
     }
   }
-}
 
-// Fungsi untuk mereset form
-function resetForm() {
-  addPengurusForm.reset();
-  formTitle.textContent = "Tambah Pengurus Baru";
-  submitButton.textContent = "Tambah";
-  currentPhotoContainer.style.display = "none";
-  currentlyEditing = null;
-}
+  function renderTable() {
+    if (!tableBody) return;
+    tableBody.innerHTML = "";
+    pengurusData.forEach((p, index) => {
+      const row = `
+                <tr>
+                    <td><img src="${
+                      p.fotoUrl ||
+                      "https://placehold.co/50x50/ccc/333?text=Foto"
+                    }" alt="${
+        p.nama
+      }" style="width:50px; height:50px; border-radius:50%; object-fit:cover;"></td>
+                    <td>${p.nama}</td>
+                    <td>${p.jabatan}</td>
+                    <td><button class="action-btn btn-approve edit-btn" data-index="${index}">Edit</button></td>
+                </tr>
+            `;
+      tableBody.innerHTML += row;
+    });
+  }
+
+  function openEditModal(index) {
+    if (!modal) return;
+    const p = pengurusData[index];
+    document.getElementById("edit-index").value = index;
+    document.getElementById("edit-nama").value = p.nama;
+    document.getElementById("edit-jabatan").value = p.jabatan;
+    document.getElementById("current-fotoUrl").value = p.fotoUrl || "";
+    document.getElementById("edit-bio").value = p.bio || "";
+    document.getElementById("edit-fotoFile").value = ""; // Reset input file
+    progressContainer.style.display = "none"; // Sembunyikan progress bar
+    modal.style.display = "flex";
+  }
+
+  function closeModal() {
+    if (modal) modal.style.display = "none";
+  }
+
+  if (editForm) {
+    editForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      saveButton.disabled = true;
+      saveButton.textContent = "Menyimpan...";
+
+      const index = document.getElementById("edit-index").value;
+      const fileInput = document.getElementById("edit-fotoFile");
+      const file = fileInput.files[0];
+      let newFotoUrl = document.getElementById("current-fotoUrl").value;
+
+      if (file) {
+        progressContainer.style.display = "block";
+        const storageRef = ref(storage, `pengurus/${Date.now()}_${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        await new Promise((resolve, reject) => {
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              const progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              progressBar.value = progress;
+              uploadStatus.textContent = `Mengunggah: ${Math.round(progress)}%`;
+            },
+            (error) => {
+              console.error("Upload failed: ", error);
+              reject(error);
+            },
+            async () => {
+              newFotoUrl = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve();
+            }
+          );
+        });
+      }
+
+      pengurusData[index].nama = document.getElementById("edit-nama").value;
+      pengurusData[index].jabatan =
+        document.getElementById("edit-jabatan").value;
+      pengurusData[index].bio = document.getElementById("edit-bio").value;
+      pengurusData[index].fotoUrl = newFotoUrl;
+
+      try {
+        await updateDoc(rwDocRef, { pengurus: pengurusData });
+        showStatusMessage("Data berhasil diperbarui!");
+        closeModal();
+        renderTable();
+      } catch (error) {
+        console.error("Error updating document: ", error);
+        showStatusMessage("Gagal memperbarui data.", true);
+      } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = "Simpan Perubahan";
+      }
+    });
+  }
+
+  if (tableBody) {
+    tableBody.addEventListener("click", (e) => {
+      if (e.target.classList.contains("edit-btn")) {
+        const index = e.target.dataset.index;
+        openEditModal(index);
+      }
+    });
+  }
+  if (closeModalBtn) closeModalBtn.addEventListener("click", closeModal);
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+  }
+  loadPengurus();
+});
