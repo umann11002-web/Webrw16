@@ -39,13 +39,20 @@
       <h1>Kelola Struktur Kepengurusan RW</h1>
       <p>Ubah detail pengurus seperti nama, jabatan, foto, dan bio di sini.</p>
 
+      <div class="main-actions">
+        <button class="submit-btn" id="add-new-btn">
+          <i class="fas fa-plus"></i> Tambah Pengurus Baru
+        </button>
+      </div>
+
       <table>
         <thead>
           <tr>
             <th>Foto</th>
             <th>Nama</th>
             <th>Jabatan</th>
-            <th>Aksi</th>
+            <!-- [PERUBAHAN] Judul kolom diubah -->
+            <th class="actions-column">Aksi</th>
           </tr>
         </thead>
         <tbody id="pengurus-table-body">
@@ -61,13 +68,12 @@
     <div class="modal-overlay" id="edit-modal">
       <div class="modal-content">
         <div class="modal-header">
-          <h2>Edit Detail Pengurus</h2>
+          <h2 id="modal-title">Edit Detail Pengurus</h2>
           <button class="close-btn" id="close-modal-btn">&times;</button>
         </div>
         <form id="edit-form">
           <input type="hidden" id="edit-index" />
           <input type="hidden" id="current-fotoUrl" />
-          <!-- Simpan URL lama -->
 
           <div class="form-group">
             <label for="edit-nama">Nama</label>
@@ -78,7 +84,6 @@
             <input type="text" id="edit-jabatan" required />
           </div>
 
-          <!-- [PERUBAHAN] Mengubah Input URL menjadi Upload File -->
           <div class="form-group">
             <label for="edit-fotoFile">Ganti Foto (Opsional)</label>
             <input type="file" id="edit-fotoFile" accept="image/*" />
@@ -92,16 +97,36 @@
           </div>
 
           <div class="form-group">
-            <label for="edit-bio">Bio / Informasi Tambahan</label>
-            <textarea
-              id="edit-bio"
-              rows="5"
-              placeholder="Tulis deskripsi singkat tentang pengurus di sini..."
-            ></textarea>
+            <label for="edit-noHp">No. HP</label>
+            <input
+              type="tel"
+              id="edit-noHp"
+              placeholder="Contoh: 081234567890"
+            />
           </div>
-          <button type="submit" class="submit-btn" id="save-button">
-            Simpan Perubahan
-          </button>
+          <div class="form-group">
+            <label for="edit-email">Email</label>
+            <input
+              type="email"
+              id="edit-email"
+              placeholder="Contoh: nama@email.com"
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit-alamat">Alamat Singkat</label>
+            <input
+              type="text"
+              id="edit-alamat"
+              placeholder="Contoh: Blok A No. 10"
+            />
+          </div>
+
+          <!-- [PERUBAHAN] Tombol Hapus tidak ada di sini lagi -->
+          <div class="form-actions">
+            <button type="submit" class="submit-btn" id="save-button">
+              Simpan Perubahan
+            </button>
+          </div>
         </form>
       </div>
     </div>

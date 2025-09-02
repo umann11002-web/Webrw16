@@ -5,7 +5,6 @@ import {
   getDoc,
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-// [BARU] Import modul untuk Firebase Storage
 import {
   getStorage,
   ref,
@@ -24,7 +23,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app); // [BARU] Inisialisasi Storage
+const storage = getStorage(app);
 
 document.addEventListener("DOMContentLoaded", () => {
   const rwDocRef = doc(db, "struktur_organisasi", "rw");
@@ -32,20 +31,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const tableBody = document.getElementById("pengurus-table-body");
   const modal = document.getElementById("edit-modal");
+  const modalTitle = document.getElementById("modal-title");
   const closeModalBtn = document.getElementById("close-modal-btn");
   const editForm = document.getElementById("edit-form");
   const statusMessage = document.getElementById("status-message");
-
-  // Elemen untuk progress upload
+  const addNewBtn = document.getElementById("add-new-btn");
+  const saveButton = document.getElementById("save-button");
   const progressContainer = document.getElementById(
     "upload-progress-container"
   );
   const progressBar = document.getElementById("upload-progress");
   const uploadStatus = document.getElementById("upload-status");
-  const saveButton = document.getElementById("save-button");
 
   function showStatusMessage(message, isError = false) {
-    if (!statusMessage) return;
     statusMessage.textContent = message;
     statusMessage.style.color = isError ? "#dc3545" : "var(--primary-green)";
     setTimeout(() => {
@@ -53,13 +51,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 4000);
   }
 
-  async function loadPengurus() {
-    if (!tableBody) return;
+  async function loadAndRender() {
     try {
       const docSnap = await getDoc(rwDocRef);
       if (docSnap.exists() && docSnap.data().pengurus) {
         pengurusData = docSnap.data().pengurus;
-        renderTable();
+        tableBody.innerHTML = "";
+        pengurusData.forEach((p, index) => {
+          const row = `
+                        <tr>
+                            <td><img src="${
+                              p.fotoUrl ||
+                              "https://placehold.co/50x50/ccc/333?text=Foto"
+                            }" alt="${p.nama}" class="table-photo"></td>
+                            <td>${p.nama}</td>
+                            <td>${p.jabatan}</td>
+                            <td>
+                                <button class="action-btn btn-approve edit-btn" data-index="${index}">Edit</button>
+                                <button class="action-btn btn-reject delete-btn" data-index="${index}">Hapus</button>
+                            </td>
+                        </tr>
+                    `;
+          tableBody.innerHTML += row;
+        });
       } else {
         tableBody.innerHTML = `<tr><td colspan="4">Data tidak ditemukan.</td></tr>`;
       }
@@ -69,61 +83,49 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function renderTable() {
-    if (!tableBody) return;
-    tableBody.innerHTML = "";
-    pengurusData.forEach((p, index) => {
-      const row = `
-                <tr>
-                    <td><img src="${
-                      p.fotoUrl ||
-                      "https://placehold.co/50x50/ccc/333?text=Foto"
-                    }" alt="${
-        p.nama
-      }" style="width:50px; height:50px; border-radius:50%; object-fit:cover;"></td>
-                    <td>${p.nama}</td>
-                    <td>${p.jabatan}</td>
-                    <td><button class="action-btn btn-approve edit-btn" data-index="${index}">Edit</button></td>
-                </tr>
-            `;
-      tableBody.innerHTML += row;
-    });
-  }
-
   function openEditModal(index) {
-    if (!modal) return;
     const p = pengurusData[index];
+    editForm.reset();
+    modalTitle.textContent = "Edit Detail Pengurus";
     document.getElementById("edit-index").value = index;
+    document.getElementById("current-fotoUrl").value = p.fotoUrl || "";
     document.getElementById("edit-nama").value = p.nama;
     document.getElementById("edit-jabatan").value = p.jabatan;
-    document.getElementById("current-fotoUrl").value = p.fotoUrl || "";
-    document.getElementById("edit-bio").value = p.bio || "";
-    document.getElementById("edit-fotoFile").value = ""; // Reset input file
-    progressContainer.style.display = "none"; // Sembunyikan progress bar
+    document.getElementById("edit-noHp").value = p.noHp || "";
+    document.getElementById("edit-email").value = p.email || "";
+    document.getElementById("edit-alamat").value = p.alamat || "";
+    progressContainer.style.display = "none";
+    modal.style.display = "flex";
+  }
+
+  function openAddModal() {
+    editForm.reset();
+    modalTitle.textContent = "Tambah Pengurus Baru";
+    document.getElementById("edit-index").value = "-1";
+    document.getElementById("current-fotoUrl").value = "";
+    progressContainer.style.display = "none";
     modal.style.display = "flex";
   }
 
   function closeModal() {
-    if (modal) modal.style.display = "none";
+    modal.style.display = "none";
   }
 
-  if (editForm) {
-    editForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      saveButton.disabled = true;
-      saveButton.textContent = "Menyimpan...";
+  editForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    saveButton.disabled = true;
+    saveButton.textContent = "Menyimpan...";
 
-      const index = document.getElementById("edit-index").value;
-      const fileInput = document.getElementById("edit-fotoFile");
-      const file = fileInput.files[0];
-      let newFotoUrl = document.getElementById("current-fotoUrl").value;
+    const index = parseInt(document.getElementById("edit-index").value, 10);
+    const file = document.getElementById("edit-fotoFile").files[0];
+    let newFotoUrl = document.getElementById("current-fotoUrl").value;
 
+    try {
       if (file) {
         progressContainer.style.display = "block";
         const storageRef = ref(storage, `pengurus/${Date.now()}_${file.name}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
-
-        await new Promise((resolve, reject) => {
+        newFotoUrl = await new Promise((resolve, reject) => {
           uploadTask.on(
             "state_changed",
             (snapshot) => {
@@ -132,54 +134,72 @@ document.addEventListener("DOMContentLoaded", () => {
               progressBar.value = progress;
               uploadStatus.textContent = `Mengunggah: ${Math.round(progress)}%`;
             },
-            (error) => {
-              console.error("Upload failed: ", error);
-              reject(error);
-            },
+            (error) => reject(error),
             async () => {
-              newFotoUrl = await getDownloadURL(uploadTask.snapshot.ref);
-              resolve();
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve(downloadURL);
             }
           );
         });
       }
 
-      pengurusData[index].nama = document.getElementById("edit-nama").value;
-      pengurusData[index].jabatan =
-        document.getElementById("edit-jabatan").value;
-      pengurusData[index].bio = document.getElementById("edit-bio").value;
-      pengurusData[index].fotoUrl = newFotoUrl;
+      const updatedPengurus = {
+        nama: document.getElementById("edit-nama").value,
+        jabatan: document.getElementById("edit-jabatan").value,
+        fotoUrl: newFotoUrl,
+        noHp: document.getElementById("edit-noHp").value,
+        email: document.getElementById("edit-email").value,
+        alamat: document.getElementById("edit-alamat").value,
+      };
+
+      if (index === -1) {
+        pengurusData.push(updatedPengurus);
+      } else {
+        pengurusData[index] = updatedPengurus;
+      }
+
+      await updateDoc(rwDocRef, { pengurus: pengurusData });
+      showStatusMessage("Data berhasil disimpan!");
+      closeModal();
+      loadAndRender();
+    } catch (error) {
+      console.error("Error saving data: ", error);
+      showStatusMessage("Gagal menyimpan data.", true);
+    } finally {
+      saveButton.disabled = false;
+      saveButton.textContent = "Simpan Perubahan";
+    }
+  });
+
+  tableBody.addEventListener("click", async (e) => {
+    if (e.target.classList.contains("edit-btn")) {
+      openEditModal(e.target.dataset.index);
+    }
+
+    if (e.target.classList.contains("delete-btn")) {
+      if (!confirm("Apakah Anda yakin ingin menghapus pengurus ini?")) {
+        return;
+      }
+      const index = parseInt(e.target.dataset.index, 10);
+      pengurusData.splice(index, 1);
 
       try {
         await updateDoc(rwDocRef, { pengurus: pengurusData });
-        showStatusMessage("Data berhasil diperbarui!");
-        closeModal();
-        renderTable();
+        showStatusMessage("Pengurus berhasil dihapus!");
+        loadAndRender();
       } catch (error) {
-        console.error("Error updating document: ", error);
-        showStatusMessage("Gagal memperbarui data.", true);
-      } finally {
-        saveButton.disabled = false;
-        saveButton.textContent = "Simpan Perubahan";
+        console.error("Error deleting data: ", error);
+        showStatusMessage("Gagal menghapus data.", true);
+        loadAndRender(); // Re-render to restore data if delete fails
       }
-    });
-  }
+    }
+  });
 
-  if (tableBody) {
-    tableBody.addEventListener("click", (e) => {
-      if (e.target.classList.contains("edit-btn")) {
-        const index = e.target.dataset.index;
-        openEditModal(index);
-      }
-    });
-  }
-  if (closeModalBtn) closeModalBtn.addEventListener("click", closeModal);
-  if (modal) {
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        closeModal();
-      }
-    });
-  }
-  loadPengurus();
+  addNewBtn.addEventListener("click", openAddModal);
+  closeModalBtn.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  loadAndRender();
 });

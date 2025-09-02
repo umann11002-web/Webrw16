@@ -17,48 +17,37 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/**
- * Membuat "slug" atau ID yang ramah URL dari nama dan jabatan.
- * Contoh: "Opal", "Ketua RW" -> "opal-ketua-rw"
- */
+// Fungsi ini HARUS SAMA PERSIS dengan yang ada di struktur-rw.js
 function slugify(nama, jabatan) {
   const combined = `${nama} ${jabatan}`;
   return combined
     .toLowerCase()
-    .replace(/\s+/g, "-") // Ganti spasi dengan -
-    .replace(/[^\w-]+/g, ""); // Hapus karakter non-alfanumerik
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "");
 }
 
-async function loadDetailPengurus() {
-  const container = document.getElementById("detail-pengurus-content");
-  if (!container) return;
-
-  // 1. Ambil ID dari URL
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("bio-container");
   const params = new URLSearchParams(window.location.search);
   const pengurusId = params.get("id");
 
   if (!pengurusId) {
-    container.innerHTML =
-      "<h1>Pengurus Tidak Ditemukan</h1><p>ID pengurus tidak valid atau tidak tersedia.</p>";
+    container.innerHTML = '<p style="color:red;">ID Pengurus tidak valid.</p>';
     return;
   }
 
   try {
-    // 2. Ambil semua data pengurus dari Firebase
     const docRef = doc(db, "struktur_organisasi", "rw");
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists() && docSnap.data().pengurus) {
       const pengurusArray = docSnap.data().pengurus;
-
-      // 3. Cari pengurus yang cocok dengan ID dari URL
       const pengurus = pengurusArray.find(
         (p) => slugify(p.nama, p.jabatan) === pengurusId
       );
 
       if (pengurus) {
-        // 4. Jika ditemukan, tampilkan datanya
-        document.title = `${pengurus.nama} - RW 16`; // Ubah judul halaman
+        // Tampilkan data kontak terstruktur
         container.innerHTML = `
                     <div class="bio-card">
                         <img src="${
@@ -68,29 +57,35 @@ async function loadDetailPengurus() {
                         <div class="bio-info">
                             <h1>${pengurus.nama}</h1>
                             <p class="jabatan">${pengurus.jabatan}</p>
-                            <div class="bio-text">
-                                <p>${
-                                  pengurus.bio ||
-                                  "Informasi lebih lanjut tentang pengurus ini belum tersedia."
-                                }</p>
-                                <!-- Anda bisa menambahkan info lain di sini, misal: -->
-                                <!-- <p><strong>Periode Jabatan:</strong> 2023 - 2026</p> -->
-                            </div>
+                            
+                            <ul class="bio-kontak">
+                                ${
+                                  pengurus.noHp
+                                    ? `<li><i class="fas fa-phone"></i><a href="tel:${pengurus.noHp}">${pengurus.noHp}</a></li>`
+                                    : ""
+                                }
+                                ${
+                                  pengurus.email
+                                    ? `<li><i class="fas fa-envelope"></i><a href="mailto:${pengurus.email}">${pengurus.email}</a></li>`
+                                    : ""
+                                }
+                                ${
+                                  pengurus.alamat
+                                    ? `<li><i class="fas fa-map-marker-alt"></i><span>${pengurus.alamat}</span></li>`
+                                    : ""
+                                }
+                            </ul>
                         </div>
                     </div>
                 `;
       } else {
-        container.innerHTML =
-          "<h1>Pengurus Tidak Ditemukan</h1><p>Data untuk pengurus ini tidak dapat ditemukan di database.</p>";
+        container.innerHTML = "<p>Detail pengurus tidak ditemukan.</p>";
       }
     } else {
-      container.innerHTML =
-        "<h1>Data Tidak Ditemukan</h1><p>Struktur organisasi tidak tersedia.</p>";
+      container.innerHTML = "<p>Data struktur organisasi tidak tersedia.</p>";
     }
   } catch (error) {
     console.error("Error memuat detail pengurus: ", error);
-    container.innerHTML = "<p style='color:red;'>Gagal memuat data.</p>";
+    container.innerHTML = '<p style="color:red;">Gagal memuat data.</p>';
   }
-}
-
-document.addEventListener("DOMContentLoaded", loadDetailPengurus);
+});

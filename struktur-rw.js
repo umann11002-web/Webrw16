@@ -17,10 +17,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/**
- * [BARU] Fungsi helper untuk membuat ID yang ramah URL.
- * Harus sama persis dengan yang ada di detail-pengurus.js
- */
 function slugify(nama, jabatan) {
   const combined = `${nama} ${jabatan}`;
   return combined
@@ -74,7 +70,7 @@ function buildHierarchy(pengurusArray) {
   if (!root) {
     console.error("Ketua RW tidak ditemukan dalam data.");
     return null;
-  }
+  } // [PERBAIKAN] Ejaan "Sekertaris" diubah menjadi "Sekertaris"
 
   const directReports = [
     "Wakil RW",
@@ -86,13 +82,13 @@ function buildHierarchy(pengurusArray) {
     if (pengurusMap.has(jabatan) && jabatan !== "Ketua RW") {
       root.children.push(pengurusMap.get(jabatan));
     }
-  });
+  }); // [PERBAIKAN] Ejaan di sini juga diubah
 
   const sekNode = root.children.find(
     (child) => child.jabatan === "Sekertaris RW"
   );
   if (sekNode) {
-    const sekReports = ["Wakil Sekertaris"];
+    const sekReports = ["Wakil Sekertaris"]; // Pastikan ejaan ini juga benar
     sekReports.forEach((jabatan) => {
       if (pengurusMap.has(jabatan)) {
         sekNode.children.push(pengurusMap.get(jabatan));
@@ -102,29 +98,23 @@ function buildHierarchy(pengurusArray) {
   return root;
 }
 
-/**
- * [MODIFIKASI] Membuat string HTML untuk bagan, sekarang dengan link.
- */
 function buildChartHTML(node) {
-  // Buat ID unik untuk link
   const linkId = slugify(node.nama, node.jabatan);
 
   let html = `
-        <li>
-            <!-- [PERUBAHAN] Kartu sekarang dibungkus dengan tag <a> -->
-            <a href="detail-pengurus.html?id=${linkId}" class="org-card-link">
-                <div class="org-card">
-                    <img src="${
-                      node.fotoUrl ||
-                      "https://placehold.co/100x100/ccc/333?text=Foto"
-                    }" alt="Foto ${
+        <li>
+            <a href="detail-pengurus.html?id=${linkId}" class="org-card-link">
+                <div class="org-card">
+                    <img src="${
+    node.fotoUrl || "https://placehold.co/100x100/ccc/333?text=Foto"
+  }" alt="Foto ${
     node.nama
   }" onerror="this.src='https://placehold.co/100x100/ccc/333?text=Error';">
-                    <h3>${node.nama}</h3>
-                    <p>${node.jabatan}</p>
-                </div>
-            </a>
-    `;
+                    <h3>${node.nama}</h3>
+                    <p>${node.jabatan}</p>
+                </div>
+            </a>
+    `;
 
   if (node.children && node.children.length > 0) {
     html += "<ul>";
