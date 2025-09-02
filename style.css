@@ -375,6 +375,86 @@ main,
 }
 
 /* ================================= */
+/* === [BARU] HALAMAN GALERI PUBLIK === */
+/* ================================= */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.album-card-public {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.album-card-public:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+.album-card-public img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+.album-card-public .album-title-public {
+  padding: 1rem;
+  font-weight: 600;
+  background-color: white;
+}
+.photo-item {
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.photo-item img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.photo-item:hover img {
+  transform: scale(1.05);
+}
+#back-to-albums-btn {
+  margin-bottom: 1.5rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  background-color: #6c757d;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+.lightbox-content img {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 4px;
+}
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* ================================= */
 /* === BAGAN ORGANISASI === */
 /* ================================= */
 
@@ -813,6 +893,10 @@ th select {
   justify-content: center;
   cursor: pointer;
   z-index: 1001;
+  transition: transform 0.2s;
+}
+.fab:hover {
+  transform: scale(1.1);
 }
 
 /* ======================================= */
