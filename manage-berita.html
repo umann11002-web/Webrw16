@@ -12,7 +12,7 @@
   </head>
   <body>
     <header class="admin-nav">
-      <!-- Salin-tempel <header> dari halaman admin lain -->
+      <!-- Header Anda -->
       <div class="nav-title"><strong>RW 16 Admin Panel</strong></div>
       <button class="hamburger-btn" id="admin-hamburger-btn">
         <i class="fas fa-bars"></i>
@@ -43,28 +43,18 @@
         publik.
       </p>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Gambar</th>
-            <th>Judul</th>
-            <th>Tanggal Terbit</th>
-            <th class="actions-column">Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="berita-table-body">
-          <!-- Data akan diisi oleh JavaScript -->
-        </tbody>
-      </table>
+      <!-- [DIROMBAK] Tabel diganti dengan Grid untuk Kartu Berita -->
+      <div id="berita-grid-container" class="admin-grid-container">
+        <!-- Data akan diisi oleh JavaScript -->
+        <p>Memuat berita...</p>
+      </div>
       <p id="status-message" style="margin-top: 1rem; font-weight: 600"></p>
     </main>
 
-    <!-- Tombol Aksi Mengambang -->
     <button class="fab" id="add-news-btn" aria-label="Tambah Berita Baru">
       <i class="fas fa-plus"></i>
     </button>
 
-    <!-- Modal untuk Tambah/Edit Berita -->
     <div class="modal-overlay" id="berita-modal">
       <div class="modal-content">
         <div class="modal-header">

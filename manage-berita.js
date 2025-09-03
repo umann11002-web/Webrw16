@@ -27,7 +27,7 @@ const db = getFirestore(app);
 
 document.addEventListener("DOMContentLoaded", () => {
   // Elemen UI
-  const tableBody = document.getElementById("berita-table-body");
+  const gridContainer = document.getElementById("berita-grid-container");
   const addNewBtn = document.getElementById("add-news-btn");
   const modal = document.getElementById("berita-modal");
   const modalTitle = document.getElementById("modal-title");
@@ -65,37 +65,44 @@ document.addEventListener("DOMContentLoaded", () => {
   // Muat dan tampilkan berita secara real-time
   const q = query(collection(db, "berita"), orderBy("tanggal", "desc"));
   onSnapshot(q, (snapshot) => {
-    tableBody.innerHTML = "";
+    gridContainer.innerHTML = "";
     if (snapshot.empty) {
-      tableBody.innerHTML = `<tr><td colspan="4">Belum ada berita. Klik tombol '+' untuk menambah.</td></tr>`;
+      gridContainer.innerHTML = `<p>Belum ada berita. Klik tombol '+' untuk menambah.</p>`;
       return;
     }
     snapshot.forEach((doc) => {
       const berita = doc.data();
       const tanggal = berita.tanggal
-        ? berita.tanggal.toDate().toLocaleDateString("id-ID")
+        ? berita.tanggal
+            .toDate()
+            .toLocaleDateString("id-ID", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })
         : "N/A";
-      const row = `
-                <tr>
-                    <td><img src="${
-                      berita.gambarUrl ||
-                      "https://placehold.co/100x60/eee/ccc?text=Gambar"
-                    }" alt="${
-        berita.judul
-      }" class="table-photo" style="height:60px; width:100px; border-radius:4px;"></td>
-                    <td>${berita.judul}</td>
-                    <td>${tanggal}</td>
-                    <td class="action-cell">
-                        <button class="action-btn btn-approve edit-btn" data-id="${
-                          doc.id
-                        }">Edit</button>
-                        <button class="action-btn btn-reject delete-btn" data-id="${
-                          doc.id
-                        }">Hapus</button>
-                    </td>
-                </tr>
+
+      const card = document.createElement("div");
+      card.className = "admin-card-berita";
+      card.innerHTML = `
+                <img src="${
+                  berita.gambarUrl ||
+                  "https://placehold.co/300x200/eee/ccc?text=Gambar"
+                }" alt="Cover Berita" class="admin-card-img">
+                <div class="admin-card-content">
+                    <p class="admin-card-date">${tanggal}</p>
+                    <h3 class="admin-card-title">${berita.judul}</h3>
+                </div>
+                <div class="admin-card-actions">
+                    <button class="card-action-btn edit-btn" data-id="${
+                      doc.id
+                    }"><i class="fas fa-edit"></i></button>
+                    <button class="card-action-btn delete-btn" data-id="${
+                      doc.id
+                    }"><i class="fas fa-trash"></i></button>
+                </div>
             `;
-      tableBody.innerHTML += row;
+      gridContainer.appendChild(card);
     });
   });
 
@@ -159,11 +166,13 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       if (beritaId) {
-        // Mode Edit
         await updateDoc(doc(db, "berita", beritaId), data);
         showStatusMessage("Berita berhasil diperbarui!");
       } else {
-        // Mode Tambah
+        if (!gambarUrl) {
+          // Validasi gambar wajib untuk berita baru
+          throw new Error("Gambar utama wajib diisi untuk berita baru.");
+        }
         data.tanggal = serverTimestamp();
         data.dilihat = 0;
         await addDoc(collection(db, "berita"), data);
@@ -178,14 +187,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  tableBody.addEventListener("click", async (e) => {
-    if (e.target.classList.contains("edit-btn")) {
-      openEditModal(e.target.dataset.id);
+  gridContainer.addEventListener("click", async (e) => {
+    const editBtn = e.target.closest(".edit-btn");
+    const deleteBtn = e.target.closest(".delete-btn");
+
+    if (editBtn) {
+      openEditModal(editBtn.dataset.id);
     }
-    if (e.target.classList.contains("delete-btn")) {
+    if (deleteBtn) {
       if (!confirm("Yakin ingin menghapus berita ini?")) return;
       try {
-        await deleteDoc(doc(db, "berita", e.target.dataset.id));
+        await deleteDoc(doc(db, "berita", deleteBtn.dataset.id));
         showStatusMessage("Berita berhasil dihapus!");
       } catch (error) {
         console.error("Error deleting berita:", error);
