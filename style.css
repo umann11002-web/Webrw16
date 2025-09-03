@@ -1338,6 +1338,7 @@ footer {
     padding: 0.5rem;
   }
 
+  /* [DIROMBAK] Responsif Bagan Organisasi */
   .org-chart {
     display: block;
     text-align: left;
@@ -1347,13 +1348,15 @@ footer {
     display: block;
     float: none;
     width: 100%;
+  }
+  .org-chart ul {
     padding-left: 20px;
   }
   .org-chart li {
     padding-top: 20px;
   }
   .org-chart ul ul::before {
-    display: none;
+    display: none; /* Sembunyikan garis konektor utama */
   }
   .org-chart li::before,
   .org-chart li::after {
@@ -1362,7 +1365,7 @@ footer {
     left: 0;
     top: -10px;
     border-left: 2px solid #ccc;
-    width: 0;
+    width: 0px;
     height: 100%;
   }
   .org-chart li::after {
@@ -1374,8 +1377,12 @@ footer {
     width: 20px;
     height: 0;
   }
-  .org-chart ul > li:last-child::before {
-    height: 40px;
+  .org-chart li:last-child::before {
+    height: 40px; /* Garis vertikal terakhir lebih pendek */
+  }
+  .org-chart li .org-card {
+    display: block; /* Kartu jadi full-width */
+    margin: 0;
   }
   .bio-card {
     flex-direction: column;
