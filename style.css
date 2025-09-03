@@ -884,6 +884,13 @@ th select {
 .form-group {
   margin: 1rem 0;
 }
+.form-group-inline {
+  display: flex;
+  gap: 1rem; /* Jarak antar input */
+}
+.form-group-inline .form-group {
+  flex: 1; /* Membuat kedua input memiliki lebar yang sama */
+}
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;

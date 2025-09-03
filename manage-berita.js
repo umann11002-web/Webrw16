@@ -11,6 +11,7 @@ import {
   orderBy,
   onSnapshot,
   serverTimestamp,
+  Timestamp,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -26,7 +27,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Elemen UI
   const gridContainer = document.getElementById("berita-grid-container");
   const addNewBtn = document.getElementById("add-news-btn");
   const modal = document.getElementById("berita-modal");
@@ -41,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const progressBar = document.getElementById("upload-progress");
   const uploadStatus = document.getElementById("upload-status");
 
-  // Fungsi upload ke Cloudinary
   const uploadFileToCloudinary = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
@@ -62,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 4000);
   }
 
-  // Muat dan tampilkan berita secara real-time
   const q = query(collection(db, "berita"), orderBy("tanggal", "desc"));
   onSnapshot(q, (snapshot) => {
     gridContainer.innerHTML = "";
@@ -81,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
               year: "numeric",
             })
         : "N/A";
-
       const card = document.createElement("div");
       card.className = "admin-card-berita";
       card.innerHTML = `
@@ -127,6 +124,17 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("current-gambarUrl").value = berita.gambarUrl;
         document.getElementById("berita-judul").value = berita.judul;
         document.getElementById("berita-isi").value = berita.isi;
+
+        // [BARU] Isi input tanggal jika data ada
+        if (berita.tanggalMulaiAcara) {
+          document.getElementById("berita-tanggal-mulai").value =
+            berita.tanggalMulaiAcara.toDate().toISOString().split("T")[0];
+        }
+        if (berita.tanggalSelesaiAcara) {
+          document.getElementById("berita-tanggal-selesai").value =
+            berita.tanggalSelesaiAcara.toDate().toISOString().split("T")[0];
+        }
+
         saveBtn.textContent = "Simpan Perubahan";
         progressContainer.style.display = "none";
         modal.style.display = "flex";
@@ -165,14 +173,31 @@ document.addEventListener("DOMContentLoaded", () => {
         gambarUrl: gambarUrl,
       };
 
+      // [BARU] Ambil dan konversi tanggal acara ke Timestamp
+      const tanggalMulaiValue = document.getElementById(
+        "berita-tanggal-mulai"
+      ).value;
+      const tanggalSelesaiValue = document.getElementById(
+        "berita-tanggal-selesai"
+      ).value;
+
+      if (tanggalMulaiValue) {
+        data.tanggalMulaiAcara = Timestamp.fromDate(
+          new Date(tanggalMulaiValue)
+        );
+      }
+      if (tanggalSelesaiValue) {
+        data.tanggalSelesaiAcara = Timestamp.fromDate(
+          new Date(tanggalSelesaiValue)
+        );
+      }
+
       if (beritaId) {
         await updateDoc(doc(db, "berita", beritaId), data);
         showStatusMessage("Berita berhasil diperbarui!");
       } else {
-        if (!gambarUrl) {
-          // Validasi gambar wajib untuk berita baru
+        if (!gambarUrl)
           throw new Error("Gambar utama wajib diisi untuk berita baru.");
-        }
         data.tanggal = serverTimestamp();
         data.dilihat = 0;
         await addDoc(collection(db, "berita"), data);
