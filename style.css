@@ -713,10 +713,12 @@ th select {
 .main-actions {
   margin-bottom: 1.5rem;
 }
+.actions-column {
+  width: 150px;
+}
 .form-actions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
   margin-top: 1.5rem;
 }
 
@@ -1332,52 +1334,74 @@ footer {
     padding: 0.5rem;
   }
 
-  /* Responsif Bagan Organisasi */
+  /* [PERBAIKAN FINAL] Responsif Bagan Organisasi */
   .org-chart {
     display: block;
-    text-align: left;
+    text-align: left; /* Ratakan ke kiri di mobile */
   }
   .org-chart ul,
   .org-chart li {
-    display: block;
+    display: block; /* Paksa jadi vertikal */
     float: none;
     width: 100%;
+    position: relative;
   }
   .org-chart ul {
-    padding-left: 20px;
+    padding-left: 20px; /* Beri indentasi untuk anak */
   }
   .org-chart li {
-    padding-top: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
   }
   .org-chart ul ul::before {
-    display: none;
+    display: none; /* Sembunyikan garis konektor utama di atas grup */
   }
+  /* Menggambar garis vertikal di sebelah kiri */
   .org-chart li::before,
   .org-chart li::after {
     content: "";
     position: absolute;
     left: 0;
-    top: -10px;
     border-left: 2px solid #ccc;
     width: 0;
+  }
+  .org-chart li::before {
+    top: -10px;
     height: 100%;
   }
+  /* Menggambar garis horizontal pendek dari garis vertikal ke kartu */
   .org-chart li::after {
-    content: "";
-    position: absolute;
-    top: 30px;
+    top: 40px; /* Sesuaikan posisi vertikal agar pas di tengah kartu */
     left: 0px;
     border-top: 2px solid #ccc;
-    width: 20px;
+    width: 20px; /* Panjang garis horizontal */
     height: 0;
+    border-left: none;
   }
+  /* Membuat garis vertikal untuk item terakhir lebih pendek */
   .org-chart li:last-child::before {
-    height: 40px;
+    height: 50px;
   }
+  /* Ratakan kartu ke kiri */
   .org-chart li .org-card {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
     margin: 0;
     text-align: left;
+    min-width: 250px;
+  }
+  .org-chart > ul > li {
+    padding-left: 0; /* Hapus indentasi untuk Ketua RW */
+  }
+  .org-chart > ul > li::before,
+  .org-chart > ul > li::after {
+    display: none; /* Hapus garis untuk Ketua RW */
+  }
+  .org-chart li .org-card img {
+    width: 60px; /* Perkecil gambar di mobile */
+    height: 60px;
+    margin-bottom: 0;
   }
   .bio-card {
     flex-direction: column;
