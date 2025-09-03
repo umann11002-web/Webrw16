@@ -5,12 +5,9 @@ import {
   getDoc,
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
+
+// Tidak perlu import storage lagi
+// import { getStorage, ... } from ...
 
 const firebaseConfig = {
   apiKey: "AIzaSyBD4ypi0bq71tJfDdyqgdLL3A_RSye9Q7I",
@@ -23,7 +20,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app);
+// const storage = getStorage(app); // Tidak perlu inisialisasi storage
 
 document.addEventListener("DOMContentLoaded", () => {
   const rwDocRef = doc(db, "struktur_organisasi", "rw");
@@ -40,8 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const progressContainer = document.getElementById(
     "upload-progress-container"
   );
-  const progressBar = document.getElementById("upload-progress");
   const uploadStatus = document.getElementById("upload-status");
+  const progressBar = document.getElementById("upload-progress"); // Kita tetap pakai untuk visual
 
   function showStatusMessage(message, isError = false) {
     statusMessage.textContent = message;
@@ -75,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
           tableBody.innerHTML += row;
         });
       } else {
-        tableBody.innerHTML = `<tr><td colspan="4">Belum ada data. Silakan klik 'Tambah Pengurus Baru'.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="4">Belum ada data.</td></tr>`;
       }
     } catch (error) {
       console.error("Error loading data: ", error);
@@ -122,26 +119,30 @@ document.addEventListener("DOMContentLoaded", () => {
     let newFotoUrl = document.getElementById("current-fotoUrl").value;
 
     try {
+      // [DIUBAH] Logika upload sekarang menggunakan Cloudinary
       if (file) {
         progressContainer.style.display = "block";
-        const storageRef = ref(storage, `pengurus/${Date.now()}_${file.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-        newFotoUrl = await new Promise((resolve, reject) => {
-          uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-              const progress =
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              progressBar.value = progress;
-              uploadStatus.textContent = `Mengunggah: ${Math.round(progress)}%`;
-            },
-            (error) => reject(error),
-            async () => {
-              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-              resolve(downloadURL);
-            }
-          );
+        uploadStatus.textContent = "Mengunggah foto...";
+        progressBar.value = 50; // Visual indikator saja
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "yd99selh"); // GANTI DENGAN NAMA PRESET-MU
+        const cloudName = "do1ba7gkn"; // GANTI JIKA BEDA
+        const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
+        const response = await fetch(uploadUrl, {
+          method: "POST",
+          body: formData,
         });
+        const data = await response.json();
+
+        if (data.error) {
+          throw new Error(data.error.message);
+        }
+        newFotoUrl = data.secure_url;
+        progressBar.value = 100;
+        uploadStatus.textContent = "Unggah Selesai!";
       }
 
       const updatedPengurus = {
@@ -166,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
       loadAndRender();
     } catch (error) {
       console.error("Error saving data: ", error);
-      showStatusMessage("Gagal menyimpan data.", true);
+      showStatusMessage(`Gagal: ${error.message}`, true);
     } finally {
       saveButton.disabled = false;
       saveButton.textContent = "Simpan Perubahan";
@@ -174,16 +175,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   tableBody.addEventListener("click", async (e) => {
-    const target = e.target;
-    if (target.classList.contains("edit-btn")) {
-      openEditModal(target.dataset.index);
+    if (e.target.classList.contains("edit-btn")) {
+      openEditModal(e.target.dataset.index);
     }
 
-    if (target.classList.contains("delete-btn")) {
+    if (e.target.classList.contains("delete-btn")) {
       if (!confirm("Apakah Anda yakin ingin menghapus pengurus ini?")) {
         return;
       }
-      const index = parseInt(target.dataset.index, 10);
+      const index = parseInt(e.target.dataset.index, 10);
       pengurusData.splice(index, 1);
 
       try {
