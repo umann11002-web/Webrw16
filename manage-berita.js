@@ -1,20 +1,16 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import {
-  getAuth,
-  onAuthStateChanged,
-} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-import {
   getFirestore,
   collection,
-  addDoc,
-  getDocs,
-  serverTimestamp,
-  getDoc,
   doc,
+  getDoc,
+  addDoc,
   updateDoc,
   deleteDoc,
   query,
   orderBy,
+  onSnapshot,
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -27,196 +23,180 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Elemen UI
-const beritaForm = document.getElementById("berita-form");
-const submitBtn = document.getElementById("submit-berita-btn");
-const uploadStatus = document.getElementById("upload-status");
-const beritaListContainer = document.getElementById("berita-list-container");
-const cancelEditBtn = document.getElementById("cancel-edit-btn");
-const formTitle = document.getElementById("form-title");
+document.addEventListener("DOMContentLoaded", () => {
+  // Elemen UI
+  const tableBody = document.getElementById("berita-table-body");
+  const addNewBtn = document.getElementById("add-news-btn");
+  const modal = document.getElementById("berita-modal");
+  const modalTitle = document.getElementById("modal-title");
+  const closeModalBtn = document.getElementById("close-modal-btn");
+  const beritaForm = document.getElementById("berita-form");
+  const saveBtn = document.getElementById("save-berita-btn");
+  const statusMessage = document.getElementById("status-message");
+  const progressContainer = document.getElementById(
+    "upload-progress-container"
+  );
+  const progressBar = document.getElementById("upload-progress");
+  const uploadStatus = document.getElementById("upload-status");
 
-// Cek status login admin
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    if (userDoc.exists() && userDoc.data().role === "admin") {
-      loadBerita(); // Muat daftar berita saat halaman dibuka
-    } else {
-      window.location.href = "index.html";
-    }
-  } else {
-    window.location.href = "login.html";
+  // Fungsi upload ke Cloudinary
+  const uploadFileToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "yd99selh");
+    const cloudName = "do1ba7gkn";
+    const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+    const response = await fetch(uploadUrl, { method: "POST", body: formData });
+    const data = await response.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.secure_url;
+  };
+
+  function showStatusMessage(message, isError = false) {
+    statusMessage.textContent = message;
+    statusMessage.style.color = isError ? "#dc3545" : "var(--primary-green)";
+    setTimeout(() => {
+      statusMessage.textContent = "";
+    }, 4000);
   }
-});
 
-// [BARU] Fungsi untuk memuat dan menampilkan daftar berita
-async function loadBerita() {
-  beritaListContainer.innerHTML = `<p>Memuat daftar berita...</p>`;
-  try {
-    const q = query(collection(db, "berita"), orderBy("tanggal", "desc"));
-    const querySnapshot = await getDocs(q);
-    beritaListContainer.innerHTML = "";
-    querySnapshot.forEach((doc) => {
+  // Muat dan tampilkan berita secara real-time
+  const q = query(collection(db, "berita"), orderBy("tanggal", "desc"));
+  onSnapshot(q, (snapshot) => {
+    tableBody.innerHTML = "";
+    if (snapshot.empty) {
+      tableBody.innerHTML = `<tr><td colspan="4">Belum ada berita. Klik tombol '+' untuk menambah.</td></tr>`;
+      return;
+    }
+    snapshot.forEach((doc) => {
       const berita = doc.data();
-      const beritaItem = document.createElement("div");
-      beritaItem.className = "berita-list-item";
-      beritaItem.innerHTML = `
-                <span>${berita.judul}</span>
-                <div class="berita-actions">
-                    <button class="btn-edit" data-id="${doc.id}">Edit</button>
-                    <button class="btn-delete" data-id="${doc.id}">Hapus</button>
-                </div>
+      const tanggal = berita.tanggal
+        ? berita.tanggal.toDate().toLocaleDateString("id-ID")
+        : "N/A";
+      const row = `
+                <tr>
+                    <td><img src="${
+                      berita.gambarUrl ||
+                      "https://placehold.co/100x60/eee/ccc?text=Gambar"
+                    }" alt="${
+        berita.judul
+      }" class="table-photo" style="height:60px; width:100px; border-radius:4px;"></td>
+                    <td>${berita.judul}</td>
+                    <td>${tanggal}</td>
+                    <td class="action-cell">
+                        <button class="action-btn btn-approve edit-btn" data-id="${
+                          doc.id
+                        }">Edit</button>
+                        <button class="action-btn btn-reject delete-btn" data-id="${
+                          doc.id
+                        }">Hapus</button>
+                    </td>
+                </tr>
             `;
-      beritaListContainer.appendChild(beritaItem);
+      tableBody.innerHTML += row;
     });
-  } catch (error) {
-    console.error("Error memuat berita: ", error);
-    beritaListContainer.innerHTML = `<p>Gagal memuat daftar berita.</p>`;
-  }
-}
+  });
 
-// [MODIFIKASI] Event listener untuk form, sekarang bisa handle tambah & edit
-beritaForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const judul = document.getElementById("berita-judul").value;
-  const isi = document.getElementById("berita-isi").value;
-  const file = document.getElementById("berita-gambar").files[0];
-  const beritaId = document.getElementById("berita-id").value;
-
-  // Validasi dasar
-  if (!judul || !isi) {
-    alert("Judul dan Isi Berita harus diisi.");
-    return;
-  }
-  // Jika ini mode tambah baru, file gambar wajib ada
-  if (!beritaId && !file) {
-    alert("Gambar utama wajib diisi untuk berita baru.");
-    return;
+  function openAddModal() {
+    beritaForm.reset();
+    modalTitle.textContent = "Tambah Berita Baru";
+    document.getElementById("berita-id").value = "";
+    saveBtn.textContent = "Publikasikan";
+    progressContainer.style.display = "none";
+    modal.style.display = "flex";
   }
 
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Menyimpan...";
-  uploadStatus.textContent = "";
-
-  try {
-    let gambarUrl;
-    // Hanya upload gambar baru jika ada file yang dipilih
-    if (file) {
-      uploadStatus.textContent = "Mengunggah gambar...";
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "yd99selh");
-      const cloudName = "do1ba7gkn";
-      const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-
-      const uploadResponse = await fetch(uploadUrl, {
-        method: "POST",
-        body: formData,
-      });
-      const uploadData = await uploadResponse.json();
-      if (uploadData.error) throw new Error(uploadData.error.message);
-      gambarUrl = uploadData.secure_url;
-    }
-
-    uploadStatus.textContent = "Menyimpan data berita...";
-
-    if (beritaId) {
-      // === MODE EDIT ===
-      const beritaRef = doc(db, "berita", beritaId);
-      const dataToUpdate = {
-        judul: judul,
-        isi: isi,
-      };
-      // Hanya update URL gambar jika gambar baru diupload
-      if (gambarUrl) {
-        dataToUpdate.gambarUrl = gambarUrl;
+  async function openEditModal(id) {
+    try {
+      const docRef = doc(db, "berita", id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const berita = docSnap.data();
+        beritaForm.reset();
+        modalTitle.textContent = "Edit Berita";
+        document.getElementById("berita-id").value = id;
+        document.getElementById("current-gambarUrl").value = berita.gambarUrl;
+        document.getElementById("berita-judul").value = berita.judul;
+        document.getElementById("berita-isi").value = berita.isi;
+        saveBtn.textContent = "Simpan Perubahan";
+        progressContainer.style.display = "none";
+        modal.style.display = "flex";
       }
-      await updateDoc(beritaRef, dataToUpdate);
-      uploadStatus.textContent = "Berita berhasil diperbarui!";
-    } else {
-      // === MODE TAMBAH BARU ===
-      await addDoc(collection(db, "berita"), {
-        judul: judul,
-        isi: isi,
+    } catch (error) {
+      console.error("Error fetching document for edit:", error);
+    }
+  }
+
+  function closeModal() {
+    modal.style.display = "none";
+  }
+
+  beritaForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Menyimpan...";
+
+    const beritaId = document.getElementById("berita-id").value;
+    const file = document.getElementById("berita-gambar").files[0];
+    let gambarUrl = document.getElementById("current-gambarUrl").value;
+
+    try {
+      if (file) {
+        progressContainer.style.display = "block";
+        uploadStatus.textContent = "Mengunggah gambar...";
+        progressBar.value = 50;
+        gambarUrl = await uploadFileToCloudinary(file);
+        progressBar.value = 100;
+        uploadStatus.textContent = "Selesai!";
+      }
+
+      const data = {
+        judul: document.getElementById("berita-judul").value,
+        isi: document.getElementById("berita-isi").value,
         gambarUrl: gambarUrl,
-        tanggal: serverTimestamp(),
-        dilihat: 0,
-      });
-      uploadStatus.textContent = "Berita berhasil dipublikasikan!";
-    }
+      };
 
-    uploadStatus.style.color = "green";
-    resetForm();
-    loadBerita();
-  } catch (error) {
-    console.error("Error: ", error);
-    uploadStatus.textContent = `Gagal: ${error.message}`;
-    uploadStatus.style.color = "red";
-  } finally {
-    submitBtn.disabled = false;
-  }
+      if (beritaId) {
+        // Mode Edit
+        await updateDoc(doc(db, "berita", beritaId), data);
+        showStatusMessage("Berita berhasil diperbarui!");
+      } else {
+        // Mode Tambah
+        data.tanggal = serverTimestamp();
+        data.dilihat = 0;
+        await addDoc(collection(db, "berita"), data);
+        showStatusMessage("Berita berhasil dipublikasikan!");
+      }
+      closeModal();
+    } catch (error) {
+      console.error("Error saving berita:", error);
+      showStatusMessage(`Gagal: ${error.message}`, true);
+    } finally {
+      saveBtn.disabled = false;
+    }
+  });
+
+  tableBody.addEventListener("click", async (e) => {
+    if (e.target.classList.contains("edit-btn")) {
+      openEditModal(e.target.dataset.id);
+    }
+    if (e.target.classList.contains("delete-btn")) {
+      if (!confirm("Yakin ingin menghapus berita ini?")) return;
+      try {
+        await deleteDoc(doc(db, "berita", e.target.dataset.id));
+        showStatusMessage("Berita berhasil dihapus!");
+      } catch (error) {
+        console.error("Error deleting berita:", error);
+        showStatusMessage("Gagal menghapus berita.", true);
+      }
+    }
+  });
+
+  addNewBtn.addEventListener("click", openAddModal);
+  closeModalBtn.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
 });
-
-// [BARU] Event listener untuk tombol di daftar berita (Edit & Hapus)
-beritaListContainer.addEventListener("click", (e) => {
-  const target = e.target;
-  const id = target.dataset.id;
-  if (target.classList.contains("btn-delete")) {
-    if (confirm("Apakah Anda yakin ingin menghapus berita ini?")) {
-      deleteBerita(id);
-    }
-  }
-  if (target.classList.contains("btn-edit")) {
-    prepareForEdit(id);
-  }
-});
-
-// [BARU] Fungsi untuk menghapus berita
-async function deleteBerita(id) {
-  try {
-    await deleteDoc(doc(db, "berita", id));
-    alert("Berita berhasil dihapus.");
-    loadBerita();
-  } catch (error) {
-    console.error("Error menghapus berita: ", error);
-    alert("Gagal menghapus berita.");
-  }
-}
-
-// [BARU] Fungsi untuk menyiapkan form dalam mode edit
-async function prepareForEdit(id) {
-  try {
-    const beritaRef = doc(db, "berita", id);
-    const docSnap = await getDoc(beritaRef);
-    if (docSnap.exists()) {
-      const berita = docSnap.data();
-      document.getElementById("berita-id").value = id;
-      document.getElementById("berita-judul").value = berita.judul;
-      document.getElementById("berita-isi").value = berita.isi;
-
-      formTitle.textContent = "Edit Berita";
-      submitBtn.textContent = "Simpan Perubahan";
-      cancelEditBtn.style.display = "inline-block";
-      window.scrollTo(0, 0); // Scroll ke atas halaman
-    }
-  } catch (error) {
-    console.error("Error menyiapkan edit: ", error);
-    alert("Gagal memuat data untuk diedit.");
-  }
-}
-
-// [BARU] Fungsi untuk mereset form dan kembali ke mode tambah
-function resetForm() {
-  beritaForm.reset();
-  document.getElementById("berita-id").value = "";
-  formTitle.textContent = "Tambah Berita Baru";
-  submitBtn.textContent = "Publikasikan Berita";
-  cancelEditBtn.style.display = "none";
-}
-
-// Event listener untuk tombol batal edit
-cancelEditBtn.addEventListener("click", resetForm);
