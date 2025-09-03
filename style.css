@@ -374,9 +374,6 @@ main,
   gap: 1.5rem;
 }
 
-/* ================================= */
-/* === [BARU] HALAMAN GALERI PUBLIK === */
-/* ================================= */
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -813,7 +810,7 @@ th select {
 }
 
 /* ================================= */
-/* === [DIROMBAK] HALAMAN KELOLA GALERI === */
+/* === HALAMAN KELOLA GALERI === */
 /* ================================= */
 
 .album-grid {
@@ -875,10 +872,7 @@ th select {
   border-color: var(--primary-green);
 }
 
-/* Tombol Aksi Mengambang (FAB) */
-/* Tombol Aksi Mengambang (FAB) */
-/* [DIUBAH] Hanya tampil jika berada setelah .manage-main */
-.manage-main + .fab {
+.fab {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
@@ -897,13 +891,13 @@ th select {
   z-index: 1001;
   transition: transform 0.2s;
 }
-.manage-main + .fab:hover {
+.fab:hover {
   transform: scale(1.1);
 }
 
-/* ========================= */
+/* ======================================= */
 /* === HALAMAN DETAIL ALBUM ADMIN === */
-/* ========================= */
+/* ======================================= */
 
 .back-link {
   display: inline-block;
@@ -1338,6 +1332,7 @@ footer {
     padding: 0.5rem;
   }
 
+  /* Responsif Bagan Organisasi */
   .org-chart {
     display: block;
     text-align: left;
