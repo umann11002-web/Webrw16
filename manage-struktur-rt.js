@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   function showStatusMessage(message, isError = false) {
+    if (!statusMessage) return;
     statusMessage.textContent = message;
     statusMessage.style.color = isError ? "#dc3545" : "var(--primary-green)";
     setTimeout(() => {
@@ -88,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       } else {
         pengurusData = [];
-        tableBody.innerHTML = `<tr><td colspan="4">Belum ada data.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="4">Belum ada data. Silakan tambah pengurus.</td></tr>`;
       }
     } catch (error) {
       console.error("Error loading RT data: ", error);
@@ -110,7 +111,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function openEditModal(index) {
     const p = pengurusData[index];
     editForm.reset();
-    modalTitle.textContent = "Edit Detail Pengurus";
+    modalTitle.textContent = `Edit Pengurus ${
+      rtSelect.options[rtSelect.selectedIndex].text
+    }`;
     document.getElementById("edit-index").value = index;
     document.getElementById("current-fotoUrl").value = p.fotoUrl || "";
     document.getElementById("edit-nama").value = p.nama;
@@ -121,8 +124,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function openAddModal() {
     editForm.reset();
-    modalTitle.textContent = "Tambah Pengurus Baru";
+    modalTitle.textContent = `Tambah Pengurus Baru ${
+      rtSelect.options[rtSelect.selectedIndex].text
+    }`;
     document.getElementById("edit-index").value = "-1";
+    document.getElementById("current-fotoUrl").value = "";
     progressContainer.style.display = "none";
     modal.style.display = "flex";
   }
