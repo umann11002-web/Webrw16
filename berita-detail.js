@@ -19,17 +19,23 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const beritaContainer = document.getElementById("berita-detail-container");
-
-function getBeritaIdFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("id");
+// Fungsi untuk format tanggal
+function formatDate(timestamp) {
+  if (!timestamp) return "";
+  return timestamp.toDate().toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
 
-async function tampilkanDetailBerita() {
-  const beritaId = getBeritaIdFromUrl();
+async function loadBeritaDetail() {
+  const params = new URLSearchParams(window.location.search);
+  const beritaId = params.get("id");
+  const contentEl = document.getElementById("berita-detail-content");
+
   if (!beritaId) {
-    beritaContainer.innerHTML = "<p>Berita tidak ditemukan.</p>";
+    contentEl.innerHTML = "<h1>Berita tidak ditemukan.</h1>";
     return;
   }
 
@@ -39,57 +45,41 @@ async function tampilkanDetailBerita() {
 
     if (docSnap.exists()) {
       const berita = docSnap.data();
-      document.title = `${berita.judul || "Berita"} - RW 16`;
 
-      let tanggalFormatted = "Tanggal tidak tersedia";
-      if (berita.tanggal && typeof berita.tanggal.toDate === "function") {
-        tanggalFormatted = berita.tanggal.toDate().toLocaleDateString("id-ID", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        });
-      } else if (berita.tanggal) {
-        tanggalFormatted = berita.tanggal;
+      // Update judul halaman dan elemen
+      document.title = `${berita.judul} - RW 16`;
+      document.getElementById("detail-judul").textContent = berita.judul;
+      document.getElementById(
+        "detail-tanggal-publish"
+      ).textContent = `Dipublikasikan pada ${formatDate(berita.tanggal)}`;
+      document.getElementById("detail-gambar").src = berita.gambarUrl;
+      document.getElementById("detail-isi").innerHTML = berita.isi.replace(
+        /\n/g,
+        "<br>"
+      );
+
+      // [KUNCI] Tampilkan info jadwal acara jika ada
+      const jadwalBox = document.getElementById("detail-info-jadwal");
+      if (berita.tanggalMulaiAcara) {
+        let jadwalText = formatDate(berita.tanggalMulaiAcara);
+        if (berita.tanggalSelesaiAcara) {
+          jadwalText += ` s/d ${formatDate(berita.tanggalSelesaiAcara)}`;
+        }
+        jadwalBox.innerHTML = `<i class="fas fa-calendar-alt"></i> <strong>Jadwal Acara:</strong> ${jadwalText}`;
+        jadwalBox.style.display = "flex";
       }
 
-      const isiBerita = berita.isi || "<p>[Isi berita tidak tersedia]</p>";
-
-      beritaContainer.innerHTML = `
-        <div class="berita-header">
-          <img src="${berita.gambarUrl}" alt="${berita.judul}">
-          <h1>${berita.judul}</h1>
-          <div class="meta-info">
-            <span><i class="fas fa-calendar-alt"></i> ${tanggalFormatted}</span>
-            <span><i class="fas fa-user"></i> Ditulis oleh Admin</span>
-            <span><i class="fas fa-eye"></i> Dilihat ${
-              berita.dilihat || 0
-            } kali</span>
-          </div>
-        </div>
-        <div class="berita-content">
-          ${isiBerita}
-        </div>
-      `;
-
-      // [FIX] Update jumlah 'dilihat' dibungkus dalam try...catch sendiri
-      // Jadi jika gagal (karena bukan admin), tidak akan merusak tampilan
-      try {
-        await updateDoc(docRef, {
-          dilihat: increment(1),
-        });
-      } catch (updateError) {
-        // Abaikan error ini di sisi pengguna, tapi catat di console untuk developer
-        console.log(
-          "Gagal mengupdate jumlah dilihat (ini wajar untuk non-admin)."
-        );
-      }
+      // Update jumlah 'dilihat'
+      await updateDoc(docRef, {
+        dilihat: increment(1),
+      });
     } else {
-      beritaContainer.innerHTML = "<p>Berita tidak ditemukan.</p>";
+      contentEl.innerHTML = "<h1>Berita tidak ditemukan.</h1>";
     }
   } catch (error) {
-    console.error("Error mengambil detail berita: ", error);
-    beritaContainer.innerHTML = "<p>Gagal memuat berita.</p>";
+    console.error("Error memuat detail berita: ", error);
+    contentEl.innerHTML = "<h1>Gagal memuat berita.</h1>";
   }
 }
 
-document.addEventListener("DOMContentLoaded", tampilkanDetailBerita);
+document.addEventListener("DOMContentLoaded", loadBeritaDetail);

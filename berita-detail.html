@@ -100,9 +100,40 @@
         </div>
       </header>
 
-      <main class="berita-detail-main" id="berita-detail-container">
-        <!-- Konten berita akan dimuat di sini oleh JavaScript -->
-        <p>Memuat berita...</p>
+      <main class="main-content">
+        <div class="berita-detail-container">
+          <a href="berita.html" class="back-link"
+            ><i class="fas fa-arrow-left"></i> Kembali ke Daftar Berita</a
+          >
+
+          <!-- Konten Detail Berita -->
+          <article id="berita-detail-content">
+            <h1 id="detail-judul">Memuat judul...</h1>
+            <div class="detail-meta">
+              <span id="detail-tanggal-publish"></span>
+            </div>
+
+            <!-- [BARU] Kotak Info Jadwal Acara -->
+            <div
+              id="detail-info-jadwal"
+              class="info-jadwal-box"
+              style="display: none"
+            >
+              <!-- Diisi oleh JavaScript -->
+            </div>
+
+            <img
+              src="https://placehold.co/800x400/eee/ccc?text=Gambar"
+              alt="Gambar Berita"
+              id="detail-gambar"
+              class="detail-gambar-utama"
+            />
+
+            <div id="detail-isi" class="detail-isi-konten">
+              <p>Memuat isi berita...</p>
+            </div>
+          </article>
+        </div>
       </main>
 
       <footer>
