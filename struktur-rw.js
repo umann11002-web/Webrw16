@@ -17,6 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// Fungsi helper untuk ID link, tetap sama
 function slugify(nama, jabatan) {
   const combined = `${nama} ${jabatan}`;
   return combined
@@ -25,6 +26,87 @@ function slugify(nama, jabatan) {
     .replace(/[^\w-]+/g, "");
 }
 
+// Fungsi untuk membuat HTML satu kartu, tetap sama
+function createCardHTML(node) {
+  const linkId = slugify(node.nama, node.jabatan);
+  return `
+        <a href="detail-pengurus.html?id=${linkId}" class="org-card-link">
+            <div class="org-card">
+                <img src="${
+                  node.fotoUrl ||
+                  "https://placehold.co/100x100/ccc/333?text=Foto"
+                }" alt="Foto ${node.nama}">
+                <h3>${node.nama}</h3>
+                <p>${node.jabatan}</p>
+            </div>
+        </a>
+    `;
+}
+
+// [BARU] Fungsi untuk membangun bagan HIERARKI (Desktop)
+function buildHierarchyChart(pengurusArray) {
+  const nodes = pengurusArray.map((p) => ({ ...p, children: [] }));
+  const root = nodes.find((p) => p.jabatan === "Ketua RW");
+  if (!root) return null;
+
+  const otherMembers = nodes.filter((p) => p.jabatan !== "Ketua RW");
+  otherMembers.forEach((member) => {
+    // Logika sederhana: semua adalah anak dari Ketua RW
+    root.children.push(member);
+  });
+
+  function buildHTML(node) {
+    let html = `<li>${createCardHTML(node)}`;
+    if (node.children && node.children.length > 0) {
+      html += "<ul>";
+      for (const child of node.children) {
+        html += buildHTML(child);
+      }
+      html += "</ul>";
+    }
+    html += "</li>";
+    return html;
+  }
+  return `<div class="org-chart"><ul>${buildHTML(root)}</ul></div>`;
+}
+
+// [BARU] Fungsi untuk membangun tampilan BERJENJANG (Mobile)
+function buildTieredLayout(pengurusArray) {
+  const pimpinan = pengurusArray.filter(
+    (p) => p.jabatan === "Ketua RW" || p.jabatan === "Wakil RW"
+  );
+  const inti = pengurusArray.filter(
+    (p) => p.jabatan === "Sekertaris RW" || p.jabatan === "Bendahara RW"
+  );
+  const anggota = pengurusArray.filter((p) => p.jabatan.includes("Anggota"));
+
+  let html = '<div class="org-container">';
+  if (pimpinan.length > 0) {
+    html += '<h2>Pimpinan</h2><div class="org-tier pimpinan">';
+    pimpinan.forEach((p) => {
+      html += createCardHTML(p);
+    });
+    html += "</div>";
+  }
+  if (inti.length > 0) {
+    html += '<h2>Jajaran Inti</h2><div class="org-tier inti">';
+    inti.forEach((p) => {
+      html += createCardHTML(p);
+    });
+    html += "</div>";
+  }
+  if (anggota.length > 0) {
+    html += '<h2>Anggota</h2><div class="org-tier anggota">';
+    anggota.forEach((p) => {
+      html += createCardHTML(p);
+    });
+    html += "</div>";
+  }
+  html += "</div>";
+  return html;
+}
+
+// Fungsi utama yang berjalan saat halaman dimuat
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("org-chart-wrapper");
   if (!container) return;
@@ -41,16 +123,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
-      const hierarchy = buildHierarchy(pengurusArray);
-
-      if (hierarchy) {
-        const chartHTML = `<div class="org-chart"><ul>${buildChartHTML(
-          hierarchy
-        )}</ul></div>`;
-        container.innerHTML = chartHTML;
+      // [KUNCI] Cek lebar layar dan gambar layout yang sesuai
+      if (window.innerWidth <= 768) {
+        container.innerHTML = buildTieredLayout(pengurusArray);
       } else {
-        container.innerHTML =
-          "<p>Struktur tidak valid (Ketua RW tidak ditemukan dalam data).</p>";
+        container.innerHTML = buildHierarchyChart(pengurusArray);
       }
     } else {
       container.innerHTML = "<p>Data struktur organisasi belum tersedia.</p>";
@@ -60,68 +137,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     container.innerHTML = '<p style="color:red;">Gagal memuat data.</p>';
   }
 });
-
-/**
- * [ROMBAK TOTAL] Fungsi ini sekarang lebih kuat dan bisa menangani
- * beberapa pengurus dengan jabatan yang sama.
- */
-function buildHierarchy(pengurusArray) {
-  // Buat salinan data agar bisa dimodifikasi dengan aman
-  const nodes = pengurusArray.map((p) => ({ ...p, children: [] }));
-
-  const root = nodes.find((p) => p.jabatan === "Ketua RW");
-  if (!root) {
-    console.error("Ketua RW tidak ditemukan dalam data.");
-    return null;
-  }
-
-  // Kelompokkan semua pengurus selain Ketua RW
-  const otherMembers = nodes.filter((p) => p.jabatan !== "Ketua RW");
-
-  otherMembers.forEach((member) => {
-    // Logika sederhana: semua jabatan selain Ketua RW dianggap bawahan langsung
-    // Ini akan menangani beberapa Wakil, Sekretaris, Bendahara, dan Anggota
-    if (
-      member.jabatan.includes("Wakil") ||
-      member.jabatan.includes("Sekertaris") || // Pakai ejaan dari database Anda
-      member.jabatan.includes("Bendahara") ||
-      member.jabatan.includes("Anggota")
-    ) {
-      root.children.push(member);
-    }
-    // Anda bisa menambahkan logika lebih kompleks di sini jika ada sub-jabatan
-    // Contoh: if (member.jabatan === "Wakil Sekertaris") { ... }
-  });
-
-  return root;
-}
-
-function buildChartHTML(node) {
-  const linkId = slugify(node.nama, node.jabatan);
-
-  let html = `
-        <li>
-            <a href="detail-pengurus.html?id=${linkId}" class="org-card-link">
-                <div class="org-card">
-                    <img src="${
-    node.fotoUrl || "https://placehold.co/100x100/ccc/333?text=Foto"
-  }" alt="Foto ${
-    node.nama
-  }" onerror="this.src='https://placehold.co/100x100/ccc/333?text=Error';">
-                    <h3>${node.nama}</h3>
-                    <p>${node.jabatan}</p>
-                </div>
-            </a>
-    `;
-
-  if (node.children && node.children.length > 0) {
-    html += "<ul>";
-    for (const child of node.children) {
-      html += buildChartHTML(child);
-    }
-    html += "</ul>";
-  }
-
-  html += "</li>";
-  return html;
-}
