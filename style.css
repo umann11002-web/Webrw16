@@ -1471,6 +1471,9 @@ footer {
     text-align: left;
     border-top: 1px solid #eee;
   }
+  .admin-nav .nav-links .logout-btn {
+    margin-top: 0.5rem;
+  }
   .admin-nav .dropdown {
     width: 100%;
   }
