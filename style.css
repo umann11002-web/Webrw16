@@ -171,6 +171,7 @@ main,
 }
 .sambutan-teks p:last-of-type {
   line-height: 1.8;
+  overflow-wrap: break-word;
 }
 .informasi {
   margin-bottom: 2rem;
