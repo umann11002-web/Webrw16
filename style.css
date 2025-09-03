@@ -171,7 +171,10 @@ main,
 }
 .sambutan-teks p:last-of-type {
   line-height: 1.8;
-  overflow-wrap: break-word;
+  overflow-wrap: break-word; /* Tetap pakai ini untuk keamanan */
+  max-height: 100px; /* Batasi tinggi paragraf, misal 100px */
+  overflow-y: auto; /* Tampilkan scrollbar jika teksnya lebih panjang */
+  text-align: left; /* Wajib agar scrollbar tidak aneh */
 }
 .informasi {
   margin-bottom: 2rem;
