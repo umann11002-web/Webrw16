@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const editForm = document.getElementById("edit-form");
   const statusMessage = document.getElementById("status-message");
   const addNewBtn = document.getElementById("add-new-btn");
-  const deleteBtn = document.getElementById("delete-btn");
   const saveButton = document.getElementById("save-button");
   const progressContainer = document.getElementById(
     "upload-progress-container"
@@ -45,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const uploadStatus = document.getElementById("upload-status");
 
   function showStatusMessage(message, isError = false) {
-    if (!statusMessage) return;
     statusMessage.textContent = message;
     statusMessage.style.color = isError ? "#dc3545" : "var(--primary-green)";
     setTimeout(() => {
@@ -68,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             }" alt="${p.nama}" class="table-photo"></td>
                             <td>${p.nama}</td>
                             <td>${p.jabatan}</td>
-                            <td>
+                            <td class="action-cell">
                                 <button class="action-btn btn-approve edit-btn" data-index="${index}">Edit</button>
                                 <button class="action-btn btn-reject delete-btn" data-index="${index}">Hapus</button>
                             </td>
@@ -77,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
           tableBody.innerHTML += row;
         });
       } else {
-        tableBody.innerHTML = `<tr><td colspan="4">Data tidak ditemukan.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="4">Belum ada data. Silakan klik 'Tambah Pengurus Baru'.</td></tr>`;
       }
     } catch (error) {
       console.error("Error loading data: ", error);
@@ -97,8 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("edit-email").value = p.email || "";
     document.getElementById("edit-alamat").value = p.alamat || "";
     document.getElementById("edit-sambutan").value = p.sambutan || "";
-
-    deleteBtn.style.display = "block";
     progressContainer.style.display = "none";
     modal.style.display = "flex";
   }
@@ -107,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     editForm.reset();
     modalTitle.textContent = "Tambah Pengurus Baru";
     document.getElementById("edit-index").value = "-1";
-    deleteBtn.style.display = "none";
+    document.getElementById("current-fotoUrl").value = "";
     progressContainer.style.display = "none";
     modal.style.display = "flex";
   }
@@ -177,27 +173,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  deleteBtn.addEventListener("click", async () => {
-    if (!confirm("Apakah Anda yakin ingin menghapus pengurus ini?")) return;
-
-    const index = parseInt(document.getElementById("edit-index").value, 10);
-    pengurusData.splice(index, 1);
-
-    try {
-      await updateDoc(rwDocRef, { pengurus: pengurusData });
-      showStatusMessage("Pengurus berhasil dihapus!");
-      closeModal();
-      loadAndRender();
-    } catch (error) {
-      console.error("Error deleting data: ", error);
-      showStatusMessage("Gagal menghapus data.", true);
-      loadAndRender();
+  tableBody.addEventListener("click", async (e) => {
+    const target = e.target;
+    if (target.classList.contains("edit-btn")) {
+      openEditModal(target.dataset.index);
     }
-  });
 
-  tableBody.addEventListener("click", (e) => {
-    if (e.target.classList.contains("edit-btn")) {
-      openEditModal(e.target.dataset.index);
+    if (target.classList.contains("delete-btn")) {
+      if (!confirm("Apakah Anda yakin ingin menghapus pengurus ini?")) {
+        return;
+      }
+      const index = parseInt(target.dataset.index, 10);
+      pengurusData.splice(index, 1);
+
+      try {
+        await updateDoc(rwDocRef, { pengurus: pengurusData });
+        showStatusMessage("Pengurus berhasil dihapus!");
+        loadAndRender();
+      } catch (error) {
+        console.error("Error deleting data: ", error);
+        showStatusMessage("Gagal menghapus data.", true);
+        loadAndRender();
+      }
     }
   });
 
