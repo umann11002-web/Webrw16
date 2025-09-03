@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const editForm = document.getElementById("edit-form");
   const statusMessage = document.getElementById("status-message");
   const addNewBtn = document.getElementById("add-new-btn");
+  const deleteBtn = document.getElementById("delete-btn");
   const saveButton = document.getElementById("save-button");
   const progressContainer = document.getElementById(
     "upload-progress-container"
@@ -44,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const uploadStatus = document.getElementById("upload-status");
 
   function showStatusMessage(message, isError = false) {
+    if (!statusMessage) return;
     statusMessage.textContent = message;
     statusMessage.style.color = isError ? "#dc3545" : "var(--primary-green)";
     setTimeout(() => {
@@ -94,6 +96,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("edit-noHp").value = p.noHp || "";
     document.getElementById("edit-email").value = p.email || "";
     document.getElementById("edit-alamat").value = p.alamat || "";
+    document.getElementById("edit-sambutan").value = p.sambutan || "";
+
+    deleteBtn.style.display = "block";
     progressContainer.style.display = "none";
     modal.style.display = "flex";
   }
@@ -102,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     editForm.reset();
     modalTitle.textContent = "Tambah Pengurus Baru";
     document.getElementById("edit-index").value = "-1";
-    document.getElementById("current-fotoUrl").value = "";
+    deleteBtn.style.display = "none";
     progressContainer.style.display = "none";
     modal.style.display = "flex";
   }
@@ -150,6 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
         noHp: document.getElementById("edit-noHp").value,
         email: document.getElementById("edit-email").value,
         alamat: document.getElementById("edit-alamat").value,
+        sambutan: document.getElementById("edit-sambutan").value,
       };
 
       if (index === -1) {
@@ -171,27 +177,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  tableBody.addEventListener("click", async (e) => {
+  deleteBtn.addEventListener("click", async () => {
+    if (!confirm("Apakah Anda yakin ingin menghapus pengurus ini?")) return;
+
+    const index = parseInt(document.getElementById("edit-index").value, 10);
+    pengurusData.splice(index, 1);
+
+    try {
+      await updateDoc(rwDocRef, { pengurus: pengurusData });
+      showStatusMessage("Pengurus berhasil dihapus!");
+      closeModal();
+      loadAndRender();
+    } catch (error) {
+      console.error("Error deleting data: ", error);
+      showStatusMessage("Gagal menghapus data.", true);
+      loadAndRender();
+    }
+  });
+
+  tableBody.addEventListener("click", (e) => {
     if (e.target.classList.contains("edit-btn")) {
       openEditModal(e.target.dataset.index);
-    }
-
-    if (e.target.classList.contains("delete-btn")) {
-      if (!confirm("Apakah Anda yakin ingin menghapus pengurus ini?")) {
-        return;
-      }
-      const index = parseInt(e.target.dataset.index, 10);
-      pengurusData.splice(index, 1);
-
-      try {
-        await updateDoc(rwDocRef, { pengurus: pengurusData });
-        showStatusMessage("Pengurus berhasil dihapus!");
-        loadAndRender();
-      } catch (error) {
-        console.error("Error deleting data: ", error);
-        showStatusMessage("Gagal menghapus data.", true);
-        loadAndRender(); // Re-render to restore data if delete fails
-      }
     }
   });
 

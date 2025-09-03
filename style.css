@@ -138,12 +138,39 @@ main,
 .berita-main {
   padding: 1.5rem 5%;
 }
-.hero {
-  text-align: center;
-  background: white;
-  padding: 2rem 1rem;
-  border-radius: 8px;
+/* [BARU] Gaya untuk Sambutan Ketua RW */
+.sambutan-ketua {
+  background-color: #fff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
   margin-bottom: 2rem;
+  box-shadow: var(--card-shadow);
+}
+.sambutan-foto img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid var(--primary-green);
+}
+.sambutan-teks h2 {
+  border-left: none;
+  padding-left: 0;
+  margin-bottom: 0.5rem;
+}
+.sambutan-teks h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+.sambutan-teks p:first-of-type {
+  color: var(--light-text);
+  margin-bottom: 1.5rem;
+}
+.sambutan-teks p:last-of-type {
+  line-height: 1.8;
 }
 .informasi {
   margin-bottom: 2rem;
@@ -1297,19 +1324,15 @@ footer {
   }
 
   /* Redesign Konten Mobile */
-  .hero {
-    text-align: left;
-    padding: 1.5rem;
-    box-shadow: none;
-    background: none;
+  .sambutan-ketua {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    gap: 1.5rem;
   }
-  .hero h1 {
-    font-size: 1.8rem;
-    font-weight: 700;
-  }
-  .hero p {
-    font-size: 0.9rem;
-    color: var(--light-text);
+  .sambutan-foto img {
+    width: 150px;
+    height: 150px;
   }
   .info-buttons {
     grid-template-columns: 1fr 1fr;

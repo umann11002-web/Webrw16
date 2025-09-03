@@ -50,28 +50,29 @@ document.addEventListener("DOMContentLoaded", () => {
       if (bottomNavLogin) bottomNavLogin.style.display = "flex";
       if (bottomNavProfil) bottomNavProfil.style.display = "none";
     }
-  });
+  }); // --- Logika untuk Slider Berita (hanya di index.html) ---
 
-  // --- Logika untuk Slider Berita (hanya di index.html) ---
   if (document.getElementById("berita-container")) {
     tampilkanBerita();
-  }
+  } // --- Logika untuk Statistik di Home ---
 
-  // --- Logika untuk Statistik di Home ---
   if (document.getElementById("home-total-penduduk")) {
     loadHomeStats();
   }
 
-  // --- Logika untuk Hamburger Menu ---
+  // [BARU] Logika untuk Sambutan Ketua RW (hanya di index.html)
+  if (document.querySelector(".sambutan-ketua")) {
+    loadSambutan();
+  } // --- Logika untuk Hamburger Menu ---
+
   const hamburgerMenu = document.getElementById("hamburger-menu");
   const navbar = document.querySelector(".navbar");
   if (hamburgerMenu) {
     hamburgerMenu.addEventListener("click", () => {
       navbar.classList.toggle("active");
     });
-  }
+  } // --- Logika untuk Dropdown Menu ---
 
-  // --- Logika untuk Dropdown Menu ---
   function closeAllDropdowns() {
     document
       .querySelectorAll(".dropdown-menu")
@@ -97,9 +98,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener("click", () => {
     closeAllDropdowns();
-  });
+  }); // --- Logika untuk Tombol Logout ---
 
-  // --- Logika untuk Tombol Logout ---
   const logoutLinkNav = document.getElementById("logout-link-nav");
   if (logoutLinkNav) {
     logoutLinkNav.addEventListener("click", (e) => {
@@ -114,9 +114,63 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
   }
+
+  // Logika untuk Footer Accordion di Tampilan Mobile
+  if (window.innerWidth <= 768) {
+    const footerToggles = document.querySelectorAll(".footer-toggle");
+
+    footerToggles.forEach((toggle) => {
+      toggle.addEventListener("click", () => {
+        const content = toggle.nextElementSibling;
+        toggle.classList.toggle("active");
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+      });
+    });
+  }
 });
 
 // === FUNGSI-FUNGSI PEMBANTU ===
+
+// [BARU] Fungsi untuk memuat dan menampilkan sambutan Ketua RW
+async function loadSambutan() {
+  const fotoEl = document.getElementById("ketua-foto");
+  const namaEl = document.getElementById("ketua-nama");
+  const jabatanEl = document.getElementById("ketua-jabatan");
+  const sambutanEl = document.getElementById("ketua-sambutan");
+
+  try {
+    const docRef = doc(db, "struktur_organisasi", "rw");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists() && docSnap.data().pengurus) {
+      const pengurus = docSnap.data().pengurus;
+      const ketuaRW = pengurus.find((p) => p.jabatan === "Ketua RW");
+
+      if (ketuaRW) {
+        fotoEl.src =
+          ketuaRW.fotoUrl || "https://placehold.co/200x200/eee/ccc?text=Foto";
+        namaEl.textContent = ketuaRW.nama || "Nama Tidak Tersedia";
+        jabatanEl.textContent = ketuaRW.jabatan;
+        sambutanEl.textContent =
+          ketuaRW.sambutan ||
+          "Selamat datang di website resmi RW 16 Kelurahan Cibabat. Website ini merupakan media informasi dan komunikasi bagi seluruh warga.";
+      } else {
+        // Tampilkan data default jika Ketua RW tidak ditemukan
+        namaEl.textContent = "Ketua RW";
+        jabatanEl.textContent = "RW 16 Kel. Cibabat";
+        sambutanEl.textContent =
+          "Selamat datang di website resmi RW 16 Kelurahan Cibabat. Website ini merupakan media informasi dan komunikasi bagi seluruh warga.";
+      }
+    }
+  } catch (error) {
+    console.error("Error memuat data sambutan: ", error);
+    namaEl.textContent = "Gagal memuat data";
+  }
+}
 
 async function loadHomeStats() {
   try {
@@ -149,11 +203,9 @@ async function loadHomeStats() {
   }
 }
 
-// [MODIFIKASI] Fungsi untuk menampilkan berita di slider
 async function tampilkanBerita() {
   const beritaContainer = document.getElementById("berita-container");
   try {
-    // Mengambil 5 berita terbaru
     const q = query(
       collection(db, "berita"),
       orderBy("tanggal", "desc"),
@@ -166,7 +218,6 @@ async function tampilkanBerita() {
       const berita = doc.data();
       const beritaId = doc.id;
 
-      // [FIX] Mengubah Timestamp menjadi format tanggal yang bisa dibaca
       const tanggalFormatted = berita.tanggal
         .toDate()
         .toLocaleDateString("id-ID", {
@@ -176,14 +227,14 @@ async function tampilkanBerita() {
         });
 
       const kartuHTML = `
-        <a href="berita-detail.html?id=${beritaId}" class="kartu-berita">
-            <img src="${berita.gambarUrl}" alt="Gambar Berita">
-            <div class="konten-kartu">
-                <span class="tanggal">${tanggalFormatted}</span>
-                <h3>${berita.judul}</h3>
-            </div>
-        </a>
-      `;
+        <a href="berita-detail.html?id=${beritaId}" class="kartu-berita">
+            <img src="${berita.gambarUrl}" alt="Gambar Berita">
+            <div class="konten-kartu">
+                <span class="tanggal">${tanggalFormatted}</span>
+                <h3>${berita.judul}</h3>
+            </div>
+        </a>
+      `;
       const slideWrapper = document.createElement("div");
       slideWrapper.className = "swiper-slide";
       slideWrapper.innerHTML = kartuHTML;
@@ -219,28 +270,3 @@ function initializeSwiper() {
     },
   });
 }
-document.addEventListener("DOMContentLoaded", () => {
-  // Cek dulu apakah kita berada di tampilan mobile
-  if (window.innerWidth <= 768) {
-    const footerToggles = document.querySelectorAll(".footer-toggle");
-
-    footerToggles.forEach((toggle) => {
-      toggle.addEventListener("click", () => {
-        // Ambil elemen konten yang berada tepat setelah judul
-        const content = toggle.nextElementSibling;
-
-        // Toggle class 'active' untuk animasi
-        toggle.classList.toggle("active");
-
-        // Cek apakah kontennya sedang aktif/terbuka
-        if (content.style.maxHeight) {
-          // Jika iya, tutup dengan set maxHeight ke null
-          content.style.maxHeight = null;
-        } else {
-          // Jika tidak, buka dengan set maxHeight sesuai tinggi kontennya
-          content.style.maxHeight = content.scrollHeight + "px";
-        }
-      });
-    });
-  }
-});
