@@ -1342,6 +1342,8 @@ footer {
     display: block;
     float: none;
     width: 100%;
+  }
+  .org-chart ul {
     padding-left: 20px;
   }
   .org-chart li {
@@ -1371,6 +1373,11 @@ footer {
   }
   .org-chart li:last-child::before {
     height: 40px;
+  }
+  .org-chart li .org-card {
+    display: block;
+    margin: 0;
+    text-align: left;
   }
   .bio-card {
     flex-direction: column;
