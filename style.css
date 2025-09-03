@@ -154,7 +154,7 @@ main,
   height: 180px;
   border-radius: 50%;
   object-fit: cover;
-  border: 5px solid var(--primary-green);
+  border: 5px solid var(--white);
 }
 .sambutan-teks h2 {
   border-left: none;
