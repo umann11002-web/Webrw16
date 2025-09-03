@@ -219,3 +219,28 @@ function initializeSwiper() {
     },
   });
 }
+document.addEventListener("DOMContentLoaded", () => {
+  // Cek dulu apakah kita berada di tampilan mobile
+  if (window.innerWidth <= 768) {
+    const footerToggles = document.querySelectorAll(".footer-toggle");
+
+    footerToggles.forEach((toggle) => {
+      toggle.addEventListener("click", () => {
+        // Ambil elemen konten yang berada tepat setelah judul
+        const content = toggle.nextElementSibling;
+
+        // Toggle class 'active' untuk animasi
+        toggle.classList.toggle("active");
+
+        // Cek apakah kontennya sedang aktif/terbuka
+        if (content.style.maxHeight) {
+          // Jika iya, tutup dengan set maxHeight ke null
+          content.style.maxHeight = null;
+        } else {
+          // Jika tidak, buka dengan set maxHeight sesuai tinggi kontennya
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+      });
+    });
+  }
+});

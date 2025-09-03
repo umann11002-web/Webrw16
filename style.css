@@ -1485,9 +1485,39 @@ footer {
     color: var(--primary-green);
   }
 
+  /* [DIROMBAK] Responsif Footer menjadi Accordion */
   .footer-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
+    grid-template-columns: 1fr; /* Tetap satu kolom */
+    gap: 0;
+  }
+  .footer-column {
+    border-bottom: 1px solid #34495e;
+  }
+  .footer-column:last-child {
+    border-bottom: none;
+  }
+  .footer-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 1rem 0;
+    border-bottom: none !important; /* Hapus border-bottom dari desktop */
+  }
+  .footer-toggle i {
+    transition: transform 0.3s ease;
+  }
+  .footer-toggle.active i {
+    transform: rotate(180deg);
+  }
+  .footer-content {
+    max-height: 0; /* Sembunyikan konten secara default */
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    padding-left: 1rem; /* Beri sedikit indentasi */
+  }
+  .footer-content > * {
+    padding-bottom: 1rem;
   }
   .info-rw {
     justify-content: center;
