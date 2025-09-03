@@ -1,16 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import {
-  getAuth,
-  onAuthStateChanged,
-} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-import {
   getFirestore,
   doc,
   getDoc,
-  setDoc,
   updateDoc,
-  arrayUnion,
-  arrayRemove,
+  setDoc,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -21,106 +15,193 @@ const firebaseConfig = {
   messagingSenderId: "744879659808",
   appId: "1:744879659808:web:9d91c4bd2068260e189545",
 };
+
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-const rtSelect = document.getElementById("rt-select");
-const managementContent = document.getElementById("management-content");
-const pengurusListDiv = document.getElementById("pengurus-list");
-const addPengurusForm = document.getElementById("add-pengurus-form");
-let currentRtDocRef = null;
+document.addEventListener("DOMContentLoaded", () => {
+  let currentRtId = null;
+  let currentRtDocRef = null;
+  let pengurusData = [];
 
-// Satpam
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    if (!userDoc.exists() || userDoc.data().role !== "admin") {
-      window.location.href = "index.html";
-    }
-  } else {
-    window.location.href = "login.html";
+  const rtSelect = document.getElementById("rt-select");
+  const managementContent = document.getElementById("management-content");
+  const tableBody = document.getElementById("rt-pengurus-table-body");
+  const addNewBtn = document.getElementById("add-new-btn");
+  const modal = document.getElementById("edit-modal");
+  const modalTitle = document.getElementById("modal-title");
+  const closeModalBtn = document.getElementById("close-modal-btn");
+  const editForm = document.getElementById("edit-form");
+  const statusMessage = document.getElementById("status-message");
+  const saveButton = document.getElementById("save-button");
+  const progressContainer = document.getElementById(
+    "upload-progress-container"
+  );
+  const progressBar = document.getElementById("upload-progress");
+  const uploadStatus = document.getElementById("upload-status");
+
+  // Fungsi upload ke Cloudinary
+  const uploadFileToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "yd99selh"); // Pastikan preset ini ada
+    const cloudName = "do1ba7gkn"; // Pastikan cloud name ini benar
+    const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+    const response = await fetch(uploadUrl, { method: "POST", body: formData });
+    const data = await response.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.secure_url;
+  };
+
+  function showStatusMessage(message, isError = false) {
+    statusMessage.textContent = message;
+    statusMessage.style.color = isError ? "#dc3545" : "var(--primary-green)";
+    setTimeout(() => {
+      statusMessage.textContent = "";
+    }, 4000);
   }
-});
 
-// Event listener saat admin memilih RT
-rtSelect.addEventListener("change", () => {
-  const selectedRtId = rtSelect.value;
-  if (selectedRtId) {
-    currentRtDocRef = doc(db, "struktur_organisasi", selectedRtId);
-    document.getElementById("rt-title").textContent =
-      rtSelect.options[rtSelect.selectedIndex].text;
-    document.getElementById("rt-title-form").textContent =
-      rtSelect.options[rtSelect.selectedIndex].text;
-    managementContent.style.display = "block";
-    loadPengurus();
-  } else {
-    managementContent.style.display = "none";
-  }
-});
-
-// Memuat daftar pengurus untuk RT yang dipilih
-async function loadPengurus() {
-  if (!currentRtDocRef) return;
-  try {
-    const docSnap = await getDoc(currentRtDocRef);
-    pengurusListDiv.innerHTML = "";
-    if (docSnap.exists() && docSnap.data().pengurus) {
-      const pengurusArray = docSnap.data().pengurus;
-      pengurusArray.forEach((p) => {
-        const item = document.createElement("div");
-        item.className = "pengurus-list-item";
-        item.innerHTML = `<span><strong>${p.nama}</strong> - ${p.jabatan}</span><button>Hapus</button>`;
-        item.querySelector("button").onclick = () => deletePengurus(p);
-        pengurusListDiv.appendChild(item);
-      });
-    } else {
-      pengurusListDiv.innerHTML =
-        "<p>Belum ada data pengurus untuk RT ini.</p>";
-    }
-  } catch (error) {
-    console.error("Error memuat pengurus RT: ", error);
-  }
-}
-
-// Menambah pengurus baru
-addPengurusForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  if (!currentRtDocRef) return;
-
-  const nama = document.getElementById("nama-pengurus").value;
-  const jabatan = document.getElementById("jabatan-pengurus").value;
-  const fotoUrl =
-    document.getElementById("foto-url").value || "https://placehold.co/100x100";
-  const newPengurus = { nama, jabatan, fotoUrl };
-
-  try {
-    // Menggunakan setDoc dengan merge agar membuat dokumen jika belum ada
-    await setDoc(
-      currentRtDocRef,
-      {
-        pengurus: arrayUnion(newPengurus),
-      },
-      { merge: true }
-    );
-    addPengurusForm.reset();
-    loadPengurus();
-  } catch (error) {
-    console.error("Error menambah pengurus RT: ", error);
-  }
-});
-
-// Menghapus pengurus
-async function deletePengurus(pengurusObject) {
-  if (!currentRtDocRef) return;
-  if (confirm(`Yakin ingin menghapus ${pengurusObject.nama}?`)) {
+  async function loadAndRender() {
+    if (!currentRtDocRef) return;
+    tableBody.innerHTML = `<tr><td colspan="4">Memuat data...</td></tr>`;
     try {
-      await updateDoc(currentRtDocRef, {
-        pengurus: arrayRemove(pengurusObject),
-      });
-      loadPengurus();
+      const docSnap = await getDoc(currentRtDocRef);
+      if (docSnap.exists() && docSnap.data().pengurus) {
+        pengurusData = docSnap.data().pengurus;
+        tableBody.innerHTML = "";
+        pengurusData.forEach((p, index) => {
+          const row = `
+                        <tr>
+                            <td><img src="${
+                              p.fotoUrl ||
+                              "https://placehold.co/50x50/ccc/333?text=Foto"
+                            }" alt="${p.nama}" class="table-photo"></td>
+                            <td>${p.nama}</td>
+                            <td>${p.jabatan}</td>
+                            <td class="action-cell">
+                                <button class="action-btn btn-approve edit-btn" data-index="${index}">Edit</button>
+                                <button class="action-btn btn-reject delete-btn" data-index="${index}">Hapus</button>
+                            </td>
+                        </tr>
+                    `;
+          tableBody.innerHTML += row;
+        });
+      } else {
+        pengurusData = [];
+        tableBody.innerHTML = `<tr><td colspan="4">Belum ada data.</td></tr>`;
+      }
     } catch (error) {
-      console.error("Error menghapus pengurus RT: ", error);
+      console.error("Error loading RT data: ", error);
+      tableBody.innerHTML = `<tr><td colspan="4" style="color:red;">Gagal memuat data.</td></tr>`;
     }
   }
-}
+
+  rtSelect.addEventListener("change", () => {
+    currentRtId = rtSelect.value;
+    if (currentRtId) {
+      currentRtDocRef = doc(db, "struktur_organisasi", currentRtId);
+      managementContent.style.display = "block";
+      loadAndRender();
+    } else {
+      managementContent.style.display = "none";
+    }
+  });
+
+  function openEditModal(index) {
+    const p = pengurusData[index];
+    editForm.reset();
+    modalTitle.textContent = "Edit Detail Pengurus";
+    document.getElementById("edit-index").value = index;
+    document.getElementById("current-fotoUrl").value = p.fotoUrl || "";
+    document.getElementById("edit-nama").value = p.nama;
+    document.getElementById("edit-jabatan").value = p.jabatan;
+    progressContainer.style.display = "none";
+    modal.style.display = "flex";
+  }
+
+  function openAddModal() {
+    editForm.reset();
+    modalTitle.textContent = "Tambah Pengurus Baru";
+    document.getElementById("edit-index").value = "-1";
+    progressContainer.style.display = "none";
+    modal.style.display = "flex";
+  }
+
+  function closeModal() {
+    modal.style.display = "none";
+  }
+
+  editForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    saveButton.disabled = true;
+    saveButton.textContent = "Menyimpan...";
+
+    const index = parseInt(document.getElementById("edit-index").value, 10);
+    const file = document.getElementById("edit-fotoFile").files[0];
+    let newFotoUrl = document.getElementById("current-fotoUrl").value;
+
+    try {
+      if (file) {
+        progressContainer.style.display = "block";
+        uploadStatus.textContent = "Mengunggah...";
+        progressBar.value = 50;
+        newFotoUrl = await uploadFileToCloudinary(file);
+        progressBar.value = 100;
+        uploadStatus.textContent = "Selesai!";
+      }
+
+      const updatedPengurus = {
+        nama: document.getElementById("edit-nama").value,
+        jabatan: document.getElementById("edit-jabatan").value,
+        fotoUrl: newFotoUrl,
+      };
+
+      if (index === -1) {
+        pengurusData.push(updatedPengurus);
+      } else {
+        pengurusData[index] = updatedPengurus;
+      }
+
+      await setDoc(
+        currentRtDocRef,
+        { pengurus: pengurusData },
+        { merge: true }
+      );
+      showStatusMessage("Data berhasil disimpan!");
+      closeModal();
+      loadAndRender();
+    } catch (error) {
+      console.error("Error saving data: ", error);
+      showStatusMessage(`Gagal: ${error.message}`, true);
+    } finally {
+      saveButton.disabled = false;
+      saveButton.textContent = "Simpan";
+    }
+  });
+
+  tableBody.addEventListener("click", async (e) => {
+    if (e.target.classList.contains("edit-btn")) {
+      openEditModal(e.target.dataset.index);
+    }
+    if (e.target.classList.contains("delete-btn")) {
+      if (!confirm("Yakin ingin menghapus pengurus ini?")) return;
+      const index = parseInt(e.target.dataset.index, 10);
+      pengurusData.splice(index, 1);
+      try {
+        await updateDoc(currentRtDocRef, { pengurus: pengurusData });
+        showStatusMessage("Pengurus berhasil dihapus!");
+        loadAndRender();
+      } catch (error) {
+        console.error("Error deleting data: ", error);
+        showStatusMessage("Gagal menghapus data.", true);
+        loadAndRender();
+      }
+    }
+  });
+
+  addNewBtn.addEventListener("click", openAddModal);
+  closeModalBtn.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+});
