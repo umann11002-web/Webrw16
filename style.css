@@ -1339,6 +1339,175 @@ footer {
   color: #bdc3c7;
 }
 
+/* ================================================= */
+/* === STYLE UNTUK HALAMAN DETAIL RT (DESKTOP) === */
+/* ================================================= */
+
+/* Layout Utama */
+.rt-detail-wrapper {
+  display: grid;
+  grid-template-columns: 120px 1fr; /* Lebar sidebar 120px, sisanya konten */
+  min-height: calc(100vh - 70px); /* 70px adalah perkiraan tinggi header */
+}
+
+/* Sidebar Merah di Kiri */
+.rt-sidebar {
+  background-color: #c0392b;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.rt-sidebar h1 {
+  font-size: 3rem;
+  writing-mode: vertical-rl; /* Membuat teks jadi vertikal */
+  transform: rotate(180deg); /* Memutar teks agar terbaca dari bawah ke atas */
+  white-space: nowrap;
+  margin: 0;
+  line-height: 1;
+  border: none; /* Hapus border default dari h1 */
+  padding: 0; /* Hapus padding default dari h1 */
+}
+
+/* Konten Utama di Kanan */
+.rt-main-content {
+  padding: 2rem 4%;
+  background-color: #f8f9fa;
+}
+.rt-main-content .back-link {
+  display: inline-block;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+/* Kotak Statistik */
+.rt-stats-container {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+.stat-box {
+  flex: 1;
+  padding: 1.5rem;
+  border-radius: 8px;
+  color: #333;
+}
+.stat-box p {
+  margin: 0 0 0.5rem 0;
+  font-weight: 500;
+}
+.stat-box span {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+.stat-box.tetap {
+  background-color: #e0d5a6;
+}
+.stat-box.sementara {
+  background-color: #c8d9a1;
+}
+.stat-box.jumlah {
+  background-color: #84c1d4;
+}
+
+/* Bagan Organisasi (Styling Kartu) */
+.rt-org-chart {
+  text-align: center;
+}
+.rt-org-chart h2 {
+  /* Styling khusus untuk judul bagan */
+  border-left: none;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.rt-org-chart .org-card {
+  background: white;
+  padding: 1.5rem 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  display: inline-block;
+  min-width: 180px;
+}
+.rt-org-chart .org-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+.rt-org-chart .org-card h3 {
+  margin: 0 0 5px 0;
+}
+.rt-org-chart .org-card p {
+  margin: 0;
+  color: #6c757d;
+}
+
+/* Bagan Organisasi (Garis Penghubung Ajaib) */
+.rt-org-chart ul {
+  position: relative;
+  padding: 1rem 0;
+  white-space: nowrap;
+  margin: 0 auto;
+  text-align: center;
+}
+.rt-org-chart ul ul {
+  padding-top: 30px;
+}
+.rt-org-chart li {
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
+  list-style-type: none;
+  position: relative;
+  padding: 30px 20px 0 20px;
+}
+/* Garis vertikal dari atas */
+.rt-org-chart li::before,
+.rt-org-chart li::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 50%;
+  border-top: 2px solid #ccc;
+  width: 50%;
+  height: 30px;
+}
+/* Garis horizontal */
+.rt-org-chart li::after {
+  right: auto;
+  left: 50%;
+  border-left: 2px solid #ccc;
+}
+.rt-org-chart li:only-child::after,
+.rt-org-chart li:only-child::before {
+  display: none;
+}
+.rt-org-chart li:first-child::before,
+.rt-org-chart li:last-child::after {
+  border: 0 none;
+}
+.rt-org-chart li:last-child::before {
+  border-right: 2px solid #ccc;
+  border-radius: 0 5px 0 0;
+}
+.rt-org-chart li:first-child::after {
+  border-radius: 5px 0 0 0;
+}
+.rt-org-chart ul ul::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  border-left: 2px solid #ccc;
+  width: 0;
+  height: 30px;
+}
+.rt-org-chart li > .org-card {
+  cursor: pointer;
+}
+
 /* #################################### */
 /* ###   ATURAN RESPONSIF (SIHIR)   ### */
 /* #################################### */
@@ -1617,7 +1786,7 @@ footer {
     justify-content: center;
   }
 
-  /* [DISISIPKAN] CSS UNTUK TAMPILAN MOBILE DETAIL RT */
+  /* === [PERBAIKAN] CSS UNTUK TAMPILAN MOBILE DETAIL RT === */
   .rt-detail-wrapper {
     grid-template-columns: 1fr; /* Hanya 1 kolom */
   }
@@ -1657,6 +1826,50 @@ footer {
     /* Pastikan garis vertikal tetap di tengah */
     left: 50%;
   }
+
+  /* === [PERBAIKAN] CSS RESPONSIF UNTUK KELOLA STRUKTUR RT === */
+  .manage-main .form-group-inline {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .manage-main table thead {
+    display: none;
+  }
+  .manage-main table tr {
+    display: block;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  .manage-main table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0.5rem;
+    border-bottom: 1px solid #eee;
+    text-align: right;
+  }
+  .manage-main table tr td:last-child {
+    border-bottom: none;
+  }
+  .manage-main table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    text-align: left;
+    padding-right: 1rem;
+  }
+  .manage-main table td.action-cell {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+  }
+  .manage-main table td.action-cell .action-btn {
+    width: 100%;
+    margin: 0;
+    padding: 0.8rem;
+  }
 }
 
 @media (min-width: 769px) {
@@ -1667,227 +1880,4 @@ footer {
   #org-chart-wrapper .org-container {
     display: none;
   }
-}
-
-/* ================================================= */
-/* === HALAMAN KELOLA STATISTIK PENDUDUK === */
-/* ================================================= */
-
-.form-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  max-width: 800px;
-  margin: auto;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-.form-card h1,
-.form-card h2 {
-  margin-top: 0;
-}
-.age-group-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1rem;
-  align-items: center;
-  margin-bottom: 0.8rem;
-}
-.age-group-row label {
-  font-weight: normal;
-}
-.submit-btn {
-  padding: 0.8rem 2rem;
-  border: none;
-  background-color: var(--primary-green);
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-/* ======================================================== */
-/* === ATURAN RESPONSIF KELOLA STATISTIK PENDUDUK === */
-/* ======================================================== */
-@media (max-width: 768px) {
-  .manage-main .form-card {
-    padding: 1.5rem 1rem;
-  }
-
-  .manage-main .age-group-row {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .manage-main .age-group-row label {
-    font-weight: 600;
-    margin-bottom: 0.2rem;
-  }
-}
-
-/* === [BARU] STYLE UNTUK HALAMAN DETAIL RT (DESKTOP) === */
-
-/* Layout Utama */
-.rt-detail-wrapper {
-  display: grid;
-  grid-template-columns: 120px 1fr; /* Lebar sidebar 120px, sisanya konten */
-  min-height: calc(100vh - 70px); /* 70px adalah perkiraan tinggi header */
-}
-
-/* Sidebar Merah di Kiri */
-.rt-sidebar {
-  background-color: #c0392b;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-.rt-sidebar h1 {
-  font-size: 3rem;
-  writing-mode: vertical-rl; /* Membuat teks jadi vertikal */
-  transform: rotate(180deg); /* Memutar teks agar terbaca dari bawah ke atas */
-  white-space: nowrap;
-  margin: 0;
-  line-height: 1;
-  border: none; /* Hapus border default dari h1 */
-  padding: 0; /* Hapus padding default dari h1 */
-}
-
-/* Konten Utama di Kanan */
-.rt-main-content {
-  padding: 2rem 4%;
-  background-color: #f8f9fa;
-}
-.rt-main-content .back-link {
-  display: inline-block;
-  margin-bottom: 2rem;
-  color: #333;
-}
-
-/* Kotak Statistik */
-.rt-stats-container {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-}
-.stat-box {
-  flex: 1;
-  padding: 1.5rem;
-  border-radius: 8px;
-  color: #333;
-}
-.stat-box p {
-  margin: 0 0 0.5rem 0;
-  font-weight: 500;
-}
-.stat-box span {
-  font-size: 2.5rem;
-  font-weight: 700;
-}
-.stat-box.tetap {
-  background-color: #e0d5a6;
-}
-.stat-box.sementara {
-  background-color: #c8d9a1;
-}
-.stat-box.jumlah {
-  background-color: #84c1d4;
-}
-
-/* Bagan Organisasi (Styling Kartu) */
-.rt-org-chart {
-  text-align: center;
-}
-.rt-org-chart h2 {
-  /* Styling khusus untuk judul bagan */
-  border-left: none;
-  text-align: center;
-  margin-bottom: 2rem;
-}
-.rt-org-chart .org-card {
-  background: white;
-  padding: 1.5rem 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  display: inline-block;
-  min-width: 180px;
-}
-.rt-org-chart .org-card img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 1rem;
-}
-.rt-org-chart .org-card h3 {
-  margin: 0 0 5px 0;
-}
-.rt-org-chart .org-card p {
-  margin: 0;
-  color: #6c757d;
-}
-
-/* Bagan Organisasi (Garis Penghubung Ajaib) */
-.rt-org-chart ul {
-  position: relative;
-  padding: 1rem 0;
-  white-space: nowrap;
-  margin: 0 auto;
-  text-align: center;
-}
-.rt-org-chart ul ul {
-  padding-top: 30px;
-}
-.rt-org-chart li {
-  display: inline-block;
-  vertical-align: top;
-  text-align: center;
-  list-style-type: none;
-  position: relative;
-  padding: 30px 20px 0 20px;
-}
-/* Garis vertikal dari atas */
-.rt-org-chart li::before,
-.rt-org-chart li::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 50%;
-  border-top: 2px solid #ccc;
-  width: 50%;
-  height: 30px;
-}
-/* Garis horizontal */
-.rt-org-chart li::after {
-  right: auto;
-  left: 50%;
-  border-left: 2px solid #ccc;
-}
-.rt-org-chart li:only-child::after,
-.rt-org-chart li:only-child::before {
-  display: none;
-}
-.rt-org-chart li:first-child::before,
-.rt-org-chart li:last-child::after {
-  border: 0 none;
-}
-.rt-org-chart li:last-child::before {
-  border-right: 2px solid #ccc;
-  border-radius: 0 5px 0 0;
-}
-.rt-org-chart li:first-child::after {
-  border-radius: 5px 0 0 0;
-}
-.rt-org-chart ul ul::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  border-left: 2px solid #ccc;
-  width: 0;
-  height: 30px;
-}
-.rt-org-chart li > .org-card {
-  cursor: pointer;
 }
