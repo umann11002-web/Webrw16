@@ -1844,31 +1844,32 @@ footer {
     justify-content: center;
   }
 
-  /* === [PERBAIKAN] CSS UNTUK TAMPILAN MOBILE DETAIL RT === */
+  /* === [PERBAIKAN FINAL] CSS UNTUK TAMPILAN MOBILE DETAIL RT === */
   .rt-detail-wrapper {
     grid-template-columns: 1fr; /* Hanya 1 kolom */
   }
   .rt-sidebar {
     grid-row: 1; /* Pindahkan ke baris pertama */
-    writing-mode: horizontal-tb; /* Teks kembali normal */
-    transform: none; /* Hapus putaran */
+    writing-mode: horizontal-tb !important; /* Paksa teks kembali normal */
+    transform: none !important; /* Hapus putaran */
     height: auto;
     padding: 1rem;
   }
   .rt-sidebar h1 {
     font-size: 2rem;
     white-space: normal;
+    writing-mode: horizontal-tb !important; /* Paksa teks kembali normal */
+    transform: none !important; /* Hapus putaran */
   }
   .rt-main-content {
     grid-row: 2;
     padding: 1.5rem 1rem;
   }
-  .rt-stats-container {
-    flex-direction: column; /* Ubah jadi vertikal */
-    gap: 1rem;
+  .rt-stats-grid {
+    gap: 0.8rem; /* Kurangi jarak antar kartu statistik */
   }
-  .stat-box span {
-    font-size: 2rem; /* Kecilkan font angka statistik */
+  .stat-card-small span {
+    font-size: 1.8rem; /* Kecilkan sedikit angka statistik */
   }
 
   /* Mobile: Sembunyikan Bagan Hirarki, Tampilkan Swiper */
@@ -1881,10 +1882,11 @@ footer {
 
   .swiper-container {
     width: 100%;
-    padding-bottom: 40px; /* Ruang untuk pagination */
+    padding-bottom: 40px; /* Ruang untuk pagination (titik-titik) */
   }
   .swiper-slide {
-    width: 200px; /* Lebar setiap kartu */
+    width: 200px; /* Beri lebar tetap untuk setiap kartu! */
+    height: auto; /* Biarkan tinggi menyesuaikan konten */
   }
   .swiper-pagination-bullet-active {
     background-color: var(--primary-green) !important;

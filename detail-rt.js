@@ -112,10 +112,10 @@ async function tampilkanDetailRT() {
 
         // Inisialisasi Swiper
         new Swiper(".swiper-container", {
-          slidesPerView: "auto",
-          spaceBetween: 15,
-          centeredSlides: true,
-          loop: false,
+          slidesPerView: "auto", // Ini kunci agar lebar CSS dipakai
+          spaceBetween: 15, // Jarak 15px antar kartu
+          centeredSlides: true, // Kartu aktif akan di tengah (opsional, tapi bagus)
+          loop: false, // Jangan mengulang slide
           pagination: {
             el: ".swiper-pagination",
             clickable: true,
