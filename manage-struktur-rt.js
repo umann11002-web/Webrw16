@@ -83,19 +83,18 @@ document.addEventListener("DOMContentLoaded", () => {
         tableBody.innerHTML = "";
         pengurusData.forEach((p, index) => {
           const row = `
-                        <tr>
-                            <td><img src="${
-                              p.fotoUrl ||
-                              "https://placehold.co/50x50/ccc/333?text=Foto"
-                            }" alt="${p.nama}" class="table-photo"></td>
-                            <td>${p.nama}</td>
-                            <td>${p.jabatan}</td>
-                            <td class="action-cell">
-                                <button class="action-btn btn-approve edit-btn" data-index="${index}">Edit</button>
-                                <button class="action-btn btn-reject delete-btn" data-index="${index}">Hapus</button>
-                            </td>
-                        </tr>
-                    `;
+    <tr>
+        <td data-label="Foto"><img src="${
+          p.fotoUrl || "https://placehold.co/50x50/ccc/333?text=Foto"
+        }" alt="${p.nama}" class="table-photo"></td>
+        <td data-label="Nama">${p.nama}</td>
+        <td data-label="Jabatan">${p.jabatan}</td>
+        <td data-label="Aksi" class="action-cell">
+            <button class="action-btn btn-approve edit-btn" data-index="${index}">Edit</button>
+            <button class="action-btn btn-reject delete-btn" data-index="${index}">Hapus</button>
+        </td>
+    </tr>
+`;
           tableBody.innerHTML += row;
         });
       } else {
