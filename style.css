@@ -1340,14 +1340,14 @@ footer {
 }
 
 /* ================================================= */
-/* === STYLE UNTUK HALAMAN DETAIL RT (DESKTOP) === */
+/* === [PERBAIKAN] STYLE UNTUK HALAMAN DETAIL RT === */
 /* ================================================= */
 
 /* Layout Utama */
 .rt-detail-wrapper {
   display: grid;
-  grid-template-columns: 120px 1fr; /* Lebar sidebar 120px, sisanya konten */
-  min-height: calc(100vh - 70px); /* 70px adalah perkiraan tinggi header */
+  grid-template-columns: 120px 1fr;
+  flex-grow: 1; /* Ini akan membuat wrapper mengisi sisa ruang */
 }
 
 /* Sidebar Merah di Kiri */
@@ -1361,13 +1361,13 @@ footer {
 }
 .rt-sidebar h1 {
   font-size: 3rem;
-  writing-mode: vertical-rl; /* Membuat teks jadi vertikal */
-  transform: rotate(180deg); /* Memutar teks agar terbaca dari bawah ke atas */
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
   white-space: nowrap;
   margin: 0;
   line-height: 1;
-  border: none; /* Hapus border default dari h1 */
-  padding: 0; /* Hapus padding default dari h1 */
+  border: none;
+  padding: 0;
 }
 
 /* Konten Utama di Kanan */
@@ -1416,7 +1416,6 @@ footer {
   text-align: center;
 }
 .rt-org-chart h2 {
-  /* Styling khusus untuk judul bagan */
   border-left: none;
   text-align: center;
   margin-bottom: 2rem;
@@ -1444,7 +1443,7 @@ footer {
   color: #6c757d;
 }
 
-/* Bagan Organisasi (Garis Penghubung Ajaib) */
+/* Bagan Organisasi (Garis Penghubung) */
 .rt-org-chart ul {
   position: relative;
   padding: 1rem 0;
@@ -1463,7 +1462,6 @@ footer {
   position: relative;
   padding: 30px 20px 0 20px;
 }
-/* Garis vertikal dari atas */
 .rt-org-chart li::before,
 .rt-org-chart li::after {
   content: "";
@@ -1474,7 +1472,6 @@ footer {
   width: 50%;
   height: 30px;
 }
-/* Garis horizontal */
 .rt-org-chart li::after {
   right: auto;
   left: 50%;

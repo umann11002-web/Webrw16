@@ -11,216 +11,104 @@
     />
   </head>
   <body>
-    <header>
-      <div class="header-content">
-        <div class="logo">
-          <img src="images/logo16.png" alt="Logo RW 16" />
-          <span>RW 16 Kel. Cibabat</span>
+    <div class="page-wrapper">
+      <header>
+        <!-- Salin-tempel header dari index.html di sini jika belum ada -->
+        <div class="header-content">
+          <div class="logo">
+            <img src="images/logo16.png" alt="Logo RW 16" />
+            <span>RW 16 Kel. Cibabat</span>
+          </div>
+          <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="berita.html">Berita</a>
+            <a href="layanan.html">Layanan</a>
+            <a href="informasi.html">Informasi</a>
+            <!-- ... sisa navigasi Anda ... -->
+          </nav>
+          <button class="hamburger" id="hamburger-menu">
+            <i class="fas fa-bars"></i>
+          </button>
         </div>
+      </header>
 
-        <nav class="navbar">
-          <a href="index.html">Home</a>
-          <a href="berita.html">Berita</a>
-          <a href="layanan.html">Layanan</a>
-          <a href="informasi.html">Informasi</a>
-          <div class="dropdown">
-            <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
-              >Tentang Kami <i class="fas fa-chevron-down"></i
-            ></a>
-            <div class="dropdown-menu" id="tentang-kami-menu">
-              <a href="visi-misi.html">Visi & Misi</a>
-              <a href="struktur-organisasi.html">Struktur Organisasi</a>
-              <a href="galeri.html">Galeri</a>
-            </div>
-          </div>
-          <div class="dropdown" id="profil-dropdown" style="display: none">
-            <a href="#" class="dropdown-toggle" id="profil-toggle"
-              >Profil <i class="fas fa-chevron-down"></i
-            ></a>
-            <div class="dropdown-menu" id="profil-menu">
-              <a href="riwayat.html">Riwayat Saya</a>
-              <a href="#" id="logout-link-nav">Logout</a>
-              <a href="profil.html">Edit Profil</a>
-            </div>
-          </div>
-          <a href="login.html" id="login-button-nav">Login</a>
-        </nav>
+      <!-- Kontainer utama untuk layout baru -->
+      <div class="rt-detail-wrapper">
+        <!-- Sidebar Merah di Kiri -->
+        <aside class="rt-sidebar">
+          <h1 id="rt-sidebar-title">RT ...</h1>
+        </aside>
 
-        <button class="hamburger" id="hamburger-menu">
-          <i class="fas fa-bars"></i>
-        </button>
+        <!-- Konten Utama di Kanan -->
+        <main class="rt-main-content">
+          <a href="struktur-rt.html" class="back-link"
+            >&larr; Kembali ke pilihan RT</a
+          >
+
+          <!-- Kotak Statistik -->
+          <section class="rt-stats-container">
+            <div class="stat-box tetap">
+              <p>Data Warga Tetap</p>
+              <span id="stat-tetap">...</span>
+            </div>
+            <div class="stat-box sementara">
+              <p>Data Warga Sementara</p>
+              <span id="stat-sementara">...</span>
+            </div>
+            <div class="stat-box jumlah">
+              <p>Jumlah Warga</p>
+              <span id="stat-jumlah">...</span>
+            </div>
+          </section>
+
+          <!-- Bagan Organisasi -->
+          <section class="rt-org-chart">
+            <h2>Struktur RT</h2>
+            <ul>
+              <li>
+                <div class="org-card" id="ketua-rt">
+                  <img
+                    src="https://placehold.co/100x100/eee/ccc?text=Foto"
+                    alt="Foto Ketua RT"
+                  />
+                  <h3>Memuat...</h3>
+                  <p>Ketua RT</p>
+                </div>
+                <ul>
+                  <li>
+                    <div class="org-card" id="sekretaris-rt">
+                      <img
+                        src="https://placehold.co/100x100/eee/ccc?text=Foto"
+                        alt="Foto Sekretaris RT"
+                      />
+                      <h3>Memuat...</h3>
+                      <p>Sekretaris</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="org-card" id="bendahara-rt">
+                      <img
+                        src="https://placehold.co/100x100/eee/ccc?text=Foto"
+                        alt="Foto Bendahara RT"
+                      />
+                      <h3>Memuat...</h3>
+                      <p>Bendahara</p>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </section>
+        </main>
       </div>
-    </header>
-
-    <div class="rt-detail-wrapper">
-      <aside class="rt-sidebar">
-        <h1 id="rt-sidebar-title">RT ...</h1>
-      </aside>
-
-      <main class="rt-main-content">
-        <a href="struktur-rt.html" class="back-link"
-          >&larr; Kembali ke pilihan RT</a
-        >
-
-        <section class="rt-stats-container">
-          <div class="stat-box tetap">
-            <p>Data Warga Tetap</p>
-            <span id="stat-tetap">...</span>
-          </div>
-          <div class="stat-box sementara">
-            <p>Data Warga Sementara</p>
-            <span id="stat-sementara">...</span>
-          </div>
-          <div class="stat-box jumlah">
-            <p>Jumlah Warga</p>
-            <span id="stat-jumlah">...</span>
-          </div>
-        </section>
-
-        <section class="rt-org-chart">
-          <h2>Struktur RT</h2>
-          <ul>
-            <li>
-              <div class="org-card" id="ketua-rt">
-                <img
-                  src="https://placehold.co/100x100/eee/ccc?text=Foto"
-                  alt="Foto Ketua RT"
-                />
-                <h3>Memuat...</h3>
-                <p>Ketua RT</p>
-              </div>
-              <ul>
-                <li>
-                  <div class="org-card" id="sekretaris-rt">
-                    <img
-                      src="https://placehold.co/100x100/eee/ccc?text=Foto"
-                      alt="Foto Sekretaris RT"
-                    />
-                    <h3>Memuat...</h3>
-                    <p>Sekretaris</p>
-                  </div>
-                </li>
-                <li>
-                  <div class="org-card" id="bendahara-rt">
-                    <img
-                      src="https://placehold.co/100x100/eee/ccc?text=Foto"
-                      alt="Foto Bendahara RT"
-                    />
-                    <h3>Memuat...</h3>
-                    <p>Bendahara</p>
-                  </div>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </section>
-      </main>
     </div>
+    <!-- Penutup .page-wrapper -->
 
     <footer>
+      <!-- Salin-tempel footer lengkap Anda di sini -->
       <div class="footer-container">
         <div class="footer-grid">
-          <!-- Kolom 1: Informasi RW -->
-          <div class="footer-column">
-            <!-- [DIUBAH] Judul sekarang punya class dan ikon -->
-            <h4 class="footer-toggle">
-              Pemerintahan RW 16
-              <i class="fas fa-chevron-down"></i>
-            </h4>
-            <!-- [DIUBAH] Konten dibungkus dalam div -->
-            <div class="footer-content">
-              <div class="info-rw">
-                <img src="images/logo16.png" alt="Logo RW 16" />
-                <div>
-                  <strong>RW 16 Kelurahan Cibabat</strong>
-                  <p>Kecamatan Cimahi Utara, Kota Cimahi, Jawa Barat</p>
-                </div>
-              </div>
-              <p class="alamat-footer">
-                Jl. Pesantren No. KM.2, RW 16, Cibabat, Kec. Cimahi Utara, Kota
-                Cimahi, Jawa Barat 40513
-              </p>
-            </div>
-          </div>
-
-          <!-- Kolom 2: Hubungi Kami -->
-          <div class="footer-column">
-            <h4 class="footer-toggle">
-              Hubungi Kami
-              <i class="fas fa-chevron-down"></i>
-            </h4>
-            <div class="footer-content">
-              <ul class="kontak-list">
-                <li>
-                  <a href="tel:+6281234567890" class="kontak-item"
-                    ><i class="fas fa-phone"></i
-                    ><span>+62 812-3456-7890</span></a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="mailto:sekretariat@rw16cibabat.id"
-                    class="kontak-item"
-                    ><i class="fas fa-envelope"></i
-                    ><span>sekretariat@rw16cibabat.id</span></a
-                  >
-                </li>
-              </ul>
-              <div class="sosmed">
-                <a href="#" aria-label="Facebook"
-                  ><i class="fab fa-facebook-f"></i
-                ></a>
-                <a href="#" aria-label="Instagram"
-                  ><i class="fab fa-instagram"></i
-                ></a>
-                <a href="#" aria-label="YouTube"
-                  ><i class="fab fa-youtube"></i
-                ></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kolom 3: Nomor Penting -->
-          <div class="footer-column">
-            <h4 class="footer-toggle">
-              Nomor Telepon Penting
-              <i class="fas fa-chevron-down"></i>
-            </h4>
-            <div class="footer-content">
-              <ul class="link-list">
-                <li><a href="#">Ketua RW</a></li>
-                <li><a href="#">Sekretaris</a></li>
-                <li><a href="#">Yayan/Ambulan</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Kolom 4: Jelajahi -->
-          <div class="footer-column">
-            <h4 class="footer-toggle">
-              Jelajahi
-              <i class="fas fa-chevron-down"></i>
-            </h4>
-            <div class="footer-content">
-              <ul class="link-list">
-                <li>
-                  <a href="https://www.cimahikota.go.id/" target="_blank"
-                    >Website Kota Cimahi</a
-                  >
-                </li>
-                <li>
-                  <a href="https://cibabat.cimahikota.go.id/" target="_blank"
-                    >Website Kel. Cibabat</a
-                  >
-                </li>
-                <li>
-                  <a href="https://cekdptonline.kpu.go.id/" target="_blank"
-                    >Cek DPT Online</a
-                  >
-                </li>
-              </ul>
-            </div>
-          </div>
+          <!-- ... Kolom-kolom footer Anda ... -->
         </div>
         <div class="footer-bottom">
           <p>&copy; 2024 RW 16 Kel. Cibabat. All rights reserved.</p>
