@@ -19,61 +19,80 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// [DIUBAH] Menggunakan ID yang benar dari kode lama Anda
 const beritaGridContainer = document.getElementById("berita-grid-container");
 
+// Fungsi format tanggal (tetap sama)
+function formatDate(timestamp, formatOptions) {
+  if (!timestamp) return "";
+  return timestamp.toDate().toLocaleDateString("id-ID", formatOptions);
+}
+
+// Ganti fungsi lama Anda dengan yang ini
 async function tampilkanSemuaBerita() {
-  const beritaContainer = document.getElementById("berita-container");
   try {
     const q = query(collection(db, "berita"), orderBy("tanggal", "desc"));
     const querySnapshot = await getDocs(q);
 
-    beritaContainer.innerHTML = "";
     if (querySnapshot.empty) {
-      beritaContainer.innerHTML =
+      beritaGridContainer.innerHTML =
         "<p>Belum ada berita yang dipublikasikan.</p>";
       return;
     }
+
+    // 1. Buat variabel kosong untuk menampung semua HTML kartu
+    let semuaKartuHTML = "";
+
     querySnapshot.forEach((doc) => {
       const berita = doc.data();
       const beritaId = doc.id;
-      const tanggalPublish = berita.tanggal
-        .toDate()
-        .toLocaleDateString("id-ID", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        });
+      const cuplikan = berita.isi ? berita.isi.substring(0, 100) + "..." : "";
 
-      // [BARU] Buat HTML untuk info jadwal jika ada
+      const tanggalPublish = formatDate(berita.tanggal, {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+
       let infoJadwalHTML = "";
       if (berita.tanggalMulaiAcara) {
-        const tglMulai = berita.tanggalMulaiAcara
-          .toDate()
-          .toLocaleDateString("id-ID", { day: "numeric", month: "short" });
+        const tglMulai = formatDate(berita.tanggalMulaiAcara, {
+          day: "numeric",
+          month: "short",
+        });
         infoJadwalHTML = `<p class="info-jadwal-kartu"><i class="fas fa-calendar-check"></i> Acara mulai ${tglMulai}</p>`;
       }
 
       const kartuHTML = `
-        <a href="berita-detail.html?id=${beritaId}" class="kartu-berita">
-            <img src="${berita.gambarUrl}" alt="Gambar Berita">
-            <div class="konten-kartu">
-                <h3>${berita.judul}</h3>
-               <!-- [BARU] Tampilkan info jadwal di sini -->
-               ${infoJadwalHTML}
-               <div class="meta-info-kartu">
-                    <span><i class="fas fa-calendar-day"></i> ${tanggalPublish}</span>
+        <a href="berita-detail.html?id=${beritaId}" class="kartu-berita">
+            <img src="${
+              berita.gambarUrl ||
+              "https://placehold.co/400x250/eee/ccc?text=Gambar"
+            }" alt="Gambar Berita">
+            <div class="konten-kartu">
+                <h3>${berita.judul}</h3>
+                <p class="cuplikan">${cuplikan}</p>
+                ${infoJadwalHTML}
+                <div class="meta-info-kartu">
+                    <span><i class="fas fa-calendar-alt"></i> ${tanggalPublish}</span>
                     <span><i class="fas fa-eye"></i> ${
                       berita.dilihat || 0
                     }</span>
-               </div>
-            </div>
-        </a>
-      `;
-      beritaContainer.innerHTML += kartuHTML;
+                </div>
+            </div>
+        </a>
+      `;
+
+      // 2. Tambahkan setiap kartu ke variabel penampung (bukan ke halaman langsung)
+      semuaKartuHTML += kartuHTML;
     });
+
+    // 3. Setelah loop selesai, masukkan semua HTML ke halaman sekaligus
+    beritaGridContainer.innerHTML = semuaKartuHTML;
   } catch (error) {
-    console.error("Error mengambil data berita: ", error);
-    beritaContainer.innerHTML = "<p>Gagal memuat berita.</p>";
+    console.error("Error mengambil semua berita: ", error);
+    beritaGridContainer.innerHTML =
+      '<p style="color: red;">Gagal memuat berita.</p>';
   }
 }
 
