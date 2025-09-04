@@ -17,13 +17,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Fungsi untuk mendapatkan ID RT dari URL
 function getRtIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("id"); // Contoh: 'rt01'
+  return params.get("id");
 }
 
-// Fungsi untuk mengisi data ke kartu pengurus
+// Fungsi Bantuan untuk mengisi kartu pengurus (desktop)
 function populateOrgCard(elementId, pengurusData) {
   const card = document.getElementById(elementId);
   if (card && pengurusData) {
@@ -31,7 +30,7 @@ function populateOrgCard(elementId, pengurusData) {
       pengurusData.fotoUrl || "https://placehold.co/100x100/eee/ccc?text=Foto";
     card.querySelector("h3").textContent = pengurusData.nama;
   } else if (card) {
-    card.style.display = "none"; // Sembunyikan jika tidak ada data
+    card.style.display = "none";
   }
 }
 
@@ -42,7 +41,6 @@ async function tampilkanDetailRT() {
     return;
   }
 
-  // Mengubah 'rt01' menjadi 'RT 01' untuk judul
   const rtNumber = rtId.replace("rt", "RT ").toUpperCase();
   document.title = `Struktur ${rtNumber} - RW 16`;
   document.getElementById("rt-sidebar-title").textContent = rtNumber;
@@ -55,7 +53,7 @@ async function tampilkanDetailRT() {
       const data = docSnap.data();
       const pengurus = data.pengurus || [];
 
-      // Cari data untuk setiap jabatan
+      // --- Mengisi Bagan Desktop ---
       const ketua = pengurus.find((p) =>
         p.jabatan.toLowerCase().includes("ketua")
       );
@@ -66,14 +64,42 @@ async function tampilkanDetailRT() {
         p.jabatan.toLowerCase().includes("bendahara")
       );
 
-      // Isi data ke bagan organisasi
-      populateOrgCard("ketua-rt", ketua);
-      populateOrgCard("sekretaris-rt", sekretaris);
-      populateOrgCard("bendahara-rt", bendahara);
+      populateOrgCard("ketua-rt-desktop", ketua);
+      populateOrgCard("sekretaris-rt-desktop", sekretaris);
+      populateOrgCard("bendahara-rt-desktop", bendahara);
 
-      // Isi data statistik
-      // CATATAN: Asumsi data ini ada di dalam dokumen RT.
-      // Jika tidak, kita perlu mengambilnya dari lokasi lain.
+      // --- [BARU] Mengisi Swiper Mobile ---
+      const swiperWrapper = document.getElementById("pengurus-swiper-wrapper");
+      let slidesHTML = "";
+      pengurus.forEach((p) => {
+        slidesHTML += `
+                    <div class="swiper-slide">
+                        <div class="org-card">
+                            <img src="${
+                              p.fotoUrl ||
+                              "https://placehold.co/100x100/eee/ccc?text=Foto"
+                            }" alt="Foto ${p.jabatan}">
+                            <h3>${p.nama}</h3>
+                            <p>${p.jabatan}</p>
+                        </div>
+                    </div>
+                `;
+      });
+      swiperWrapper.innerHTML = slidesHTML;
+
+      // Inisialisasi Swiper SETELAH slide ditambahkan
+      new Swiper(".swiper-container", {
+        slidesPerView: "auto",
+        spaceBetween: 15,
+        centeredSlides: true,
+        loop: false,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+      });
+
+      // --- Mengisi Statistik ---
       document.getElementById("stat-tetap").textContent = data.wargaTetap || 0;
       document.getElementById("stat-sementara").textContent =
         data.wargaSementara || 0;
@@ -81,7 +107,6 @@ async function tampilkanDetailRT() {
         (data.wargaTetap || 0) + (data.wargaSementara || 0);
     } else {
       console.log(`Dokumen untuk ${rtId} tidak ditemukan.`);
-      // Anda bisa menampilkan pesan error yang lebih ramah di sini
     }
   } catch (error) {
     console.error("Gagal memuat data RT: ", error);

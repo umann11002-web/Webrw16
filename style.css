@@ -1347,7 +1347,7 @@ footer {
 .rt-detail-wrapper {
   display: grid;
   grid-template-columns: 120px 1fr;
-  flex-grow: 1; /* Ini akan membuat wrapper mengisi sisa ruang */
+  flex-grow: 1;
 }
 
 /* Sidebar Merah di Kiri */
@@ -1411,7 +1411,6 @@ footer {
   background-color: #84c1d4;
 }
 
-/* Bagan Organisasi (Styling Kartu) */
 .rt-org-chart {
   text-align: center;
 }
@@ -1427,6 +1426,7 @@ footer {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   display: inline-block;
   min-width: 180px;
+  height: 100%; /* Agar tinggi kartu sama di swiper */
 }
 .rt-org-chart .org-card img {
   width: 100px;
@@ -1443,18 +1443,24 @@ footer {
   color: #6c757d;
 }
 
-/* Bagan Organisasi (Garis Penghubung) */
-.rt-org-chart ul {
+/* Desktop: Tampilkan Bagan Hirarki, Sembunyikan Swiper */
+.org-chart-mobile {
+  display: none;
+}
+.org-chart-desktop {
+  display: block;
+}
+.org-chart-desktop ul {
   position: relative;
   padding: 1rem 0;
   white-space: nowrap;
   margin: 0 auto;
   text-align: center;
 }
-.rt-org-chart ul ul {
+.org-chart-desktop ul ul {
   padding-top: 30px;
 }
-.rt-org-chart li {
+.org-chart-desktop li {
   display: inline-block;
   vertical-align: top;
   text-align: center;
@@ -1462,8 +1468,8 @@ footer {
   position: relative;
   padding: 30px 20px 0 20px;
 }
-.rt-org-chart li::before,
-.rt-org-chart li::after {
+.org-chart-desktop li::before,
+.org-chart-desktop li::after {
   content: "";
   position: absolute;
   top: 0;
@@ -1472,27 +1478,27 @@ footer {
   width: 50%;
   height: 30px;
 }
-.rt-org-chart li::after {
+.org-chart-desktop li::after {
   right: auto;
   left: 50%;
   border-left: 2px solid #ccc;
 }
-.rt-org-chart li:only-child::after,
-.rt-org-chart li:only-child::before {
+.org-chart-desktop li:only-child::after,
+.org-chart-desktop li:only-child::before {
   display: none;
 }
-.rt-org-chart li:first-child::before,
-.rt-org-chart li:last-child::after {
+.org-chart-desktop li:first-child::before,
+.org-chart-desktop li:last-child::after {
   border: 0 none;
 }
-.rt-org-chart li:last-child::before {
+.org-chart-desktop li:last-child::before {
   border-right: 2px solid #ccc;
   border-radius: 0 5px 0 0;
 }
-.rt-org-chart li:first-child::after {
+.org-chart-desktop li:first-child::after {
   border-radius: 5px 0 0 0;
 }
-.rt-org-chart ul ul::before {
+.org-chart-desktop ul ul::before {
   content: "";
   position: absolute;
   top: 0;
@@ -1500,9 +1506,6 @@ footer {
   border-left: 2px solid #ccc;
   width: 0;
   height: 30px;
-}
-.rt-org-chart li > .org-card {
-  cursor: pointer;
 }
 
 /* #################################### */
@@ -1809,19 +1812,24 @@ footer {
   .stat-box span {
     font-size: 2rem; /* Kecilkan font angka statistik */
   }
-  .rt-org-chart li {
-    display: block; /* Buat jadi vertikal */
-    padding: 20px 0 0 0;
+
+  /* Mobile: Sembunyikan Bagan Hirarki, Tampilkan Swiper */
+  .org-chart-desktop {
+    display: none;
   }
-  .rt-org-chart li::before,
-  .rt-org-chart li::after {
-    /* Sembunyikan garis horizontal di mobile agar tidak aneh */
-    border-left: none;
-    border-right: none;
+  .org-chart-mobile {
+    display: block;
   }
-  .rt-org-chart ul ul::before {
-    /* Pastikan garis vertikal tetap di tengah */
-    left: 50%;
+
+  .swiper-container {
+    width: 100%;
+    padding-bottom: 40px; /* Ruang untuk pagination */
+  }
+  .swiper-slide {
+    width: 200px; /* Lebar setiap kartu */
+  }
+  .swiper-pagination-bullet-active {
+    background-color: var(--primary-green) !important;
   }
 
   /* === [PERBAIKAN] CSS RESPONSIF UNTUK KELOLA STRUKTUR RT === */
