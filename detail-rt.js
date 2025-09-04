@@ -17,61 +17,75 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const pengurusGridContainer = document.getElementById(
-  "pengurus-grid-container"
-);
-const titleHeading = document.getElementById("rt-title-heading");
-
 // Fungsi untuk mendapatkan ID RT dari URL
 function getRtIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
   return params.get("id"); // Contoh: 'rt01'
 }
 
-async function tampilkanStrukturRT() {
+// Fungsi untuk mengisi data ke kartu pengurus
+function populateOrgCard(elementId, pengurusData) {
+  const card = document.getElementById(elementId);
+  if (card && pengurusData) {
+    card.querySelector("img").src =
+      pengurusData.fotoUrl || "https://placehold.co/100x100/eee/ccc?text=Foto";
+    card.querySelector("h3").textContent = pengurusData.nama;
+  } else if (card) {
+    card.style.display = "none"; // Sembunyikan jika tidak ada data
+  }
+}
+
+async function tampilkanDetailRT() {
   const rtId = getRtIdFromUrl();
   if (!rtId) {
-    pengurusGridContainer.innerHTML = "<p>ID RT tidak ditemukan.</p>";
-    titleHeading.textContent = "Error";
+    document.body.innerHTML = "<h1>ID RT tidak ditemukan.</h1>";
     return;
   }
 
   // Mengubah 'rt01' menjadi 'RT 01' untuk judul
-  const rtNumber = rtId.replace("rt", "RT ");
-  titleHeading.textContent = `Struktur Kepengurusan ${rtNumber}`;
-
-  const rtDocRef = doc(db, "struktur_organisasi", rtId);
+  const rtNumber = rtId.replace("rt", "RT ").toUpperCase();
+  document.title = `Struktur ${rtNumber} - RW 16`;
+  document.getElementById("rt-sidebar-title").textContent = rtNumber;
 
   try {
-    const docSnap = await getDoc(rtDocRef);
-    pengurusGridContainer.innerHTML = ""; // Kosongkan kontainer
+    const docRef = doc(db, "struktur_organisasi", rtId);
+    const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists() && docSnap.data().pengurus) {
-      const pengurusArray = docSnap.data().pengurus;
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const pengurus = data.pengurus || [];
 
-      if (pengurusArray.length === 0) {
-        pengurusGridContainer.innerHTML = `<p>Belum ada data pengurus untuk ${rtNumber}.</p>`;
-        return;
-      }
+      // Cari data untuk setiap jabatan
+      const ketua = pengurus.find((p) =>
+        p.jabatan.toLowerCase().includes("ketua")
+      );
+      const sekretaris = pengurus.find((p) =>
+        p.jabatan.toLowerCase().includes("sekretaris")
+      );
+      const bendahara = pengurus.find((p) =>
+        p.jabatan.toLowerCase().includes("bendahara")
+      );
 
-      pengurusArray.forEach((pengurus) => {
-        const cardHTML = `
-                    <div class="pengurus-card">
-                        <img src="${pengurus.fotoUrl}" alt="Foto ${pengurus.jabatan}">
-                        <h3>${pengurus.nama}</h3>
-                        <p>${pengurus.jabatan}</p>
-                    </div>
-                `;
-        pengurusGridContainer.innerHTML += cardHTML;
-      });
+      // Isi data ke bagan organisasi
+      populateOrgCard("ketua-rt", ketua);
+      populateOrgCard("sekretaris-rt", sekretaris);
+      populateOrgCard("bendahara-rt", bendahara);
+
+      // Isi data statistik
+      // CATATAN: Asumsi data ini ada di dalam dokumen RT.
+      // Jika tidak, kita perlu mengambilnya dari lokasi lain.
+      document.getElementById("stat-tetap").textContent = data.wargaTetap || 0;
+      document.getElementById("stat-sementara").textContent =
+        data.wargaSementara || 0;
+      document.getElementById("stat-jumlah").textContent =
+        (data.wargaTetap || 0) + (data.wargaSementara || 0);
     } else {
-      pengurusGridContainer.innerHTML = `<p>Data struktur organisasi untuk ${rtNumber} belum tersedia.</p>`;
+      console.log(`Dokumen untuk ${rtId} tidak ditemukan.`);
+      // Anda bisa menampilkan pesan error yang lebih ramah di sini
     }
   } catch (error) {
-    console.error(`Error memuat struktur ${rtId}: `, error);
-    pengurusGridContainer.innerHTML =
-      '<p style="color:red;">Gagal memuat data.</p>';
+    console.error("Gagal memuat data RT: ", error);
   }
 }
 
-document.addEventListener("DOMContentLoaded", tampilkanStrukturRT);
+document.addEventListener("DOMContentLoaded", tampilkanDetailRT);
