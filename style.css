@@ -1958,3 +1958,6 @@ footer {
     display: none;
   }
 }
+.full-width-layout .page-wrapper {
+  max-width: none; /* Hapus batasan lebar maksimum HANYA di halaman ini */
+}
