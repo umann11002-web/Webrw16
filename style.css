@@ -1387,28 +1387,86 @@ footer {
   gap: 1.5rem;
   margin-bottom: 3rem;
 }
-.stat-box {
-  flex: 1;
-  padding: 1.5rem;
-  border-radius: 8px;
-  color: #333;
+.rt-stats-grid {
+  display: grid;
+  /* Membuat kolom responsif, minimal 160px */
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 3rem;
 }
-.stat-box p {
-  margin: 0 0 0.5rem 0;
+
+.stat-card-small {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-left: 5px solid; /* Garis warna di kiri */
+}
+
+.stat-card-small i {
+  font-size: 1.8rem;
+  padding: 0.5rem;
+  color: white;
+  border-radius: 8px;
+}
+
+.stat-card-small .stat-text p {
+  margin: 0 0 4px 0;
+  font-size: 0.9rem;
+  color: var(--light-text);
   font-weight: 500;
 }
-.stat-box span {
-  font-size: 2.5rem;
+
+.stat-card-small .stat-text span {
+  font-size: 1.8rem;
   font-weight: 700;
+  color: var(--dark-text);
 }
-.stat-box.tetap {
-  background-color: #e0d5a6;
+
+/* Variasi Warna */
+.stat-card-small.tetap {
+  border-color: #b09a4a;
 }
-.stat-box.sementara {
-  background-color: #c8d9a1;
+.stat-card-small.tetap i {
+  background-color: #b09a4a;
 }
-.stat-box.jumlah {
-  background-color: #84c1d4;
+
+.stat-card-small.sementara {
+  border-color: #8aab64;
+}
+.stat-card-small.sementara i {
+  background-color: #8aab64;
+}
+
+.stat-card-small.laki {
+  border-color: #3b9bbf;
+}
+.stat-card-small.laki i {
+  background-color: #3b9bbf;
+}
+
+.stat-card-small.perempuan {
+  border-color: #a95b8d;
+}
+.stat-card-small.perempuan i {
+  background-color: #a95b8d;
+}
+
+.stat-card-small.kk {
+  border-color: #6c757d;
+}
+.stat-card-small.kk i {
+  background-color: #6c757d;
+}
+
+.stat-card-small.total {
+  border-color: #876a96;
+}
+.stat-card-small.total i {
+  background-color: #876a96;
 }
 
 .rt-org-chart {
