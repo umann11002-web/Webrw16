@@ -17,7 +17,23 @@
   <body>
     <div class="page-wrapper">
       <header>
-        <!-- Isi header Anda di sini -->
+        <!-- Pastikan isi header Anda lengkap di sini -->
+        <div class="header-content">
+          <div class="logo">
+            <img src="images/logo16.png" alt="Logo RW 16" />
+            <span>RW 16 Kel. Cibabat</span>
+          </div>
+          <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="berita.html">Berita</a>
+            <a href="layanan.html">Layanan</a>
+            <a href="informasi.html">Informasi</a>
+            <!-- ... sisa nav ... -->
+          </nav>
+          <button class="hamburger" id="hamburger-menu">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
       </header>
 
       <div class="rt-detail-wrapper">
@@ -60,7 +76,6 @@
                 <span id="stat-perempuan">...</span>
               </div>
             </div>
-            <!-- [BARU] Kartu untuk Kepala Keluarga -->
             <div class="stat-card-small kk">
               <i class="fas fa-house-user"></i>
               <div class="stat-text">
@@ -77,16 +92,38 @@
             </div>
           </section>
 
-          <!-- Bagan Organisasi (tidak berubah) -->
           <section class="rt-org-chart">
-            <!-- ... Isi bagan desktop & mobile Anda ... -->
+            <h2>Struktur RT</h2>
+            <div class="org-chart-desktop">
+              <ul>
+                <li>
+                  <div class="org-card" id="ketua-rt-desktop">
+                    <!-- Diisi JS -->
+                  </div>
+                  <ul>
+                    <li>
+                      <div class="org-card" id="sekretaris-rt-desktop"></div>
+                    </li>
+                    <li>
+                      <div class="org-card" id="bendahara-rt-desktop"></div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="org-chart-mobile">
+              <div class="swiper-container">
+                <div class="swiper-wrapper" id="pengurus-swiper-wrapper"></div>
+                <div class="swiper-pagination"></div>
+              </div>
+            </div>
           </section>
         </main>
       </div>
     </div>
 
     <footer>
-      <!-- Isi footer Anda di sini -->
+      <!-- Pastikan isi footer Anda lengkap di sini -->
     </footer>
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
