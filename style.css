@@ -1617,7 +1617,7 @@ footer {
     justify-content: center;
   }
 
-  /* [DISISIPKAN] CSS UNTUK TAMPILAN MOBILE DETAIL RT */
+  /* CSS UNTUK TAMPILAN MOBILE DETAIL RT */
   .rt-detail-wrapper {
     grid-template-columns: 1fr; /* Hanya 1 kolom */
   }
@@ -1656,6 +1656,52 @@ footer {
   .rt-org-chart ul ul::before {
     /* Pastikan garis vertikal tetap di tengah */
     left: 50%;
+  }
+
+  /* CSS RESPONSIF UNTUK KELOLA STRUKTUR RT */
+  .manage-main .form-group-inline {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* --- SULAP TABEL MENJADI KARTU --- */
+  .manage-main table thead {
+    display: none;
+  }
+  .manage-main table tr {
+    display: block;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  .manage-main table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0.5rem;
+    border-bottom: 1px solid #eee;
+    text-align: right;
+  }
+  .manage-main table tr td:last-child {
+    border-bottom: none;
+  }
+  .manage-main table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    text-align: left;
+    padding-right: 1rem;
+  }
+  .manage-main table td.action-cell {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+  }
+  .manage-main table td.action-cell .action-btn {
+    width: 100%;
+    margin: 0;
+    padding: 0.8rem;
   }
 }
 
@@ -1890,69 +1936,4 @@ footer {
 }
 .rt-org-chart li > .org-card {
   cursor: pointer;
-}
-/* === [BARU] CSS RESPONSIF UNTUK KELOLA STRUKTUR RT === */
-
-@media (max-width: 768px) {
-  /* Atur padding utama halaman */
-  .manage-main {
-    padding: 1.5rem 1rem;
-  }
-
-  /* Buat form statistik menjadi vertikal */
-  .manage-main .form-group-inline {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  /* --- SULAP TABEL MENJADI KARTU --- */
-
-  /* 1. Sembunyikan header tabel di mobile */
-  .manage-main table thead {
-    display: none;
-  }
-
-  /* 2. Ubah setiap baris menjadi kartu */
-  .manage-main table tr {
-    display: block;
-    margin-bottom: 1.5rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
-
-  /* 3. Atur setiap sel di dalam kartu */
-  .manage-main table td {
-    display: flex;
-    justify-content: space-between; /* Label di kiri, data di kanan */
-    align-items: center;
-    padding: 0.8rem 0.5rem;
-    border-bottom: 1px solid #eee;
-    text-align: right; /* Data rata kanan */
-  }
-
-  .manage-main table tr td:last-child {
-    border-bottom: none;
-  }
-
-  /* 4. Tampilkan label dari atribut 'data-label' */
-  .manage-main table td::before {
-    content: attr(data-label);
-    font-weight: 600;
-    text-align: left; /* Label rata kiri */
-    padding-right: 1rem;
-  }
-
-  /* 5. Atur sel aksi agar tombolnya bagus */
-  .manage-main table td.action-cell {
-    flex-direction: column;
-    gap: 0.5rem;
-    padding-top: 1rem;
-  }
-  .manage-main table td.action-cell .action-btn {
-    width: 100%;
-    margin: 0;
-    padding: 0.8rem;
-  }
 }
