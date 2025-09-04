@@ -56,6 +56,28 @@
 
       <!-- Konten ini akan muncul setelah RT dipilih -->
       <div id="management-content" style="display: none">
+        <!-- [BARU] Tambahkan blok ini untuk mengelola statistik -->
+        <div class="form-card" style="margin-top: 2rem">
+          <h3>Data Statistik RT</h3>
+          <div class="form-group-inline">
+            <div class="form-group">
+              <label for="warga-tetap-input">Jumlah Warga Tetap</label>
+              <input type="number" id="warga-tetap-input" placeholder="0" />
+            </div>
+            <div class="form-group">
+              <label for="warga-sementara-input">Jumlah Warga Sementara</label>
+              <input type="number" id="warga-sementara-input" placeholder="0" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="submit-btn" id="save-stats-btn">
+              Simpan Data Statistik
+            </button>
+          </div>
+        </div>
+        <!-- Akhir blok baru -->
+
+        <h3 style="margin-top: 2rem">Data Pengurus RT</h3>
         <div class="main-actions">
           <button class="submit-btn" id="add-new-btn">
             <i class="fas fa-plus"></i> Tambah Pengurus Baru
@@ -120,7 +142,6 @@
     </div>
 
     <script src="manage-struktur-rt.js" type="module"></script>
-    <!-- [PERBAIKAN] Menambahkan script navigasi yang hilang -->
     <script src="admin-nav.js" type="module"></script>
   </body>
 </html>

@@ -40,6 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const progressBar = document.getElementById("upload-progress");
   const uploadStatus = document.getElementById("upload-status");
 
+  // [BARU] Ambil elemen untuk statistik
+  const wargaTetapInput = document.getElementById("warga-tetap-input");
+  const wargaSementaraInput = document.getElementById("warga-sementara-input");
+  const saveStatsBtn = document.getElementById("save-stats-btn");
+
   // Fungsi upload ke Cloudinary
   const uploadFileToCloudinary = async (file) => {
     const formData = new FormData();
@@ -67,8 +72,14 @@ document.addEventListener("DOMContentLoaded", () => {
     tableBody.innerHTML = `<tr><td colspan="4">Memuat data...</td></tr>`;
     try {
       const docSnap = await getDoc(currentRtDocRef);
-      if (docSnap.exists() && docSnap.data().pengurus) {
-        pengurusData = docSnap.data().pengurus;
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        pengurusData = data.pengurus || [];
+
+        // [BARU] Isi nilai input statistik
+        wargaTetapInput.value = data.wargaTetap || 0;
+        wargaSementaraInput.value = data.wargaSementara || 0;
+
         tableBody.innerHTML = "";
         pengurusData.forEach((p, index) => {
           const row = `
@@ -209,5 +220,32 @@ document.addEventListener("DOMContentLoaded", () => {
   closeModalBtn.addEventListener("click", closeModal);
   modal.addEventListener("click", (e) => {
     if (e.target === modal) closeModal();
+  });
+
+  // [BARU] Event listener untuk tombol simpan statistik
+  saveStatsBtn.addEventListener("click", async () => {
+    if (!currentRtDocRef) return;
+
+    saveStatsBtn.disabled = true;
+    saveStatsBtn.textContent = "Menyimpan...";
+
+    try {
+      const wargaTetap = parseInt(wargaTetapInput.value, 10) || 0;
+      const wargaSementara = parseInt(wargaSementaraInput.value, 10) || 0;
+
+      // Gunakan updateDoc agar tidak menimpa data pengurus
+      await updateDoc(currentRtDocRef, {
+        wargaTetap: wargaTetap,
+        wargaSementara: wargaSementara,
+      });
+
+      showStatusMessage("Data statistik berhasil disimpan!");
+    } catch (error) {
+      console.error("Error saving stats: ", error);
+      showStatusMessage("Gagal menyimpan data statistik.", true);
+    } finally {
+      saveStatsBtn.disabled = false;
+      saveStatsBtn.textContent = "Simpan Data Statistik";
+    }
   });
 });
