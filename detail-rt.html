@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Struktur Pengurus RT - RW 16</title>
+    <!-- CSS Anda yang sudah diperbaiki -->
     <link rel="stylesheet" href="style.css" />
+    <!-- Font Awesome untuk Ikon -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -32,7 +34,7 @@
         </div>
       </header>
 
-      <!-- Ini adalah wrapper yang akan kita perbaiki nanti -->
+      <!-- Wrapper utama halaman detail RT -->
       <div class="rt-detail-wrapper">
         <aside class="rt-sidebar">
           <h1 id="rt-sidebar-title">RT ...</h1>
@@ -40,28 +42,38 @@
 
         <main class="rt-main-content">
           <a href="struktur-rt.html" class="back-link"
-            >&larr; Kembali ke pilihan RT</a
+            ><i class="fas fa-arrow-left"></i> Kembali ke Daftar RT</a
           >
 
-          <!-- Hanya 3 Kotak Statistik Awal -->
+          <!-- KOTAK STATISTIK (SESUAI DENGAN JS ANDA) -->
           <section class="rt-stats-container">
-            <div class="stat-box tetap">
-              <p>Data Warga Tetap</p>
-              <span id="stat-tetap">...</span>
+            <div class="stat-card-small tetap">
+              <i class="fas fa-users"></i>
+              <div class="stat-text">
+                <p>Warga Tetap</p>
+                <span id="stat-tetap">...</span>
+              </div>
             </div>
-            <div class="stat-box sementara">
-              <p>Data Warga Sementara</p>
-              <span id="stat-sementara">...</span>
+            <div class="stat-card-small sementara">
+              <i class="fas fa-user-clock"></i>
+              <div class="stat-text">
+                <p>Warga Sementara</p>
+                <span id="stat-sementara">...</span>
+              </div>
             </div>
-            <div class="stat-box jumlah">
-              <p>Jumlah Warga</p>
-              <span id="stat-jumlah">...</span>
+            <div class="stat-card-small total">
+              <i class="fas fa-globe-asia"></i>
+              <div class="stat-text">
+                <p>Total Jiwa</p>
+                <span id="stat-jumlah">...</span>
+              </div>
             </div>
           </section>
 
-          <!-- Struktur Grid Sederhana Awal -->
+          <!-- STRUKTUR ORGANISASI (SESUAI DENGAN JS ANDA) -->
           <section class="rt-org-chart">
-            <h2>Struktur RT</h2>
+            <h2>Struktur Organisasi RT</h2>
+            <!-- Kontainer ini akan diisi oleh detail-rt.js -->
             <div class="pengurus-grid" id="pengurus-grid-container">
               <p>Memuat struktur organisasi...</p>
             </div>
@@ -74,7 +86,7 @@
       <!-- Pastikan isi footer Anda lengkap di sini -->
     </footer>
 
-    <script src="script.js" type="module"></script>
     <script src="detail-rt.js" type="module"></script>
+    <script src="script.js"></script>
   </body>
 </html>

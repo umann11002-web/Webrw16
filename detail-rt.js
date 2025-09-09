@@ -5,6 +5,8 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
+// WARNING: It's recommended to use environment variables for Firebase config keys
+// to avoid exposing them publicly. For this example, we'll use the provided config.
 const firebaseConfig = {
   apiKey: "AIzaSyBD4ypi0bq71tJfDdyqgdLL3A_RSye9Q7I",
   authDomain: "rw16cibabat-dbf87.firebaseapp.com",
@@ -26,7 +28,7 @@ function getRtIdFromUrl() {
 async function tampilkanDetailRT() {
   const rtId = getRtIdFromUrl();
   if (!rtId) {
-    document.body.innerHTML = "<h1>ID RT tidak ditemukan.</h1>";
+    document.body.innerHTML = "<h1>ID RT tidak ditemukan di URL.</h1>";
     return;
   }
 
@@ -41,47 +43,50 @@ async function tampilkanDetailRT() {
     if (docSnap.exists()) {
       const data = docSnap.data();
 
+      // Mengisi data statistik
       const wargaTetap = data.wargaTetap || 0;
       const wargaSementara = data.wargaSementara || 0;
-
       document.getElementById("stat-tetap").textContent = wargaTetap;
       document.getElementById("stat-sementara").textContent = wargaSementara;
       document.getElementById("stat-jumlah").textContent =
         wargaTetap + wargaSementara;
 
+      // Mengisi data pengurus
       const pengurus = data.pengurus || [];
       const pengurusGridContainer = document.getElementById(
         "pengurus-grid-container"
       );
 
       if (pengurus.length > 0) {
-        pengurusGridContainer.innerHTML = ""; // Kosongkan dulu
+        pengurusGridContainer.innerHTML = ""; // Kosongkan placeholder
         let cardsHTML = "";
         pengurus.forEach((p) => {
           cardsHTML += `
-                <div class="org-card">
-                    <img src="${
-                      p.fotoUrl ||
-                      "https://placehold.co/100x100/eee/ccc?text=Foto"
-                    }" alt="Foto ${p.jabatan}">
-                    <h3>${p.nama}</h3>
-                    <p>${p.jabatan}</p>
-                </div>
-            `;
+            <div class="org-card">
+              <img src="${
+                p.fotoUrl || "https://placehold.co/100x100/eee/ccc?text=Foto"
+              }" alt="Foto ${p.jabatan}">
+              <h3>${p.nama}</h3>
+              <p>${p.jabatan}</p>
+            </div>
+          `;
         });
         pengurusGridContainer.innerHTML = cardsHTML;
       } else {
         pengurusGridContainer.innerHTML =
-          "<p>Data pengurus belum tersedia.</p>";
+          "<p>Data pengurus untuk RT ini belum tersedia.</p>";
       }
     } else {
       console.log(`Dokumen untuk ${rtId} tidak ditemukan.`);
       document.getElementById("pengurus-grid-container").innerHTML =
-        "<p>Data RT tidak ditemukan.</p>";
+        "<p>Data untuk RT ini tidak ditemukan.</p>";
     }
   } catch (error) {
-    console.error("Gagal memuat data RT: ", error);
+    console.error("Gagal memuat data RT dari Firebase: ", error);
+    pengurusGridContainer.innerHTML =
+      "<p>Terjadi kesalahan saat memuat data.</p>";
   }
 }
 
+// Menjalankan fungsi setelah halaman selesai dimuat
 document.addEventListener("DOMContentLoaded", tampilkanDetailRT);
