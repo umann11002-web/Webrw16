@@ -1958,6 +1958,12 @@ footer {
     display: none;
   }
 }
-.full-width-layout .page-wrapper {
-  max-width: none; /* Hapus batasan lebar maksimum HANYA di halaman ini */
+.rt-detail-wrapper {
+  width: 100%;
+  max-width: none; /* Hapus batasan lebar apapun */
+}
+
+/* Ini untuk memastikan konten di dalamnya juga ikut melebar */
+.rt-main-content {
+  width: auto; /* Biarkan lebar konten menyesuaikan sisa ruang */
 }
