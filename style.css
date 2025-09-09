@@ -483,7 +483,7 @@ main,
 }
 
 /* ================================= */
-/* === [DIROMBAK] BAGAN ORGANISASI (DESKTOP) === */
+/* === BAGAN ORGANISASI RW (ASLI) === */
 /* ================================= */
 @media (min-width: 769px) {
   #org-chart-wrapper {
@@ -559,9 +559,6 @@ main,
   }
 }
 
-/* ================================= */
-/* === [DIROMBAK] BAGAN ORGANISASI (MOBILE) === */
-/* ================================= */
 .org-container {
   text-align: center;
 }
@@ -633,7 +630,8 @@ main,
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem auto;
+  display: block;
   border: 4px solid #eee;
 }
 .org-card h3 {
@@ -1340,14 +1338,13 @@ footer {
 }
 
 /* ================================================= */
-/* === [PERBAIKAN] STYLE UNTUK HALAMAN DETAIL RT === */
+/* === [DIGANTI] STYLE UNTUK HALAMAN DETAIL RT === */
 /* ================================================= */
 
 /* Layout Utama */
 .rt-detail-wrapper {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
 }
 
 /* Sidebar Merah di Kiri */
@@ -1358,6 +1355,8 @@ footer {
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  width: 120px;
+  flex-shrink: 0;
 }
 .rt-sidebar h1 {
   font-size: 3rem;
@@ -1374,6 +1373,7 @@ footer {
 .rt-main-content {
   padding: 2rem 4%;
   background-color: #f8f9fa;
+  width: 100%;
 }
 .rt-main-content .back-link {
   display: inline-block;
@@ -1383,90 +1383,35 @@ footer {
 
 /* Kotak Statistik */
 .rt-stats-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
   margin-bottom: 3rem;
 }
-.rt-stats-grid {
-  display: grid;
-  /* Membuat kolom responsif, minimal 160px */
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 1rem;
-  margin-bottom: 3rem;
-}
-
-.stat-card-small {
+.stat-box {
   background: white;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  border-left: 5px solid; /* Garis warna di kiri */
-}
-
-.stat-card-small i {
-  font-size: 1.8rem;
-  padding: 0.5rem;
-  color: white;
+  padding: 1.5rem;
   border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  text-align: center;
 }
-
-.stat-card-small .stat-text p {
-  margin: 0 0 4px 0;
-  font-size: 0.9rem;
+.stat-box p {
+  margin: 0 0 0.5rem 0;
   color: var(--light-text);
   font-weight: 500;
 }
-
-.stat-card-small .stat-text span {
-  font-size: 1.8rem;
+.stat-box span {
+  font-size: 2.5rem;
   font-weight: 700;
-  color: var(--dark-text);
 }
-
-/* Variasi Warna */
-.stat-card-small.tetap {
-  border-color: #b09a4a;
+.stat-box.tetap span {
+  color: #b09a4a;
 }
-.stat-card-small.tetap i {
-  background-color: #b09a4a;
+.stat-box.sementara span {
+  color: #8aab64;
 }
-
-.stat-card-small.sementara {
-  border-color: #8aab64;
-}
-.stat-card-small.sementara i {
-  background-color: #8aab64;
-}
-
-.stat-card-small.laki {
-  border-color: #3b9bbf;
-}
-.stat-card-small.laki i {
-  background-color: #3b9bbf;
-}
-
-.stat-card-small.perempuan {
-  border-color: #a95b8d;
-}
-.stat-card-small.perempuan i {
-  background-color: #a95b8d;
-}
-
-.stat-card-small.kk {
-  border-color: #6c757d;
-}
-.stat-card-small.kk i {
-  background-color: #6c757d;
-}
-
-.stat-card-small.total {
-  border-color: #876a96;
-}
-.stat-card-small.total i {
-  background-color: #876a96;
+.stat-box.jumlah span {
+  color: #876a96;
 }
 
 .rt-org-chart {
@@ -1477,97 +1422,15 @@ footer {
   text-align: center;
   margin-bottom: 2rem;
 }
-.rt-org-chart .org-card {
-  background: white;
-  padding: 1.5rem 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  display: inline-block;
-  min-width: 180px;
-  height: 100%; /* Agar tinggi kartu sama di swiper */
-}
-.rt-org-chart .org-card img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 1rem;
-}
-.rt-org-chart .org-card h3 {
-  margin: 0 0 5px 0;
-}
-.rt-org-chart .org-card p {
-  margin: 0;
-  color: #6c757d;
-}
-
-/* Desktop: Tampilkan Bagan Hirarki, Sembunyikan Swiper */
-.org-chart-mobile {
-  display: none;
-}
-.org-chart-desktop {
-  display: block;
-}
-.org-chart-desktop ul {
-  position: relative;
-  padding: 1rem 0;
-  white-space: nowrap;
-  margin: 0 auto;
-  text-align: center;
-}
-.org-chart-desktop ul ul {
-  padding-top: 30px;
-}
-.org-chart-desktop li {
-  display: inline-block;
-  vertical-align: top;
-  text-align: center;
-  list-style-type: none;
-  position: relative;
-  padding: 30px 20px 0 20px;
-}
-.org-chart-desktop li::before,
-.org-chart-desktop li::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 50%;
-  border-top: 2px solid #ccc;
-  width: 50%;
-  height: 30px;
-}
-.org-chart-desktop li::after {
-  right: auto;
-  left: 50%;
-  border-left: 2px solid #ccc;
-}
-.org-chart-desktop li:only-child::after,
-.org-chart-desktop li:only-child::before {
-  display: none;
-}
-.org-chart-desktop li:first-child::before,
-.org-chart-desktop li:last-child::after {
-  border: 0 none;
-}
-.org-chart-desktop li:last-child::before {
-  border-right: 2px solid #ccc;
-  border-radius: 0 5px 0 0;
-}
-.org-chart-desktop li:first-child::after {
-  border-radius: 5px 0 0 0;
-}
-.org-chart-desktop ul ul::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  border-left: 2px solid #ccc;
-  width: 0;
-  height: 30px;
+/* Grid Pengurus yang dibuat oleh JS */
+.pengurus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
 }
 
 /* #################################### */
-/* ###   ATURAN RESPONSIF (SIHIR)   ### */
+/* ### ATURAN RESPONSIF (SIHIR) ### */
 /* #################################### */
 @media (max-width: 768px) {
   /* Navigasi Publik Mobile */
@@ -1699,11 +1562,6 @@ footer {
     padding: 0.5rem;
   }
 
-  /* [PERBAIKAN FINAL] Responsif Bagan Organisasi */
-  #org-chart-wrapper .org-chart {
-    display: none; /* Sembunyikan bagan desktop di mobile */
-  }
-
   .bio-card {
     flex-direction: column;
     text-align: center;
@@ -1799,112 +1657,35 @@ footer {
     color: var(--primary-green);
   }
 
-  /* [DIROMBAK] Responsif Footer menjadi Accordion */
+  /* Footer Mobile */
   .footer-grid {
-    grid-template-columns: 1fr; /* Tetap satu kolom */
+    grid-template-columns: 1fr;
     gap: 0;
   }
-  .footer-column {
-    border-bottom: 1px solid #34495e;
-  }
-  .footer-column:last-child {
-    border-bottom: none;
-  }
-  .footer-toggle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    padding: 1rem 0;
-    border-bottom: none !important; /* Hapus border-bottom dari desktop */
-  }
-  .footer-toggle i {
-    transition: transform 0.3s ease;
-  }
-  .footer-toggle.active i {
-    transform: rotate(180deg);
-  }
-  .footer-content {
-    max-height: 0; /* Sembunyikan konten secara default */
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
-    padding-left: 1rem; /* Beri sedikit indentasi */
-  }
-  .footer-content > * {
-    padding-bottom: 1rem;
-  }
-  .info-rw {
-    justify-content: center;
-  }
-  .footer-column h4 {
-    border-bottom: none;
-  }
-  .kontak-item,
-  .sosmed {
-    justify-content: center;
-  }
 
-  /* === [PERBAIKAN FINAL] CSS UNTUK TAMPILAN MOBILE DETAIL RT === */
+  /* === [DIGANTI] CSS UNTUK TAMPILAN MOBILE DETAIL RT === */
   .rt-detail-wrapper {
-    grid-template-columns: 1fr; /* Hanya 1 kolom */
+    flex-direction: column; /* Mengubah layout jadi atas-bawah */
   }
   .rt-sidebar {
-    grid-row: 1;
-    writing-mode: horizontal-tb !important;
-    transform: none !important;
+    width: 100%;
     height: auto;
     padding: 1rem;
   }
   .rt-sidebar h1 {
     font-size: 2rem;
-    white-space: normal;
-    writing-mode: horizontal-tb !important;
-    transform: none !important;
+    writing-mode: horizontal-tb; /* Teks jadi normal */
+    transform: none;
   }
   .rt-main-content {
-    grid-row: 2;
     padding: 1.5rem 1rem;
   }
-
-  /* Perbaikan untuk Kartu Statistik */
-  .rt-stats-grid {
-    grid-template-columns: 1fr 1fr; /* Paksa jadi 2 kolom */
+  .rt-stats-container {
+    grid-template-columns: 1fr 1fr; /* Statistik jadi 2 kolom */
     gap: 0.8rem;
   }
-  .stat-card-small {
-    padding: 0.8rem; /* Kurangi padding kartu */
-  }
-  .stat-card-small .stat-text p {
-    font-size: 0.8rem; /* Kecilkan teks label */
-  }
-  .stat-card-small .stat-text span {
-    font-size: 1.5rem; /* Kecilkan angka statistik */
-  }
-  .stat-card-small i {
-    font-size: 1.5rem; /* Kecilkan ikon */
-  }
 
-  /* Mobile: Sembunyikan Bagan Hirarki, Tampilkan Swiper */
-  .org-chart-desktop {
-    display: none;
-  }
-  .org-chart-mobile {
-    display: block;
-  }
-
-  .swiper-container {
-    width: 100%;
-    padding-bottom: 40px;
-  }
-  .swiper-slide {
-    width: 180px; /* Lebar kartu di swiper */
-    height: auto;
-  }
-  .swiper-pagination-bullet-active {
-    background-color: var(--primary-green) !important;
-  }
-
-  /* === [PERBAIKAN] CSS RESPONSIF UNTUK KELOLA STRUKTUR RT === */
+  /* CSS RESPONSIF UNTUK ADMIN */
   .manage-main .form-group-inline {
     flex-direction: column;
     gap: 1rem;
@@ -1953,17 +1734,7 @@ footer {
   .bottom-nav {
     display: none;
   }
-  /* Sembunyikan layout mobile di desktop */
   #org-chart-wrapper .org-container {
     display: none;
   }
-}
-.rt-detail-wrapper {
-  width: 100%;
-  max-width: none; /* Hapus batasan lebar apapun */
-}
-
-/* Ini untuk memastikan konten di dalamnya juga ikut melebar */
-.rt-main-content {
-  width: auto; /* Biarkan lebar konten menyesuaikan sisa ruang */
 }
