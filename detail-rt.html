@@ -123,23 +123,24 @@
     <footer>
       <div class="footer-container">
         <div class="footer-grid">
-          <!-- Kolom 1: Tentang RW -->
+          <!-- Kolom 1: Informasi RW -->
           <div class="footer-column">
-            <div class="footer-toggle">
-              <h4>Pemerintahan RW 16</h4>
+            <!-- [DIUBAH] Judul sekarang punya class dan ikon -->
+            <h4 class="footer-toggle">
+              Pemerintahan RW 16
               <i class="fas fa-chevron-down"></i>
-            </div>
+            </h4>
+            <!-- [DIUBAH] Konten dibungkus dalam div -->
             <div class="footer-content">
               <div class="info-rw">
                 <img src="images/logo16.png" alt="Logo RW 16" />
-                <p>
-                  Website Resmi<br />
-                  <strong>RW 16 Kel. Cibabat</strong><br />
-                  Kota Cimahi
-                </p>
+                <div>
+                  <strong>RW 16 Kelurahan Cibabat</strong>
+                  <p>Kecamatan Cimahi Utara, Kota Cimahi, Jawa Barat</p>
+                </div>
               </div>
               <p class="alamat-footer">
-                Alamat sekretariat RW 16, Cibabat, Kec. Cimahi Utara, Kota
+                Jl. Pesantren No. KM.2, RW 16, Cibabat, Kec. Cimahi Utara, Kota
                 Cimahi, Jawa Barat 40513
               </p>
             </div>
@@ -147,17 +148,25 @@
 
           <!-- Kolom 2: Hubungi Kami -->
           <div class="footer-column">
-            <div class="footer-toggle">
-              <h4>Hubungi Kami</h4>
+            <h4 class="footer-toggle">
+              Hubungi Kami
               <i class="fas fa-chevron-down"></i>
-            </div>
+            </h4>
             <div class="footer-content">
               <ul class="kontak-list">
-                <li class="kontak-item">
-                  <i class="fas fa-phone"></i> +62 812-3456-7890
+                <li>
+                  <a href="tel:+6281234567890" class="kontak-item"
+                    ><i class="fas fa-phone"></i
+                    ><span>+62 812-3456-7890</span></a
+                  >
                 </li>
-                <li class="kontak-item">
-                  <i class="fas fa-envelope"></i> sekretariat@rw16cibabat.id
+                <li>
+                  <a
+                    href="mailto:sekretariat@rw16cibabat.id"
+                    class="kontak-item"
+                    ><i class="fas fa-envelope"></i
+                    ><span>sekretariat@rw16cibabat.id</span></a
+                  >
                 </li>
               </ul>
               <div class="sosmed">
@@ -174,38 +183,50 @@
             </div>
           </div>
 
-          <!-- Kolom 3: Tautan Penting -->
+          <!-- Kolom 3: Nomor Penting -->
           <div class="footer-column">
-            <div class="footer-toggle">
-              <h4>Nomor Telepon Penting</h4>
+            <h4 class="footer-toggle">
+              Nomor Telepon Penting
               <i class="fas fa-chevron-down"></i>
-            </div>
+            </h4>
             <div class="footer-content">
               <ul class="link-list">
-                <li><a href="tel:000000000">Ketua RW</a></li>
-                <li><a href="tel:000000000">Sekretaris</a></li>
-                <li><a href="tel:000000000">Yayan / Ambulan</a></li>
+                <li><a href="#">Ketua RW</a></li>
+                <li><a href="#">Sekretaris</a></li>
+                <li><a href="#">Yayan/Ambulan</a></li>
               </ul>
             </div>
           </div>
 
           <!-- Kolom 4: Jelajahi -->
           <div class="footer-column">
-            <div class="footer-toggle">
-              <h4>Jelajahi</h4>
+            <h4 class="footer-toggle">
+              Jelajahi
               <i class="fas fa-chevron-down"></i>
-            </div>
+            </h4>
             <div class="footer-content">
               <ul class="link-list">
-                <li><a href="#">Website Kota Cimahi</a></li>
-                <li><a href="#">Website Kel. Cibabat</a></li>
-                <li><a href="#">Cek DPT Online</a></li>
+                <li>
+                  <a href="https://www.cimahikota.go.id/" target="_blank"
+                    >Website Kota Cimahi</a
+                  >
+                </li>
+                <li>
+                  <a href="https://cibabat.cimahikota.go.id/" target="_blank"
+                    >Website Kel. Cibabat</a
+                  >
+                </li>
+                <li>
+                  <a href="https://cekdptonline.kpu.go.id/" target="_blank"
+                    >Cek DPT Online</a
+                  >
+                </li>
               </ul>
             </div>
           </div>
         </div>
         <div class="footer-bottom">
-          &copy; 2024 Hak Cipta Dilindungi | RW 16 Kelurahan Cibabat
+          <p>&copy; 2024 RW 16 Kel. Cibabat. All rights reserved.</p>
         </div>
       </div>
     </footer>
