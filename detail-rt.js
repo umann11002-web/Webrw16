@@ -23,23 +23,6 @@ function getRtIdFromUrl() {
   return params.get("id"); // Contoh: 'rt01'
 }
 
-// Fungsi bantuan untuk mengisi data ke kartu pengurus (desktop)
-function populateOrgCard(elementId, pengurusData) {
-  const card = document.getElementById(elementId);
-  if (card && pengurusData) {
-    card.innerHTML = `
-            <img src="${
-              pengurusData.fotoUrl ||
-              "https://placehold.co/100x100/eee/ccc?text=Foto"
-            }" alt="Foto ${pengurusData.jabatan}">
-            <h3>${pengurusData.nama}</h3>
-            <p>${pengurusData.jabatan}</p>
-        `;
-  } else if (card) {
-    card.style.display = "none"; // Sembunyikan jika tidak ada data
-  }
-}
-
 async function tampilkanDetailRT() {
   const rtId = getRtIdFromUrl();
   if (!rtId) {
@@ -47,7 +30,6 @@ async function tampilkanDetailRT() {
     return;
   }
 
-  // Mengubah 'rt01' menjadi 'RT 01' untuk judul
   const rtNumber = rtId.replace("rt", "RT ").toUpperCase();
   document.title = `Struktur ${rtNumber} - RW 16`;
   document.getElementById("rt-sidebar-title").textContent = rtNumber;
@@ -59,72 +41,43 @@ async function tampilkanDetailRT() {
     if (docSnap.exists()) {
       const data = docSnap.data();
 
-      // 1. Tampilkan semua data statistik dari dokumen (versi manual)
       const wargaTetap = data.wargaTetap || 0;
       const wargaSementara = data.wargaSementara || 0;
+
       document.getElementById("stat-tetap").textContent = wargaTetap;
       document.getElementById("stat-sementara").textContent = wargaSementara;
-      document.getElementById("stat-laki").textContent =
-        data.jumlahLakiLaki || 0;
-      document.getElementById("stat-perempuan").textContent =
-        data.jumlahPerempuan || 0;
-      document.getElementById("stat-kk").textContent = data.jumlahKK || 0;
-      document.getElementById("stat-total").textContent =
+      document.getElementById("stat-jumlah").textContent =
         wargaTetap + wargaSementara;
 
-      // 2. Tampilkan data pengurus
       const pengurus = data.pengurus || [];
-
-      // Mengisi Bagan Desktop
-      const ketua = pengurus.find((p) =>
-        p.jabatan.toLowerCase().includes("ketua")
-      );
-      const sekretaris = pengurus.find((p) =>
-        p.jabatan.toLowerCase().includes("sekretaris")
-      );
-      const bendahara = pengurus.find((p) =>
-        p.jabatan.toLowerCase().includes("bendahara")
+      const pengurusGridContainer = document.getElementById(
+        "pengurus-grid-container"
       );
 
-      populateOrgCard("ketua-rt-desktop", ketua);
-      populateOrgCard("sekretaris-rt-desktop", sekretaris);
-      populateOrgCard("bendahara-rt-desktop", bendahara);
-
-      // Mengisi Swiper Mobile
-      const swiperWrapper = document.getElementById("pengurus-swiper-wrapper");
-      if (swiperWrapper) {
-        let slidesHTML = "";
+      if (pengurus.length > 0) {
+        pengurusGridContainer.innerHTML = ""; // Kosongkan dulu
+        let cardsHTML = "";
         pengurus.forEach((p) => {
-          slidesHTML += `
-                        <div class="swiper-slide">
-                            <div class="org-card">
-                                <img src="${
-                                  p.fotoUrl ||
-                                  "https://placehold.co/100x100/eee/ccc?text=Foto"
-                                }" alt="Foto ${p.jabatan}">
-                                <h3>${p.nama}</h3>
-                                <p>${p.jabatan}</p>
-                            </div>
-                        </div>
-                    `;
+          cardsHTML += `
+                <div class="org-card">
+                    <img src="${
+                      p.fotoUrl ||
+                      "https://placehold.co/100x100/eee/ccc?text=Foto"
+                    }" alt="Foto ${p.jabatan}">
+                    <h3>${p.nama}</h3>
+                    <p>${p.jabatan}</p>
+                </div>
+            `;
         });
-        swiperWrapper.innerHTML = slidesHTML;
-
-        // Inisialisasi Swiper
-        new Swiper(".swiper-container", {
-          slidesPerView: "auto", // Ini kunci agar lebar CSS dipakai
-          spaceBetween: 15, // Jarak 15px antar kartu
-          centeredSlides: true, // Kartu aktif akan di tengah (opsional, tapi bagus)
-          loop: false, // Jangan mengulang slide
-          pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-          },
-        });
+        pengurusGridContainer.innerHTML = cardsHTML;
+      } else {
+        pengurusGridContainer.innerHTML =
+          "<p>Data pengurus belum tersedia.</p>";
       }
     } else {
       console.log(`Dokumen untuk ${rtId} tidak ditemukan.`);
-      // Anda bisa menambahkan pesan error di halaman di sini jika mau
+      document.getElementById("pengurus-grid-container").innerHTML =
+        "<p>Data RT tidak ditemukan.</p>";
     }
   } catch (error) {
     console.error("Gagal memuat data RT: ", error);
