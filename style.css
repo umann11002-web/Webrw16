@@ -138,7 +138,6 @@ main,
 .berita-main {
   padding: 1.5rem 5%;
 }
-/* [BARU] Gaya untuk Sambutan Ketua RW */
 .sambutan-ketua {
   background-color: #fff;
   padding: 2.5rem;
@@ -171,10 +170,10 @@ main,
 }
 .sambutan-teks p:last-of-type {
   line-height: 1.8;
-  overflow-wrap: break-word; /* Tetap pakai ini untuk keamanan */
-  max-height: 100px; /* Batasi tinggi paragraf, misal 100px */
-  overflow-y: auto; /* Tampilkan scrollbar jika teksnya lebih panjang */
-  text-align: left; /* Wajib agar scrollbar tidak aneh */
+  overflow-wrap: break-word;
+  max-height: 100px;
+  overflow-y: auto;
+  text-align: left;
 }
 .informasi {
   margin-bottom: 2rem;
@@ -884,10 +883,10 @@ th select {
 }
 .form-group-inline {
   display: flex;
-  gap: 1rem; /* Jarak antar input */
+  gap: 1rem;
 }
 .form-group-inline .form-group {
-  flex: 1; /* Membuat kedua input memiliki lebar yang sama */
+  flex: 1;
 }
 .form-group label {
   display: block;
@@ -932,7 +931,7 @@ th select {
 
 .admin-card-content {
   padding: 1rem;
-  flex-grow: 1; /* Memastikan konten mengisi ruang yang tersedia */
+  flex-grow: 1;
 }
 
 .admin-card-date {
@@ -944,16 +943,16 @@ th select {
 .admin-card-title {
   font-weight: 600;
   line-height: 1.4;
-  margin: 0; /* Hapus margin default dari h3 */
+  margin: 0;
 }
 
 .admin-card-actions {
   padding: 0 1rem 1rem 1rem;
   display: flex;
-  justify-content: flex-end; /* Pindahkan tombol ke kanan */
+  justify-content: flex-end;
   gap: 0.5rem;
   border-top: 1px solid #eee;
-  margin-top: auto; /* Mendorong tombol ke bagian paling bawah kartu */
+  margin-top: auto;
 }
 .album-grid {
   display: grid;
@@ -1338,7 +1337,7 @@ footer {
 }
 
 /* ================================================= */
-/* === [DIGANTI] STYLE UNTUK HALAMAN DETAIL RT === */
+/* === [DIUBAH TOTAL] STYLE UNTUK HALAMAN DETAIL RT === */
 /* ================================================= */
 
 /* Layout Utama */
@@ -1346,8 +1345,6 @@ footer {
   display: flex;
   flex-direction: row;
 }
-
-/* Sidebar Merah di Kiri */
 .rt-sidebar {
   background-color: #c0392b;
   color: white;
@@ -1368,8 +1365,6 @@ footer {
   border: none;
   padding: 0;
 }
-
-/* Konten Utama di Kanan */
 .rt-main-content {
   padding: 2rem 4%;
   background-color: #f8f9fa;
@@ -1381,52 +1376,91 @@ footer {
   color: #333;
 }
 
-/* Kotak Statistik */
-.rt-stats-container {
+/* Grid Statistik Baru yang Berwarna */
+.rt-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1.5rem;
   margin-bottom: 3rem;
 }
-.stat-box {
+.stat-card-small {
   background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: var(--card-shadow);
-  text-align: center;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-left: 5px solid;
 }
-.stat-box p {
-  margin: 0 0 0.5rem 0;
+.stat-card-small i {
+  font-size: 1.8rem;
+  padding: 0.5rem;
+  color: white;
+  border-radius: 8px;
+}
+.stat-card-small .stat-text p {
+  margin: 0 0 4px 0;
+  font-size: 0.9rem;
   color: var(--light-text);
   font-weight: 500;
 }
-.stat-box span {
-  font-size: 2.5rem;
+.stat-card-small .stat-text span {
+  font-size: 1.8rem;
   font-weight: 700;
+  color: var(--dark-text);
 }
-.stat-box.tetap span {
-  color: #b09a4a;
+.stat-card-small.tetap {
+  border-color: #b09a4a;
 }
-.stat-box.sementara span {
-  color: #8aab64;
+.stat-card-small.tetap i {
+  background-color: #b09a4a;
 }
-.stat-box.jumlah span {
-  color: #876a96;
+.stat-card-small.sementara {
+  border-color: #8aab64;
+}
+.stat-card-small.sementara i {
+  background-color: #8aab64;
+}
+.stat-card-small.laki {
+  border-color: #3b9bbf;
+}
+.stat-card-small.laki i {
+  background-color: #3b9bbf;
+}
+.stat-card-small.perempuan {
+  border-color: #a95b8d;
+}
+.stat-card-small.perempuan i {
+  background-color: #a95b8d;
+}
+.stat-card-small.kk {
+  border-color: #6c757d;
+}
+.stat-card-small.kk i {
+  background-color: #6c757d;
+}
+.stat-card-small.total {
+  border-color: #876a96;
+}
+.stat-card-small.total i {
+  background-color: #876a96;
 }
 
-.rt-org-chart {
-  text-align: center;
-}
 .rt-org-chart h2 {
   border-left: none;
   text-align: center;
   margin-bottom: 2rem;
 }
-/* Grid Pengurus yang dibuat oleh JS */
-.pengurus-grid {
-  display: grid;
+
+/* [BARU] Aturan untuk memisahkan tampilan Desktop dan Mobile */
+#pengurus-grid-desktop {
+  display: grid; /* Tampil sebagai grid di desktop */
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
+}
+#pengurus-slider-mobile {
+  display: none; /* Sembunyi di desktop */
 }
 
 /* #################################### */
@@ -1662,10 +1696,41 @@ footer {
     grid-template-columns: 1fr;
     gap: 0;
   }
+  .footer-column {
+    border-bottom: 1px solid #34495e;
+  }
+  .footer-column:last-child {
+    border-bottom: none;
+  }
+  .footer-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 1rem 0;
+  }
+  .footer-toggle h4 {
+    border-bottom: none;
+  }
+  .footer-toggle i {
+    transition: transform 0.3s ease;
+  }
+  .footer-toggle.active i {
+    transform: rotate(180deg);
+  }
+  .footer-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    padding-left: 1rem;
+  }
+  .footer-content > * {
+    padding-bottom: 1rem;
+  }
 
-  /* === [DIGANTI] CSS UNTUK TAMPILAN MOBILE DETAIL RT === */
+  /* === [DIUBAH] CSS UNTUK TAMPILAN MOBILE DETAIL RT === */
   .rt-detail-wrapper {
-    flex-direction: column; /* Mengubah layout jadi atas-bawah */
+    flex-direction: column;
   }
   .rt-sidebar {
     width: 100%;
@@ -1674,15 +1739,44 @@ footer {
   }
   .rt-sidebar h1 {
     font-size: 2rem;
-    writing-mode: horizontal-tb; /* Teks jadi normal */
+    writing-mode: horizontal-tb;
     transform: none;
   }
   .rt-main-content {
     padding: 1.5rem 1rem;
   }
-  .rt-stats-container {
-    grid-template-columns: 1fr 1fr; /* Statistik jadi 2 kolom */
+  .rt-stats-grid {
+    grid-template-columns: 1fr 1fr;
     gap: 0.8rem;
+  }
+  .stat-card-small {
+    padding: 0.8rem;
+  }
+  .stat-card-small .stat-text p {
+    font-size: 0.8rem;
+  }
+  .stat-card-small .stat-text span {
+    font-size: 1.5rem;
+  }
+  .stat-card-small i {
+    font-size: 1.5rem;
+  }
+
+  /* [BARU] Sembunyikan Grid Desktop, Tampilkan Slider Mobile */
+  #pengurus-grid-desktop {
+    display: none;
+  }
+  #pengurus-slider-mobile {
+    display: block;
+    width: 100%;
+    padding-bottom: 40px; /* Ruang untuk pagination */
+  }
+  .swiper-slide {
+    width: 200px; /* Lebar setiap kartu di slider */
+    height: auto;
+  }
+  .swiper-pagination-bullet-active {
+    background-color: var(--primary-green) !important;
   }
 
   /* CSS RESPONSIF UNTUK ADMIN */

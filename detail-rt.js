@@ -5,8 +5,6 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-// WARNING: It's recommended to use environment variables for Firebase config keys
-// to avoid exposing them publicly. For this example, we'll use the provided config.
 const firebaseConfig = {
   apiKey: "AIzaSyBD4ypi0bq71tJfDdyqgdLL3A_RSye9Q7I",
   authDomain: "rw16cibabat-dbf87.firebaseapp.com",
@@ -19,16 +17,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Fungsi untuk mendapatkan ID RT dari URL
 function getRtIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("id"); // Contoh: 'rt01'
+  return params.get("id");
 }
 
 async function tampilkanDetailRT() {
   const rtId = getRtIdFromUrl();
   if (!rtId) {
-    document.body.innerHTML = "<h1>ID RT tidak ditemukan di URL.</h1>";
+    document.body.innerHTML = "<h1>ID RT tidak ditemukan.</h1>";
     return;
   }
 
@@ -43,50 +40,69 @@ async function tampilkanDetailRT() {
     if (docSnap.exists()) {
       const data = docSnap.data();
 
-      // Mengisi data statistik
+      // Ambil semua data statistik dari Firebase
       const wargaTetap = data.wargaTetap || 0;
       const wargaSementara = data.wargaSementara || 0;
+      const jumlahLaki = data.jumlahLaki || 0;
+      const jumlahPerempuan = data.jumlahPerempuan || 0;
+      const totalKK = data.totalKK || 0;
+      const totalJiwa = wargaTetap + wargaSementara;
+
+      // Update elemen statistik di HTML
       document.getElementById("stat-tetap").textContent = wargaTetap;
       document.getElementById("stat-sementara").textContent = wargaSementara;
-      document.getElementById("stat-jumlah").textContent =
-        wargaTetap + wargaSementara;
+      document.getElementById("stat-laki").textContent = jumlahLaki;
+      document.getElementById("stat-perempuan").textContent = jumlahPerempuan;
+      document.getElementById("stat-kk").textContent = totalKK;
+      document.getElementById("stat-jumlah").textContent = totalJiwa;
 
-      // Mengisi data pengurus
       const pengurus = data.pengurus || [];
-      const pengurusGridContainer = document.getElementById(
-        "pengurus-grid-container"
-      );
+      const desktopContainer = document.getElementById("pengurus-grid-desktop");
+      const mobileWrapper = document.getElementById("pengurus-wrapper-mobile");
 
       if (pengurus.length > 0) {
-        pengurusGridContainer.innerHTML = ""; // Kosongkan placeholder
+        desktopContainer.innerHTML = "";
+        mobileWrapper.innerHTML = "";
+
         let cardsHTML = "";
+        let slidesHTML = "";
+
         pengurus.forEach((p) => {
-          cardsHTML += `
-            <div class="org-card">
-              <img src="${
-                p.fotoUrl || "https://placehold.co/100x100/eee/ccc?text=Foto"
-              }" alt="Foto ${p.jabatan}">
-              <h3>${p.nama}</h3>
-              <p>${p.jabatan}</p>
-            </div>
+          const cardContent = `
+            <img src="${
+              p.fotoUrl || "https://placehold.co/100x100/eee/ccc?text=Foto"
+            }" alt="Foto ${p.jabatan}">
+            <h3>${p.nama}</h3>
+            <p>${p.jabatan}</p>
           `;
+
+          cardsHTML += `<div class="org-card">${cardContent}</div>`;
+          slidesHTML += `<div class="swiper-slide"><div class="org-card">${cardContent}</div></div>`;
         });
-        pengurusGridContainer.innerHTML = cardsHTML;
+
+        desktopContainer.innerHTML = cardsHTML;
+        mobileWrapper.innerHTML = slidesHTML;
+
+        // Inisialisasi Swiper Slider setelah data dimuat
+        new Swiper("#pengurus-slider-mobile", {
+          slidesPerView: "auto",
+          spaceBetween: 15,
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+        });
       } else {
-        pengurusGridContainer.innerHTML =
-          "<p>Data pengurus untuk RT ini belum tersedia.</p>";
+        desktopContainer.innerHTML = "<p>Data pengurus belum tersedia.</p>";
       }
     } else {
       console.log(`Dokumen untuk ${rtId} tidak ditemukan.`);
-      document.getElementById("pengurus-grid-container").innerHTML =
-        "<p>Data untuk RT ini tidak ditemukan.</p>";
+      document.getElementById("pengurus-grid-desktop").innerHTML =
+        "<p>Data RT tidak ditemukan.</p>";
     }
   } catch (error) {
-    console.error("Gagal memuat data RT dari Firebase: ", error);
-    pengurusGridContainer.innerHTML =
-      "<p>Terjadi kesalahan saat memuat data.</p>";
+    console.error("Gagal memuat data RT: ", error);
   }
 }
 
-// Menjalankan fungsi setelah halaman selesai dimuat
 document.addEventListener("DOMContentLoaded", tampilkanDetailRT);

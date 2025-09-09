@@ -4,12 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Struktur Pengurus RT - RW 16</title>
-    <!-- CSS Anda yang sudah diperbaiki -->
     <link rel="stylesheet" href="style.css" />
-    <!-- Font Awesome untuk Ikon -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <!-- [BARU] Link CSS untuk Swiper Slider -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
     />
   </head>
   <body>
@@ -34,7 +37,6 @@
         </div>
       </header>
 
-      <!-- Wrapper utama halaman detail RT -->
       <div class="rt-detail-wrapper">
         <aside class="rt-sidebar">
           <h1 id="rt-sidebar-title">RT ...</h1>
@@ -42,27 +44,54 @@
 
         <main class="rt-main-content">
           <a href="struktur-rt.html" class="back-link"
-            ><i class="fas fa-arrow-left"></i> Kembali ke Daftar RT</a
+            >&larr; Kembali ke pilihan RT</a
           >
 
-          <!-- KOTAK STATISTIK (SESUAI DENGAN JS ANDA) -->
-          <section class="rt-stats-container">
+          <!-- [DIUBAH] Grid Statistik Baru yang Lebih Berwarna -->
+          <section class="rt-stats-grid">
+            <!-- Kartu Warga Tetap -->
             <div class="stat-card-small tetap">
-              <i class="fas fa-users"></i>
+              <i class="fa-solid fa-users"></i>
               <div class="stat-text">
                 <p>Warga Tetap</p>
                 <span id="stat-tetap">...</span>
               </div>
             </div>
+            <!-- Kartu Warga Sementara -->
             <div class="stat-card-small sementara">
-              <i class="fas fa-user-clock"></i>
+              <i class="fa-solid fa-user-clock"></i>
               <div class="stat-text">
                 <p>Warga Sementara</p>
                 <span id="stat-sementara">...</span>
               </div>
             </div>
+            <!-- [BARU] Kartu Laki-laki -->
+            <div class="stat-card-small laki">
+              <i class="fa-solid fa-mars"></i>
+              <div class="stat-text">
+                <p>Laki-laki</p>
+                <span id="stat-laki">...</span>
+              </div>
+            </div>
+            <!-- [BARU] Kartu Perempuan -->
+            <div class="stat-card-small perempuan">
+              <i class="fa-solid fa-venus"></i>
+              <div class="stat-text">
+                <p>Perempuan</p>
+                <span id="stat-perempuan">...</span>
+              </div>
+            </div>
+            <!-- Kartu Total KK -->
+            <div class="stat-card-small kk">
+              <i class="fa-solid fa-house-user"></i>
+              <div class="stat-text">
+                <p>Total KK</p>
+                <span id="stat-kk">...</span>
+              </div>
+            </div>
+            <!-- Kartu Total Jiwa -->
             <div class="stat-card-small total">
-              <i class="fas fa-globe-asia"></i>
+              <i class="fa-solid fa-users-line"></i>
               <div class="stat-text">
                 <p>Total Jiwa</p>
                 <span id="stat-jumlah">...</span>
@@ -70,12 +99,21 @@
             </div>
           </section>
 
-          <!-- STRUKTUR ORGANISASI (SESUAI DENGAN JS ANDA) -->
           <section class="rt-org-chart">
             <h2>Struktur Organisasi RT</h2>
-            <!-- Kontainer ini akan diisi oleh detail-rt.js -->
-            <div class="pengurus-grid" id="pengurus-grid-container">
-              <p>Memuat struktur organisasi...</p>
+            <!-- [DIUBAH] Kontainer untuk Desktop (Grid) dan Mobile (Slider) -->
+            <div class="pengurus-container">
+              <!-- Untuk Desktop -->
+              <div class="pengurus-grid" id="pengurus-grid-desktop">
+                <p>Memuat struktur organisasi...</p>
+              </div>
+              <!-- Untuk Mobile (Swiper Slider) -->
+              <div class="swiper-container" id="pengurus-slider-mobile">
+                <div class="swiper-wrapper" id="pengurus-wrapper-mobile">
+                  <!-- Kartu akan diisi oleh JavaScript -->
+                </div>
+                <div class="swiper-pagination"></div>
+              </div>
             </div>
           </section>
         </main>
@@ -86,7 +124,9 @@
       <!-- Pastikan isi footer Anda lengkap di sini -->
     </footer>
 
+    <script src="script.js" type="module"></script>
+    <!-- [BARU] Link JavaScript untuk Swiper Slider -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="detail-rt.js" type="module"></script>
-    <script src="script.js"></script>
   </body>
 </html>
