@@ -9,10 +9,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
-    <!-- [BARU] Link CSS untuk Swiper Slider -->
+    <!-- Link untuk Swiper.js (PENTING untuk slider) -->
     <link
       rel="stylesheet"
-      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
   </head>
   <body>
@@ -47,70 +47,25 @@
             >&larr; Kembali ke pilihan RT</a
           >
 
-          <!-- [DIUBAH] Grid Statistik Baru yang Lebih Berwarna -->
-          <section class="rt-stats-grid">
-            <!-- Kartu Warga Tetap -->
-            <div class="stat-card-small tetap">
-              <i class="fa-solid fa-users"></i>
-              <div class="stat-text">
-                <p>Warga Tetap</p>
-                <span id="stat-tetap">...</span>
-              </div>
-            </div>
-            <!-- Kartu Warga Sementara -->
-            <div class="stat-card-small sementara">
-              <i class="fa-solid fa-user-clock"></i>
-              <div class="stat-text">
-                <p>Warga Sementara</p>
-                <span id="stat-sementara">...</span>
-              </div>
-            </div>
-            <!-- [BARU] Kartu Laki-laki -->
-            <div class="stat-card-small laki">
-              <i class="fa-solid fa-mars"></i>
-              <div class="stat-text">
-                <p>Laki-laki</p>
-                <span id="stat-laki">...</span>
-              </div>
-            </div>
-            <!-- [BARU] Kartu Perempuan -->
-            <div class="stat-card-small perempuan">
-              <i class="fa-solid fa-venus"></i>
-              <div class="stat-text">
-                <p>Perempuan</p>
-                <span id="stat-perempuan">...</span>
-              </div>
-            </div>
-            <!-- Kartu Total KK -->
-            <div class="stat-card-small kk">
-              <i class="fa-solid fa-house-user"></i>
-              <div class="stat-text">
-                <p>Total KK</p>
-                <span id="stat-kk">...</span>
-              </div>
-            </div>
-            <!-- Kartu Total Jiwa -->
-            <div class="stat-card-small total">
-              <i class="fa-solid fa-users-line"></i>
-              <div class="stat-text">
-                <p>Total Jiwa</p>
-                <span id="stat-jumlah">...</span>
-              </div>
-            </div>
+          <!-- [DIUBAH] Kontainer Statistik Baru -->
+          <section class="rt-stats-grid" id="rt-stats-container">
+            <!-- Data statistik akan dimuat oleh JavaScript di sini -->
+            <p>Memuat data statistik...</p>
           </section>
 
           <section class="rt-org-chart">
             <h2>Struktur Organisasi RT</h2>
-            <!-- [DIUBAH] Kontainer untuk Desktop (Grid) dan Mobile (Slider) -->
-            <div class="pengurus-container">
-              <!-- Untuk Desktop -->
-              <div class="pengurus-grid" id="pengurus-grid-desktop">
-                <p>Memuat struktur organisasi...</p>
-              </div>
-              <!-- Untuk Mobile (Swiper Slider) -->
-              <div class="swiper-container" id="pengurus-slider-mobile">
-                <div class="swiper-wrapper" id="pengurus-wrapper-mobile">
-                  <!-- Kartu akan diisi oleh JavaScript -->
+
+            <!-- [BARU] Tampilan untuk Desktop (Grid) -->
+            <div class="pengurus-grid-desktop" id="pengurus-grid-desktop">
+              <!-- Kartu pengurus untuk desktop akan dimuat oleh JS -->
+            </div>
+
+            <!-- [BARU] Tampilan untuk Mobile (Slider) -->
+            <div class="pengurus-slider-mobile">
+              <div class="swiper mySwiperRT">
+                <div class="swiper-wrapper" id="pengurus-slider-mobile">
+                  <!-- Slide pengurus untuk mobile akan dimuat oleh JS -->
                 </div>
                 <div class="swiper-pagination"></div>
               </div>
@@ -231,9 +186,11 @@
       </div>
     </footer>
 
+    <!-- Script Swiper.js (PENTING untuk slider) -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Script utama dan script halaman -->
     <script src="script.js" type="module"></script>
-    <!-- [BARU] Link JavaScript untuk Swiper Slider -->
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="detail-rt.js" type="module"></script>
   </body>
 </html>

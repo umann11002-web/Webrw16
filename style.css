@@ -29,6 +29,7 @@ body {
   flex-direction: column;
   background-color: var(--bg-light);
   color: var(--dark-text);
+  overflow-x: hidden; /* Mencegah scroll horizontal global */
 }
 .page-wrapper {
   flex: 1 0 auto;
@@ -138,6 +139,7 @@ main,
 .berita-main {
   padding: 1.5rem 5%;
 }
+/* [BARU] Gaya untuk Sambutan Ketua RW */
 .sambutan-ketua {
   background-color: #fff;
   padding: 2.5rem;
@@ -170,10 +172,10 @@ main,
 }
 .sambutan-teks p:last-of-type {
   line-height: 1.8;
-  overflow-wrap: break-word;
-  max-height: 100px;
-  overflow-y: auto;
-  text-align: left;
+  overflow-wrap: break-word; /* Tetap pakai ini untuk keamanan */
+  max-height: 100px; /* Batasi tinggi paragraf, misal 100px */
+  overflow-y: auto; /* Tampilkan scrollbar jika teksnya lebih panjang */
+  text-align: left; /* Wajib agar scrollbar tidak aneh */
 }
 .informasi {
   margin-bottom: 2rem;
@@ -482,7 +484,7 @@ main,
 }
 
 /* ================================= */
-/* === BAGAN ORGANISASI RW (ASLI) === */
+/* === [DIROMBAK] BAGAN ORGANISASI (DESKTOP) === */
 /* ================================= */
 @media (min-width: 769px) {
   #org-chart-wrapper {
@@ -558,6 +560,9 @@ main,
   }
 }
 
+/* ================================= */
+/* === BAGAN ORGANISASI (MOBILE RW) === */
+/* ================================= */
 .org-container {
   text-align: center;
 }
@@ -619,6 +624,9 @@ main,
   text-align: center;
   transition: transform 0.2s, box-shadow 0.2s;
   height: 100%;
+  display: flex; /* Tambahan untuk alignment vertikal */
+  flex-direction: column; /* Tambahan */
+  justify-content: center; /* Tambahan */
 }
 .org-card:hover {
   transform: translateY(-5px);
@@ -629,8 +637,7 @@ main,
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  margin: 0 auto 1rem auto;
-  display: block;
+  margin: 0 auto 1rem auto; /* Pusatkan gambar */
   border: 4px solid #eee;
 }
 .org-card h3 {
@@ -883,10 +890,10 @@ th select {
 }
 .form-group-inline {
   display: flex;
-  gap: 1rem;
+  gap: 1rem; /* Jarak antar input */
 }
 .form-group-inline .form-group {
-  flex: 1;
+  flex: 1; /* Membuat kedua input memiliki lebar yang sama */
 }
 .form-group label {
   display: block;
@@ -931,7 +938,7 @@ th select {
 
 .admin-card-content {
   padding: 1rem;
-  flex-grow: 1;
+  flex-grow: 1; /* Memastikan konten mengisi ruang yang tersedia */
 }
 
 .admin-card-date {
@@ -943,16 +950,16 @@ th select {
 .admin-card-title {
   font-weight: 600;
   line-height: 1.4;
-  margin: 0;
+  margin: 0; /* Hapus margin default dari h3 */
 }
 
 .admin-card-actions {
   padding: 0 1rem 1rem 1rem;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end; /* Pindahkan tombol ke kanan */
   gap: 0.5rem;
   border-top: 1px solid #eee;
-  margin-top: auto;
+  margin-top: auto; /* Mendorong tombol ke bagian paling bawah kartu */
 }
 .album-grid {
   display: grid;
@@ -1266,9 +1273,14 @@ footer {
   margin-bottom: 1rem;
   position: relative;
   padding-bottom: 0.5rem;
+}
+
+/* Penyesuaian untuk border di desktop */
+.footer-column > h4:not(.footer-toggle) {
   border-bottom: 2px solid var(--primary-green);
   display: inline-block;
 }
+
 .info-rw {
   display: flex;
   align-items: center;
@@ -1337,7 +1349,7 @@ footer {
 }
 
 /* ================================================= */
-/* === [DIUBAH TOTAL] STYLE UNTUK HALAMAN DETAIL RT === */
+/* === [REVISI] STYLE UNTUK HALAMAN DETAIL RT === */
 /* ================================================= */
 
 /* Layout Utama */
@@ -1352,8 +1364,8 @@ footer {
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  width: 120px;
   flex-shrink: 0;
+  width: 120px;
 }
 .rt-sidebar h1 {
   font-size: 3rem;
@@ -1361,9 +1373,7 @@ footer {
   transform: rotate(180deg);
   white-space: nowrap;
   margin: 0;
-  line-height: 1;
   border: none;
-  padding: 0;
 }
 .rt-main-content {
   padding: 2rem 4%;
@@ -1376,11 +1386,11 @@ footer {
   color: #333;
 }
 
-/* Grid Statistik Baru yang Berwarna */
+/* [BARU] Grid Statistik Berwarna */
 .rt-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
   margin-bottom: 3rem;
 }
 .stat-card-small {
@@ -1410,6 +1420,8 @@ footer {
   font-weight: 700;
   color: var(--dark-text);
 }
+
+/* Variasi Warna */
 .stat-card-small.tetap {
   border-color: #b09a4a;
 }
@@ -1447,24 +1459,26 @@ footer {
   background-color: #876a96;
 }
 
+/* Struktur Organisasi RT */
 .rt-org-chart h2 {
   border-left: none;
   text-align: center;
   margin-bottom: 2rem;
 }
-
-/* [BARU] Aturan untuk memisahkan tampilan Desktop dan Mobile */
-#pengurus-grid-desktop {
-  display: grid; /* Tampil sebagai grid di desktop */
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+.pengurus-grid-desktop {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
+  justify-content: center;
 }
-#pengurus-slider-mobile {
-  display: none; /* Sembunyi di desktop */
+
+/* Sembunyikan Slider di Desktop */
+.pengurus-slider-mobile {
+  display: none;
 }
 
 /* #################################### */
-/* ### ATURAN RESPONSIF (SIHIR) ### */
+/* ###   ATURAN RESPONSIF (SIHIR)   ### */
 /* #################################### */
 @media (max-width: 768px) {
   /* Navigasi Publik Mobile */
@@ -1596,6 +1610,11 @@ footer {
     padding: 0.5rem;
   }
 
+  /* Responsif Bagan Organisasi RW */
+  #org-chart-wrapper .org-chart {
+    display: none; /* Sembunyikan bagan desktop di mobile */
+  }
+
   .bio-card {
     flex-direction: column;
     text-align: center;
@@ -1691,7 +1710,7 @@ footer {
     color: var(--primary-green);
   }
 
-  /* Footer Mobile */
+  /* Responsif Footer menjadi Accordion */
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 0;
@@ -1709,9 +1728,6 @@ footer {
     cursor: pointer;
     padding: 1rem 0;
   }
-  .footer-toggle h4 {
-    border-bottom: none;
-  }
   .footer-toggle i {
     transition: transform 0.3s ease;
   }
@@ -1727,8 +1743,18 @@ footer {
   .footer-content > * {
     padding-bottom: 1rem;
   }
+  .info-rw {
+    justify-content: center;
+  }
+  .footer-column h4 {
+    border-bottom: none;
+  }
+  .kontak-item,
+  .sosmed {
+    justify-content: center;
+  }
 
-  /* === [DIUBAH] CSS UNTUK TAMPILAN MOBILE DETAIL RT === */
+  /* === [REVISI FINAL] CSS UNTUK TAMPILAN MOBILE DETAIL RT === */
   .rt-detail-wrapper {
     flex-direction: column;
   }
@@ -1762,24 +1788,26 @@ footer {
     font-size: 1.5rem;
   }
 
-  /* [BARU] Sembunyikan Grid Desktop, Tampilkan Slider Mobile */
-  #pengurus-grid-desktop {
+  /* Tampilkan SLIDER, sembunyikan GRID */
+  .pengurus-grid-desktop {
     display: none;
   }
-  #pengurus-slider-mobile {
+  .pengurus-slider-mobile {
     display: block;
+  }
+  .swiper-container {
     width: 100%;
-    padding-bottom: 40px; /* Ruang untuk pagination */
+    padding-bottom: 40px;
   }
   .swiper-slide {
-    width: 200px; /* Lebar setiap kartu di slider */
+    width: 200px; /* Lebar kartu di swiper */
     height: auto;
   }
   .swiper-pagination-bullet-active {
     background-color: var(--primary-green) !important;
   }
 
-  /* CSS RESPONSIF UNTUK ADMIN */
+  /* === CSS RESPONSIF UNTUK KELOLA STRUKTUR RT (ADMIN) === */
   .manage-main .form-group-inline {
     flex-direction: column;
     gap: 1rem;
@@ -1828,7 +1856,12 @@ footer {
   .bottom-nav {
     display: none;
   }
+  /* Sembunyikan layout mobile di desktop */
   #org-chart-wrapper .org-container {
+    display: none;
+  }
+  /* Sembunyikan ikon dropdown di desktop */
+  .footer-toggle i {
     display: none;
   }
 }

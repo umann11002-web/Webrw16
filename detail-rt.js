@@ -17,9 +17,23 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// Fungsi untuk mendapatkan ID RT dari URL
 function getRtIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("id");
+  return params.get("id"); // Contoh: 'rt01'
+}
+
+// Fungsi untuk membuat kartu statistik
+function createStatCard(label, value, iconClass, colorClass) {
+  return `
+        <div class="stat-card-small ${colorClass}">
+            <i class="fas ${iconClass}"></i>
+            <div class="stat-text">
+                <p>${label}</p>
+                <span>${value}</span>
+            </div>
+        </div>
+    `;
 }
 
 async function tampilkanDetailRT() {
@@ -40,60 +54,91 @@ async function tampilkanDetailRT() {
     if (docSnap.exists()) {
       const data = docSnap.data();
 
-      // Ambil semua data statistik dari Firebase
+      // --- 1. MEMUAT DATA STATISTIK ---
+      const statsContainer = document.getElementById("rt-stats-container");
+      statsContainer.innerHTML = ""; // Kosongkan dulu
+
       const wargaTetap = data.wargaTetap || 0;
       const wargaSementara = data.wargaSementara || 0;
-      const jumlahLaki = data.jumlahLaki || 0;
-      const jumlahPerempuan = data.jumlahPerempuan || 0;
+      const lakiLaki = data.lakiLaki || 0;
+      const perempuan = data.perempuan || 0;
       const totalKK = data.totalKK || 0;
-      const totalJiwa = wargaTetap + wargaSementara;
+      const totalJiwa = lakiLaki + perempuan;
 
-      // Update elemen statistik di HTML
-      document.getElementById("stat-tetap").textContent = wargaTetap;
-      document.getElementById("stat-sementara").textContent = wargaSementara;
-      document.getElementById("stat-laki").textContent = jumlahLaki;
-      document.getElementById("stat-perempuan").textContent = jumlahPerempuan;
-      document.getElementById("stat-kk").textContent = totalKK;
-      document.getElementById("stat-jumlah").textContent = totalJiwa;
+      statsContainer.innerHTML += createStatCard(
+        "Warga Tetap",
+        wargaTetap,
+        "fa-user-check",
+        "tetap"
+      );
+      statsContainer.innerHTML += createStatCard(
+        "Warga Sementara",
+        wargaSementara,
+        "fa-user-clock",
+        "sementara"
+      );
+      statsContainer.innerHTML += createStatCard(
+        "Laki-laki",
+        lakiLaki,
+        "fa-mars",
+        "laki"
+      );
+      statsContainer.innerHTML += createStatCard(
+        "Perempuan",
+        perempuan,
+        "fa-venus",
+        "perempuan"
+      );
+      statsContainer.innerHTML += createStatCard(
+        "Total KK",
+        totalKK,
+        "fa-house-user",
+        "kk"
+      );
+      statsContainer.innerHTML += createStatCard(
+        "Total Jiwa",
+        totalJiwa,
+        "fa-users",
+        "total"
+      );
 
+      // --- 2. MEMUAT STRUKTUR ORGANISASI ---
       const pengurus = data.pengurus || [];
       const desktopContainer = document.getElementById("pengurus-grid-desktop");
-      const mobileWrapper = document.getElementById("pengurus-wrapper-mobile");
+      const mobileContainer = document.getElementById("pengurus-slider-mobile");
 
       if (pengurus.length > 0) {
         desktopContainer.innerHTML = "";
-        mobileWrapper.innerHTML = "";
-
-        let cardsHTML = "";
-        let slidesHTML = "";
+        mobileContainer.innerHTML = "";
 
         pengurus.forEach((p) => {
-          const cardContent = `
-            <img src="${
-              p.fotoUrl || "https://placehold.co/100x100/eee/ccc?text=Foto"
-            }" alt="Foto ${p.jabatan}">
-            <h3>${p.nama}</h3>
-            <p>${p.jabatan}</p>
+          const fotoUrl =
+            p.fotoUrl || "https://placehold.co/100x100/eee/ccc?text=Foto";
+          // Buat kartu untuk Desktop
+          desktopContainer.innerHTML += `
+            <div class="org-card">
+              <img src="${fotoUrl}" alt="Foto ${p.jabatan}">
+              <h3>${p.nama}</h3>
+              <p>${p.jabatan}</p>
+            </div>
           `;
-
-          cardsHTML += `<div class="org-card">${cardContent}</div>`;
-          slidesHTML += `<div class="swiper-slide"><div class="org-card">${cardContent}</div></div>`;
+          // Buat kartu untuk Mobile Slider
+          mobileContainer.innerHTML += `
+            <div class="swiper-slide">
+              <div class="org-card">
+                <img src="${fotoUrl}" alt="Foto ${p.jabatan}">
+                <h3>${p.nama}</h3>
+                <p>${p.jabatan}</p>
+              </div>
+            </div>
+          `;
         });
 
-        desktopContainer.innerHTML = cardsHTML;
-        mobileWrapper.innerHTML = slidesHTML;
-
-        // Inisialisasi Swiper Slider setelah data dimuat
-        new Swiper("#pengurus-slider-mobile", {
-          slidesPerView: "auto",
-          spaceBetween: 15,
-          pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-          },
-        });
+        // --- 3. INISIALISASI SLIDER SETELAH KARTU DIBUAT ---
+        initializeSwiperRT();
       } else {
         desktopContainer.innerHTML = "<p>Data pengurus belum tersedia.</p>";
+        mobileContainer.innerHTML = "<p>Data pengurus belum tersedia.</p>";
       }
     } else {
       console.log(`Dokumen untuk ${rtId} tidak ditemukan.`);
@@ -103,6 +148,20 @@ async function tampilkanDetailRT() {
   } catch (error) {
     console.error("Gagal memuat data RT: ", error);
   }
+}
+
+// Fungsi untuk inisialisasi Swiper di halaman detail RT
+function initializeSwiperRT() {
+  const swiper = new Swiper(".mySwiperRT", {
+    slidesPerView: "auto",
+    spaceBetween: 15,
+    centeredSlides: true,
+    loop: true,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+  });
 }
 
 document.addEventListener("DOMContentLoaded", tampilkanDetailRT);
