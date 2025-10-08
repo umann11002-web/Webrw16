@@ -127,7 +127,7 @@ suratForm.addEventListener("submit", async (e) => {
     formData.append("timestamp", uploadData.timestamp);
     formData.append("signature", uploadData.signature);
     formData.append("folder", uploadData.folder);
-    formData.append("upload_preset", uploadPreset);
+    formData.append("upload_preset", uploadData.upload_preset);
 
     submitButton.textContent = "Mengunggah file...";
 
