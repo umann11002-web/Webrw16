@@ -38,6 +38,19 @@ const submitButton = document.getElementById("submit-btn");
 let currentUser = null;
 let layananId = null;
 
+// Fungsi untuk upload file ke Cloudinary (sama seperti sebelumnya)
+const uploadFileToCloudinary = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "yd99selh");
+  const cloudName = "do1ba7gkn";
+  const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+  const response = await fetch(uploadUrl, { method: "POST", body: formData });
+  const data = await response.json();
+  if (data.error) throw new Error(data.error.message);
+  return data.secure_url;
+};
+
 // Fungsi untuk mendapatkan ID layanan dari URL
 function getLayananIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
@@ -127,7 +140,7 @@ suratForm.addEventListener("submit", async (e) => {
     formData.append("timestamp", uploadData.timestamp);
     formData.append("signature", uploadData.signature);
     formData.append("folder", uploadData.folder);
-    formData.append("upload_preset", uploadData.upload_preset);
+    formData.append("upload_preset", uploadPreset);
 
     submitButton.textContent = "Mengunggah file...";
 
