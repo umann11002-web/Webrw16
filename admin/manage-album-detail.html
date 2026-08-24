@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelola Detail Album - Admin</title>
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header class="admin-nav">
+      <div class="nav-title">
+        <strong>RW 16 Admin Panel</strong>
+      </div>
+      <button class="hamburger-btn" id="admin-hamburger-btn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-links" id="admin-nav-links">
+        <a href="admin.html">Dashboard</a>
+        <div class="dropdown">
+          <a href="#" class="dropdown-toggle"
+            >Kelola Data <i class="fas fa-chevron-down"></i
+          ></a>
+          <div class="dropdown-menu">
+            <a href="manage-layanan.html">Layanan</a>
+            <a href="manage-galeri.html">Galeri</a>
+            <a href="manage-penduduk.html">Statistik</a>
+            <a href="manage-berita.html">Berita</a>
+            <a href="manage-struktur.html">Struktur RW</a>
+            <a href="manage-struktur-rt.html">Struktur RT</a>
+          </div>
+        </div>
+        <a href="#" id="admin-logout-btn" class="logout-btn">Logout</a>
+      </div>
+    </header>
+
+    <main class="manage-main">
+      <a href="manage-galeri.html" class="back-link"
+        ><i class="fas fa-arrow-left"></i> Kembali ke Daftar Album</a
+      >
+      <h1 id="detail-album-title">Memuat nama album...</h1>
+      <p>Di sini Anda dapat menambah atau menghapus foto di dalam album ini.</p>
+
+      <!-- Form untuk menambah foto baru -->
+      <div class="card">
+        <h2>Tambah Foto Baru ke Album Ini</h2>
+        <form id="add-photos-form">
+          <div class="form-group">
+            <label for="photo-files-input"
+              >Pilih File Gambar (Bisa lebih dari satu)</label
+            >
+            <input
+              type="file"
+              id="photo-files-input"
+              accept="image/*"
+              multiple
+              required
+            />
+          </div>
+          <div id="preview-container"></div>
+          <button type="submit" class="submit-btn" id="upload-photos-btn">
+            Unggah Foto
+          </button>
+          <p id="upload-progress"></p>
+        </form>
+      </div>
+
+      <!-- Grid untuk menampilkan foto yang sudah ada -->
+      <h2>Foto di Album Ini</h2>
+      <div id="photo-grid" class="photo-grid">
+        <p>Memuat foto...</p>
+      </div>
+    </main>
+
+    <script src="../js/manage-album-detail.js" type="module"></script>
+    <script src="../js/admin-nav.js" type="module"></script>
+  </body>
+</html>

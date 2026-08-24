@@ -3,83 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Berita - RW 16</title>
-    <!-- Judul akan diupdate oleh JS -->
-    <link rel="stylesheet" href="style.css" />
+    <title>Profil Saya - RW 16</title>
+    <link rel="stylesheet" href="../style.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
-    <style>
-      /* Style khusus untuk halaman detail berita */
-      .berita-detail-main {
-        padding: 1.5rem 5%;
-      }
-      .berita-header img {
-        width: 100%;
-        max-height: 400px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-bottom: 1.5rem;
-      }
-      .berita-header h1 {
-        font-size: 2rem;
-        line-height: 1.3;
-        margin-bottom: 1rem;
-      }
-      .meta-info {
-        display: flex;
-        gap: 1.5rem;
-        color: var(--light-text);
-        font-size: 0.9rem;
-        margin-bottom: 2rem;
-        flex-wrap: wrap;
-      }
-      .meta-info span {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      .berita-content {
-        line-height: 1.8;
-        font-size: 1rem;
-      }
-      .berita-content p {
-        margin-bottom: 1.5rem;
-      }
-      /* Responsif untuk mobile */
-      @media (max-width: 768px) {
-        .berita-header h1 {
-          font-size: 1.5rem;
-        }
-        .berita-detail-main {
-          padding: 1rem;
-        }
-      }
-    </style>
   </head>
   <body>
     <div class="page-wrapper">
       <header>
         <div class="header-content">
           <div class="logo">
-            <img src="images/logo16.png" alt="Logo RW 16" />
+            <img src="../images/logo16.png" alt="Logo RW 16" />
             <span>RW 16 Kel. Cibabat</span>
           </div>
 
           <nav class="navbar">
-            <a href="index.html">Home</a>
-            <a href="berita.html">Berita</a>
-            <a href="layanan.html">Layanan</a>
-            <a href="informasi.html">Informasi</a>
+            <a href="../index.html">Home</a>
+            <a href="../berita.html">Berita</a>
+            <a href="../layanan.html">Layanan</a>
+            <a href="../informasi.html">Informasi</a>
             <div class="dropdown">
               <a href="#" class="dropdown-toggle" id="tentang-kami-toggle"
                 >Tentang Kami <i class="fas fa-chevron-down"></i
               ></a>
               <div class="dropdown-menu" id="tentang-kami-menu">
-                <a href="visi-misi.html">Visi & Misi</a>
-                <a href="struktur-organisasi.html">Struktur Organisasi</a>
-                <a href="galeri.html">Galeri</a>
+                <a href="../visi-misi.html">Visi & Misi</a>
+                <a href="../struktur-organisasi.html">Struktur Organisasi</a>
+                <a href="../galeri.html">Galeri</a>
               </div>
             </div>
             <div class="dropdown" id="profil-dropdown" style="display: none">
@@ -87,11 +39,12 @@
                 >Profil <i class="fas fa-chevron-down"></i
               ></a>
               <div class="dropdown-menu" id="profil-menu">
-                <a href="riwayat.html">Riwayat Saya</a>
+                <a href="../riwayat.html">Riwayat Saya</a>
                 <a href="#" id="logout-link-nav">Logout</a>
+                <a href="profil.html">Edit Profil</a>
               </div>
             </div>
-            <a href="admin/login.html" id="login-button-nav">Login</a>
+            <a href="login.html" id="login-button-nav">Login</a>
           </nav>
 
           <button class="hamburger" id="hamburger-menu">
@@ -101,38 +54,67 @@
       </header>
 
       <main class="main-content">
-        <div id="berita-detail-container" class="berita-detail-container">
-          <a href="berita.html" class="back-link"
-            ><i class="fas fa-arrow-left"></i> Kembali ke Daftar Berita</a
-          >
-
-          <!-- Konten Detail Berita -->
-          <article id="berita-detail-content">
-            <h1 id="detail-judul">Memuat judul...</h1>
-            <div class="detail-meta">
-              <span id="detail-tanggal-publish"></span>
+        <div class="profile-container">
+          <!-- Bagian Header Profil -->
+          <div class="profile-header">
+            <div class="profile-pic-container">
+              <img
+                src="https://placehold.co/120x120/EFEFEF/333?text=Foto"
+                alt="Foto Profil"
+                id="profile-pic"
+              />
+              <button class="edit-pic-btn" id="edit-pic-btn">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <!-- [BARU] Menu Opsi untuk Foto -->
+              <div class="edit-pic-menu" id="edit-pic-menu">
+                <!-- Opsi akan diisi oleh JavaScript -->
+              </div>
             </div>
-
-            <!-- [BARU] Kotak Info Jadwal Acara -->
-            <div
-              id="detail-info-jadwal"
-              class="info-jadwal-box"
-              style="display: none"
-            >
-              <!-- Diisi oleh JavaScript -->
+            <div class="profile-info">
+              <h2 id="profile-name">Memuat nama...</h2>
+              <p>
+                <i class="fas fa-envelope"></i>
+                <span id="profile-email">...</span>
+              </p>
+              <p>
+                <i class="fas fa-phone"></i> <span id="profile-nohp">...</span>
+              </p>
+              <a href="profil-edit.html" class="lengkapi-biodata-btn"
+                >Lengkapi Biodata</a
+              >
             </div>
+          </div>
 
-            <img
-              src="https://placehold.co/800x400/eee/ccc?text=Gambar"
-              alt="Gambar Berita"
-              id="detail-gambar"
-              class="detail-gambar-utama"
-            />
+          <!-- Input file yang disembunyikan -->
+          <input
+            type="file"
+            id="photo-upload-input"
+            style="display: none"
+            accept="image/*"
+          />
 
-            <div id="detail-isi" class="detail-isi-konten">
-              <p>Memuat isi berita...</p>
+          <!-- Bagian Riwayat Pengajuan -->
+          <div class="profile-history">
+            <h2>Riwayat Pengajuan Surat Anda</h2>
+            <p>Lacak status semua surat yang pernah Anda ajukan di sini.</p>
+            <div class="tabel-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tanggal</th>
+                    <th>Jenis Surat</th>
+                    <th>Keperluan</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="history-table-body">
+                  <!-- Riwayat akan diisi oleh JavaScript -->
+                </tbody>
+              </table>
             </div>
-          </article>
+          </div>
         </div>
       </main>
 
@@ -149,7 +131,7 @@
               <!-- [DIUBAH] Konten dibungkus dalam div -->
               <div class="footer-content">
                 <div class="info-rw">
-                  <img src="images/logo16.png" alt="Logo RW 16" />
+                  <img src="../images/logo16.png" alt="Logo RW 16" />
                   <div>
                     <strong>RW 16 Kelurahan Cibabat</strong>
                     <p>Kecamatan Cimahi Utara, Kota Cimahi, Jawa Barat</p>
@@ -249,19 +231,19 @@
     </div>
 
     <nav class="bottom-nav">
-      <a href="index.html" class="bottom-nav-item active">
+      <a href="../index.html" class="bottom-nav-item active">
         <i class="fas fa-home"></i>
         <span>Beranda</span>
       </a>
-      <a href="layanan.html" class="bottom-nav-item">
+      <a href="../layanan.html" class="bottom-nav-item">
         <i class="fas fa-file-alt"></i>
         <span>Layanan</span>
       </a>
-      <a href="berita.html" class="bottom-nav-item">
+      <a href="../berita.html" class="bottom-nav-item">
         <i class="fas fa-newspaper"></i>
         <span>Berita</span>
       </a>
-      <a href="admin/login.html" class="bottom-nav-item" id="bottom-nav-login">
+      <a href="login.html" class="bottom-nav-item" id="bottom-nav-login">
         <i class="fas fa-user"></i>
         <span>Login</span>
       </a>
@@ -276,7 +258,7 @@
       </a>
     </nav>
 
-    <script src="js/script.js" type="module"></script>
-    <script src="js/berita-detail.js" type="module"></script>
+    <script src="../js/script.js" type="module"></script>
+    <script src="../js/profil.js" type="module"></script>
   </body>
 </html>

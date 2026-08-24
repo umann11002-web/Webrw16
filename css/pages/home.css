@@ -1,0 +1,374 @@
+/* ================================= */
+/* === KONTEN HALAMAN PUBLIK (UMUM) === */
+/* ================================= */
+main,
+.info-main,
+.berita-main {
+  padding: 1.5rem 5%;
+}
+/* [BARU] Gaya untuk Hero Carousel */
+.hero-carousel-section {
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+}
+.heroSwiper {
+  width: 100%;
+  height: 400px;
+}
+.heroSwiper .swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+@media (max-width: 768px) {
+  .heroSwiper {
+    height: 250px;
+  }
+}
+
+/* [BARU] Gaya untuk Sambutan Ketua RW */
+.sambutan-ketua {
+  background-color: #fff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--card-shadow);
+}
+.sambutan-foto img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid var(--white);
+}
+.sambutan-teks h2 {
+  border-left: none;
+  padding-left: 0;
+  margin-bottom: 0.5rem;
+}
+.sambutan-teks h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+.sambutan-teks p:first-of-type {
+  color: var(--light-text);
+  margin-bottom: 1.5rem;
+}
+.sambutan-teks p:last-of-type {
+  line-height: 1.8;
+  overflow-wrap: break-word; /* Tetap pakai ini untuk keamanan */
+  max-height: 100px; /* Batasi tinggi paragraf, misal 100px */
+  overflow-y: auto; /* Tampilkan scrollbar jika teksnya lebih panjang */
+  text-align: left; /* Wajib agar scrollbar tidak aneh */
+}
+.informasi {
+  margin-bottom: 2rem;
+}
+.info-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.info-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  gap: 0.5rem;
+  transition: transform 0.2s;
+}
+.info-btn:hover {
+  transform: translateY(-5px);
+}
+.info-btn i {
+  font-size: 2rem;
+}
+.penduduk {
+  background-color: #007bff;
+}
+.bansos {
+  background-color: #dc3545;
+}
+.struktur-rw {
+  background-color: #ffc107;
+  color: var(--dark-text);
+}
+.struktur-rt {
+  background-color: #17a2b8;
+}
+.home-stats {
+  padding: 0 5%;
+  margin-bottom: 2rem;
+}
+.home-stats > p {
+  color: var(--light-text);
+  margin-bottom: 1.5rem;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+.stat-card {
+  background-color: #e74c3c;
+  color: white;
+  padding: 1.2rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s;
+}
+.stat-card:hover {
+  transform: scale(1.03);
+}
+.stat-card span {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+.stat-card p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: right;
+}
+.berita-utama {
+  margin-bottom: 2rem;
+}
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.section-header h2 {
+  margin-bottom: 0;
+}
+.lihat-semua-btn {
+  text-decoration: none;
+  color: var(--primary-green);
+  font-weight: 500;
+}
+.kartu-berita {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s;
+  text-decoration: none;
+  color: var(--dark-text);
+  display: flex;
+  flex-direction: column;
+}
+.kartu-berita:hover {
+  transform: translateY(-5px);
+}
+.kartu-berita img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.konten-kartu {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.konten-kartu h3 {
+  font-size: 1.1rem;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+.konten-kartu .cuplikan {
+  font-size: 0.9rem;
+  color: var(--light-text);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+.meta-info-kartu {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: var(--light-text);
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.8rem;
+}
+.meta-info-kartu span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.info-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+.summary-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.summary-card .icon {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: white;
+  flex-shrink: 0;
+}
+.summary-card .icon.total {
+  background-color: #ffc107;
+}
+.summary-card .icon.kk {
+  background-color: #17a2b8;
+}
+.summary-card .icon.wanita {
+  background-color: #dc3545;
+}
+.summary-card .icon.pria {
+  background-color: #007bff;
+}
+.summary-card .text h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+.summary-card .text p {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #343a40;
+}
+.chart-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+.chart-container h2 {
+  border-left: 5px solid var(--primary-green);
+  padding-left: 10px;
+  margin-top: 0;
+}
+
+.analisis-container {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1.5rem;
+}
+.kartu-analisis {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  line-height: 1.7;
+  font-size: 0.95rem;
+  border-left: 5px solid var(--primary-green);
+}
+.kartu-analisis strong {
+  color: var(--dark-text);
+}
+
+.berita-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.album-card-public {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.album-card-public:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+.album-card-public img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+.album-card-public .album-title-public {
+  padding: 1rem;
+  font-weight: 600;
+  background-color: white;
+}
+.photo-item {
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.photo-item img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.photo-item:hover img {
+  transform: scale(1.05);
+}
+#back-to-albums-btn {
+  margin-bottom: 1.5rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  background-color: #6c757d;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+.lightbox-content img {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 4px;
+}
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+}

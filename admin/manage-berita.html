@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelola Berita - Admin</title>
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header class="admin-nav">
+      <!-- Header Anda -->
+      <div class="nav-title"><strong>RW 16 Admin Panel</strong></div>
+      <button class="hamburger-btn" id="admin-hamburger-btn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-links" id="admin-nav-links">
+        <a href="admin.html">Dashboard</a>
+        <div class="dropdown">
+          <a href="#" class="dropdown-toggle"
+            >Kelola Data <i class="fas fa-chevron-down"></i
+          ></a>
+          <div class="dropdown-menu">
+            <a href="manage-layanan.html">Layanan</a>
+            <a href="manage-galeri.html">Galeri</a>
+            <a href="manage-penduduk.html">Statistik</a>
+            <a href="manage-berita.html">Berita</a>
+            <a href="manage-struktur.html">Struktur RW</a>
+            <a href="manage-struktur-rt.html">Struktur RT</a>
+          </div>
+        </div>
+        <a href="#" id="admin-logout-btn" class="logout-btn">Logout</a>
+      </div>
+    </header>
+
+    <main class="manage-main">
+      <h1>Kelola Berita</h1>
+
+      <!-- [DIROMBAK] Tabel diganti dengan Grid untuk Kartu Berita -->
+      <div id="berita-grid-container" class="admin-grid-container">
+        <!-- Data akan diisi oleh JavaScript -->
+        <p>Memuat berita...</p>
+      </div>
+      <p id="status-message" style="margin-top: 1rem; font-weight: 600"></p>
+    </main>
+
+    <button class="fab" id="add-news-btn" aria-label="Tambah Berita Baru">
+      <i class="fas fa-plus"></i>
+    </button>
+
+    <div class="modal-overlay" id="berita-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-title">Tambah Berita Baru</h2>
+          <button class="close-btn" id="close-modal-btn">&times;</button>
+        </div>
+        <form id="berita-form">
+          <input type="hidden" id="berita-id" />
+          <input type="hidden" id="current-gambarUrl" />
+
+          <div class="form-group">
+            <label for="berita-judul">Judul Berita</label>
+            <input type="text" id="berita-judul" required />
+          </div>
+          <div class="form-group">
+            <label for="berita-gambar">Gambar Utama</label>
+            <input type="file" id="berita-gambar" accept="image/*" />
+            <small
+              >Kosongkan jika tidak ingin mengubah gambar saat mengedit.</small
+            >
+            <div
+              id="upload-progress-container"
+              style="display: none; margin-top: 10px"
+            >
+              <progress id="upload-progress" value="0" max="100"></progress>
+              <span id="upload-status"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="berita-isi">Isi Berita</label>
+            <textarea id="berita-isi" required rows="10"></textarea>
+          </div>
+          <div class="form-group-inline">
+            <div class="form-group">
+              <label for="berita-tanggal-mulai"
+                >Tanggal Mulai Acara (Opsional)</label
+              >
+              <input type="date" id="berita-tanggal-mulai" />
+            </div>
+            <div class="form-group">
+              <label for="berita-tanggal-selesai"
+                >Tanggal Selesai Acara (Opsional)</label
+              >
+              <input type="date" id="berita-tanggal-selesai" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="submit-btn" id="save-berita-btn">
+              Publikasikan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="../js/manage-berita.js" type="module"></script>
+    <script src="../js/admin-nav.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelola Struktur RT - Admin</title>
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header class="admin-nav">
+      <!-- Header Anda -->
+      <div class="nav-title"><strong>RW 16 Admin Panel</strong></div>
+      <button class="hamburger-btn" id="admin-hamburger-btn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-links" id="admin-nav-links">
+        <a href="admin.html">Dashboard</a>
+        <div class="dropdown">
+          <a href="#" class="dropdown-toggle"
+            >Kelola Data <i class="fas fa-chevron-down"></i
+          ></a>
+          <div class="dropdown-menu">
+            <a href="manage-layanan.html">Layanan</a>
+            <a href="manage-galeri.html">Galeri</a>
+            <a href="manage-penduduk.html">Statistik</a>
+            <a href="manage-berita.html">Berita</a>
+            <a href="manage-struktur.html">Struktur RW</a>
+            <a href="manage-struktur-rt.html">Struktur RT</a>
+          </div>
+        </div>
+        <a href="#" id="admin-logout-btn" class="logout-btn">Logout</a>
+      </div>
+    </header>
+
+    <main class="manage-main">
+      <h1>Kelola Struktur Pengurus RT</h1>
+
+      <div class="card rt-selector">
+        <label for="rt-select">Pilih RT untuk Dikelola:</label>
+        <select id="rt-select">
+          <option value="">-- Pilih RT --</option>
+          <option value="rt01">RT 01</option>
+          <option value="rt02">RT 02</option>
+          <option value="rt03">RT 03</option>
+          <option value="rt04">RT 04</option>
+          <option value="rt05">RT 05</option>
+          <option value="rt06">RT 06</option>
+          <option value="rt07">RT 07</option>
+          <option value="rt08">RT 08</option>
+        </select>
+      </div>
+
+      <!-- Konten ini akan muncul setelah RT dipilih -->
+      <div id="management-content" style="display: none">
+        <!-- [BARU] Tambahkan blok ini untuk mengelola statistik -->
+        <div class="form-card" style="margin-top: 2rem">
+          <h3>Data Statistik RT</h3>
+          <div class="form-group-inline">
+            <div class="form-group">
+              <label for="warga-tetap-input">Warga Tetap</label>
+              <input type="number" id="warga-tetap-input" placeholder="0" />
+            </div>
+            <div class="form-group">
+              <label for="warga-sementara-input">Warga Sementara</label>
+              <input type="number" id="warga-sementara-input" placeholder="0" />
+            </div>
+            <div class="form-group">
+              <label for="laki-input">Laki-laki</label>
+              <input type="number" id="laki-input" placeholder="0" />
+            </div>
+            <div class="form-group">
+              <label for="perempuan-input">Perempuan</label>
+              <input type="number" id="perempuan-input" placeholder="0" />
+            </div>
+            <div class="form-group">
+              <label for="kk-input">Kepala Keluarga</label>
+              <input type="number" id="kk-input" placeholder="0" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="submit-btn" id="save-stats-btn">
+              Simpan Data Statistik
+            </button>
+          </div>
+        </div>
+        <!-- Akhir blok baru -->
+
+        <h3 style="margin-top: 2rem">Data Pengurus RT</h3>
+        <div class="main-actions">
+          <button class="submit-btn" id="add-new-btn">
+            <i class="fas fa-plus"></i> Tambah Pengurus Baru
+          </button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Foto</th>
+              <th>Nama</th>
+              <th>Jabatan</th>
+              <th class="actions-column">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="rt-pengurus-table-body">
+            <!-- Data diisi oleh JavaScript -->
+          </tbody>
+        </table>
+        <p id="status-message" style="margin-top: 1rem; font-weight: 600"></p>
+      </div>
+    </main>
+
+    <!-- Modal untuk Tambah/Edit Pengurus RT -->
+    <div class="modal-overlay" id="edit-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-title">Edit Detail</h2>
+          <button class="close-btn" id="close-modal-btn">&times;</button>
+        </div>
+        <form id="edit-form">
+          <input type="hidden" id="edit-index" />
+          <input type="hidden" id="current-fotoUrl" />
+
+          <div class="form-group">
+            <label for="edit-nama">Nama</label>
+            <input type="text" id="edit-nama" required />
+          </div>
+          <div class="form-group">
+            <label for="edit-jabatan">Jabatan</label>
+            <input type="text" id="edit-jabatan" required />
+          </div>
+
+          <div class="form-group">
+            <label for="edit-fotoFile">Ganti Foto (Opsional)</label>
+            <input type="file" id="edit-fotoFile" accept="image/*" />
+            <div
+              id="upload-progress-container"
+              style="display: none; margin-top: 10px"
+            >
+              <progress id="upload-progress" value="0" max="100"></progress>
+              <span id="upload-status"></span>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="submit-btn" id="save-button">
+              Simpan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="../js/manage-struktur-rt.js" type="module"></script>
+    <script src="../js/admin-nav.js" type="module"></script>
+  </body>
+</html>
