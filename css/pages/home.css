@@ -4,7 +4,7 @@
 main,
 .info-main,
 .berita-main {
-  padding: 1.5rem 5%;
+  padding: 3rem 5%;
 }
 /* [BARU] Gaya untuk Hero Carousel */
 .hero-carousel-section {
@@ -29,43 +29,70 @@ main,
 /* [BARU] Gaya untuk Sambutan Ketua RW */
 .sambutan-ketua {
   background-color: #fff;
-  padding: 2.5rem;
   border-radius: 12px;
   display: flex;
-  align-items: center;
-  gap: 2.5rem;
-  margin-bottom: 2rem;
+  align-items: stretch;
+  margin-bottom: 4rem;
   box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+.sambutan-foto {
+  flex: 0 0 40%;
+  min-height: 400px;
 }
 .sambutan-foto img {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border: 5px solid var(--white);
+  display: block;
+}
+.sambutan-teks {
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .sambutan-teks h2 {
   border-left: none;
   padding-left: 0;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
 }
 .sambutan-teks h3 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
 }
 .sambutan-teks p:first-of-type {
-  color: var(--light-text);
+  color: var(--primary-green);
+  font-weight: 600;
   margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
 }
 .sambutan-teks p:last-of-type {
   line-height: 1.8;
-  overflow-wrap: break-word; /* Tetap pakai ini untuk keamanan */
-  max-height: 100px; /* Batasi tinggi paragraf, misal 100px */
-  overflow-y: auto; /* Tampilkan scrollbar jika teksnya lebih panjang */
-  text-align: left; /* Wajib agar scrollbar tidak aneh */
+  color: var(--light-text);
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .sambutan-ketua {
+    flex-direction: column;
+  }
+  .sambutan-foto {
+    min-height: 300px;
+  }
+  .sambutan-teks {
+    padding: 2rem;
+  }
+  .sambutan-teks h2 {
+    font-size: 2rem;
+  }
 }
 .informasi {
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
 }
 .info-buttons {
   display: grid;
@@ -106,7 +133,7 @@ main,
 }
 .home-stats {
   padding: 0 5%;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
 }
 .home-stats > p {
   color: var(--light-text);
@@ -141,7 +168,7 @@ main,
   text-align: right;
 }
 .berita-utama {
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
 }
 .section-header {
   display: flex;
