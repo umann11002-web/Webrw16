@@ -322,6 +322,11 @@
   display: none;
 }
 
+/* Sembunyikan elemen mobile menu di desktop */
+.nav-close-btn {
+  display: none;
+}
+
 /* #################################### */
 /* ###   ATURAN RESPONSIF (SIHIR)   ### */
 /* #################################### */
@@ -397,6 +402,7 @@
   }
   
   .nav-close-btn {
+    display: block;
     position: absolute;
     top: 20px;
     right: 20px;
