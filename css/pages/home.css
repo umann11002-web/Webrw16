@@ -20,11 +20,6 @@ main,
   object-fit: cover;
   display: block;
 }
-@media (max-width: 768px) {
-  .heroSwiper {
-    height: 250px;
-  }
-}
 
 /* [BARU] Gaya untuk Sambutan Ketua RW */
 .sambutan-ketua {

@@ -101,8 +101,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const hamburgerMenu = document.getElementById("hamburger-menu");
   const navbar = document.querySelector(".navbar");
   if (hamburgerMenu) {
+    // Buat elemen overlay
+    const overlay = document.createElement("div");
+    overlay.className = "nav-overlay";
+    document.body.appendChild(overlay);
+
+    // Buat tombol close
+    const closeBtn = document.createElement("button");
+    closeBtn.className = "nav-close-btn";
+    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+    navbar.insertBefore(closeBtn, navbar.firstChild);
+
     hamburgerMenu.addEventListener("click", () => {
-      navbar.classList.toggle("active");
+      navbar.classList.add("active");
+      overlay.classList.add("active");
+    });
+
+    closeBtn.addEventListener("click", () => {
+      navbar.classList.remove("active");
+      overlay.classList.remove("active");
+    });
+
+    overlay.addEventListener("click", () => {
+      navbar.classList.remove("active");
+      overlay.classList.remove("active");
     });
   }
 
