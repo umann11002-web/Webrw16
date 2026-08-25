@@ -8,14 +8,11 @@ main,
 }
 /* [BARU] Gaya untuk Hero Carousel */
 .hero-carousel-section {
-  margin-bottom: 2rem;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--card-shadow);
+  margin-bottom: 0;
 }
 .heroSwiper {
   width: 100%;
-  height: 400px;
+  height: 100vh;
 }
 .heroSwiper .swiper-slide img {
   width: 100%;

@@ -178,3 +178,39 @@ footer {
   font-size: 0.9rem;
   color: #bdc3c7;
 }
+
+/* ================================= */
+/* === KHUSUS HALAMAN UTAMA (HOME) === */
+/* ================================= */
+.home-page header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: transparent;
+  box-shadow: none;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  padding: 1.5rem 5%;
+}
+
+.home-page header.scrolled {
+  position: fixed;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem 5%;
+}
+
+/* Warna teks putih saat transparan (sesuaikan dengan warna background banner) */
+.home-page header:not(.scrolled) .navbar a,
+.home-page header:not(.scrolled) .logo {
+  color: white;
+}
+.home-page header:not(.scrolled) .hamburger {
+  color: white;
+}
+
+/* Kembalikan warna gelap untuk dropdown menu walaupun header transparan */
+.home-page header:not(.scrolled) .dropdown-menu a {
+  color: var(--dark-text);
+}

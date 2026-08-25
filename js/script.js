@@ -75,6 +75,16 @@ document.addEventListener("DOMContentLoaded", () => {
         prevEl: ".heroSwiper .swiper-button-prev",
       },
     });
+
+    // --- Logika untuk Transparent Header on Scroll ---
+    const header = document.querySelector("header");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 50) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
+    });
   }
 
   // --- Logika untuk Statistik di Home ---
