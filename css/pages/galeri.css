@@ -106,9 +106,9 @@
   transition: all 0.2s;
 }
 .card-action-btn:hover {
-  background-color: var(--primary-green);
+  background-color: var(--primary-color);
   color: white;
-  border-color: var(--primary-green);
+  border-color: var(--primary-color);
 }
 
 .manage-main + .fab {
@@ -117,7 +117,7 @@
   right: 2rem;
   width: 56px;
   height: 56px;
-  background-color: var(--primary-green);
+  background-color: var(--primary-color);
   color: white;
   border-radius: 50%;
   border: none;

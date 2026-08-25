@@ -84,7 +84,7 @@
 .org-container h2 {
   text-align: center;
   border-left: none;
-  border-bottom: 2px solid var(--primary-green);
+  border-bottom: 2px solid var(--primary-color);
   display: inline-block;
   padding-bottom: 0.5rem;
   margin-bottom: 2rem;
@@ -204,7 +204,7 @@
 }
 .bio-info .jabatan {
   font-size: 1.1rem;
-  color: var(--primary-green);
+  color: var(--primary-color);
   font-weight: 600;
   margin-top: 0.2rem;
   margin-bottom: 1.5rem;
@@ -225,7 +225,7 @@
   color: var(--light-text);
 }
 .bio-kontak li i {
-  color: var(--primary-green);
+  color: var(--primary-color);
   width: 20px;
   text-align: center;
 }
@@ -235,6 +235,6 @@
   transition: color 0.3s;
 }
 .bio-kontak li a:hover {
-  color: var(--primary-green);
+  color: var(--primary-color);
   text-decoration: underline;
 }

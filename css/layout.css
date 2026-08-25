@@ -108,7 +108,7 @@ footer {
 
 /* Penyesuaian untuk border di desktop */
 .footer-column > h4:not(.footer-toggle) {
-  border-bottom: 2px solid var(--primary-green);
+  border-bottom: 2px solid var(--primary-color);
   display: inline-block;
 }
 
@@ -150,10 +150,10 @@ footer {
 }
 .kontak-item:hover,
 .link-list a:hover {
-  color: var(--primary-green);
+  color: var(--primary-color);
 }
 .kontak-item i {
-  color: var(--primary-green);
+  color: var(--primary-color);
   width: 20px;
   text-align: center;
 }
@@ -169,7 +169,7 @@ footer {
 }
 .sosmed a:hover {
   transform: scale(1.2);
-  color: var(--primary-green);
+  color: var(--primary-color);
 }
 .footer-bottom {
   border-top: 1px solid #34495e;
