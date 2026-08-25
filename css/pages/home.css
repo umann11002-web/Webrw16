@@ -145,7 +145,7 @@ main,
   gap: 1rem;
 }
 .stat-card {
-  background-color: #e74c3c;
+  background-color: var(--primary-color);
   color: white;
   padding: 1.2rem;
   border-radius: 8px;
@@ -395,4 +395,27 @@ main,
   color: white;
   font-size: 2rem;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .lightbox-close {
+    top: 10px;
+    right: 15px;
+  }
+}
+
+/* === RESPONSIVE LAYOUT (MOBILE) === */
+@media (max-width: 768px) {
+  .info-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .info-buttons {
+    grid-template-columns: 1fr;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }
