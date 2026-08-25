@@ -119,17 +119,17 @@ main,
   font-size: 2rem;
 }
 .penduduk {
-  background-color: #007bff;
+  background-color: var(--primary-green);
 }
 .bansos {
-  background-color: #dc3545;
+  background-color: var(--primary-green);
 }
 .struktur-rw {
-  background-color: #ffc107;
-  color: var(--dark-text);
+  background-color: var(--primary-green);
+  color: white;
 }
 .struktur-rt {
-  background-color: #17a2b8;
+  background-color: var(--primary-green);
 }
 .home-stats {
   padding: 0 5%;

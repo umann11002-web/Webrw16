@@ -223,12 +223,10 @@ async function loadHomeStats() {
       });
       const totalPenduduk = totalPria + totalWanita;
 
-      document.getElementById("home-total-penduduk").textContent =
-        totalPenduduk;
-      document.getElementById("home-kepala-keluarga").textContent =
-        data.kepalaKeluarga;
-      document.getElementById("home-jumlah-wanita").textContent = totalWanita;
-      document.getElementById("home-jumlah-pria").textContent = totalPria;
+      animateValue(document.getElementById("home-total-penduduk"), 0, totalPenduduk, 2000);
+      animateValue(document.getElementById("home-kepala-keluarga"), 0, parseInt(data.kepalaKeluarga) || 0, 2000);
+      animateValue(document.getElementById("home-jumlah-wanita"), 0, totalWanita, 2000);
+      animateValue(document.getElementById("home-jumlah-pria"), 0, totalPria, 2000);
     } else {
       console.log("Dokumen statistik tidak ditemukan!");
     }
@@ -303,4 +301,18 @@ function initializeSwiper() {
       1024: { slidesPerView: 3, spaceBetween: 30 },
     },
   });
+}
+
+// --- FUNGSI ANIMASI ANGKA ---
+function animateValue(obj, start, end, duration, suffix = "") {
+  let startTimestamp = null;
+  const step = (timestamp) => {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    obj.innerHTML = Math.floor(progress * (end - start) + start) + suffix;
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
+    }
+  };
+  window.requestAnimationFrame(step);
 }

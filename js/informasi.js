@@ -39,13 +39,10 @@ async function loadStatistik() {
       });
       const totalPenduduk = totalPria + totalWanita;
 
-      document.getElementById("total-penduduk").textContent =
-        totalPenduduk + " Jiwa";
-      document.getElementById("kepala-keluarga").textContent =
-        data.kepalaKeluarga + " Jiwa";
-      document.getElementById("jumlah-wanita").textContent =
-        totalWanita + " Jiwa";
-      document.getElementById("jumlah-pria").textContent = totalPria + " Jiwa";
+      animateValue(document.getElementById("total-penduduk"), 0, totalPenduduk, 2000, " Jiwa");
+      animateValue(document.getElementById("kepala-keluarga"), 0, parseInt(data.kepalaKeluarga) || 0, 2000, " Jiwa");
+      animateValue(document.getElementById("jumlah-wanita"), 0, totalWanita, 2000, " Jiwa");
+      animateValue(document.getElementById("jumlah-pria"), 0, totalPria, 2000, " Jiwa");
 
       const labels = Object.keys(kelompokUmur).sort(
         (a, b) => parseInt(a.split("-")[0]) - parseInt(b.split("-")[0])
@@ -219,3 +216,17 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
 }
 
 document.addEventListener("DOMContentLoaded", loadStatistik);
+
+// --- FUNGSI ANIMASI ANGKA ---
+function animateValue(obj, start, end, duration, suffix = "") {
+  let startTimestamp = null;
+  const step = (timestamp) => {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    obj.innerHTML = Math.floor(progress * (end - start) + start) + suffix;
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
+    }
+  };
+  window.requestAnimationFrame(step);
+}
