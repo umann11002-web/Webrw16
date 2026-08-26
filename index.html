@@ -164,29 +164,46 @@
 
       <hr class="section-divider">
 
+      <section class="berita-utama">
+        <!-- [PERUBAHAN] Wrapper untuk judul dan tombol "Lihat Semua" -->
+        <div class="section-header">
+          <h2>Berita Utama</h2>
+          <a href="berita.html" class="lihat-semua-btn">Lihat Semua</a>
+        </div>
+        <div class="magazine-grid" id="berita-container">
+          <!-- Berita will be injected here by script.js -->
+        </div>
+      </section>
+
+      <hr class="section-divider">
+
       <section class="galeri-section">
         <div class="section-header">
           <h2>Kegiatan & Galeri</h2>
           <a href="galeri.html" class="lihat-semua-btn">Lihat Semua</a>
         </div>
-        
+
         <!-- [BARU] Swiper 3D Coverflow untuk Galeri -->
         <div class="swiper galeriCoverflowSwiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide galeri-home-item">
-              <img src="images/galeri/gotong-royong.jpg" onerror="this.src='https://placehold.co/400x300/eee/ccc?text=Kerja+Bakti'" alt="Kerja Bakti">
+              <img src="images/galeri/gotong-royong.jpg"
+                onerror="this.src='https://placehold.co/400x300/eee/ccc?text=Kerja+Bakti'" alt="Kerja Bakti">
               <div class="galeri-overlay"><span>Kerja Bakti Rutin</span></div>
             </div>
             <div class="swiper-slide galeri-home-item">
-              <img src="images/galeri/posyandu.jpg" onerror="this.src='https://placehold.co/400x300/eee/ccc?text=Posyandu'" alt="Posyandu">
+              <img src="images/galeri/posyandu.jpg"
+                onerror="this.src='https://placehold.co/400x300/eee/ccc?text=Posyandu'" alt="Posyandu">
               <div class="galeri-overlay"><span>Posyandu Balita</span></div>
             </div>
             <div class="swiper-slide galeri-home-item">
-              <img src="images/galeri/rapat.jpg" onerror="this.src='https://placehold.co/400x300/eee/ccc?text=Rapat+RW'" alt="Rapat RW">
+              <img src="images/galeri/rapat.jpg" onerror="this.src='https://placehold.co/400x300/eee/ccc?text=Rapat+RW'"
+                alt="Rapat RW">
               <div class="galeri-overlay"><span>Musyawarah RW</span></div>
             </div>
             <div class="swiper-slide galeri-home-item">
-              <img src="images/galeri/lomba.jpg" onerror="this.src='https://placehold.co/400x300/eee/ccc?text=Lomba+17an'" alt="Lomba 17an">
+              <img src="images/galeri/lomba.jpg"
+                onerror="this.src='https://placehold.co/400x300/eee/ccc?text=Lomba+17an'" alt="Lomba 17an">
               <div class="galeri-overlay"><span>Perayaan HUT RI</span></div>
             </div>
             <!-- Slide tambahan biar efek carouselnya lebih berasa -->
@@ -195,22 +212,6 @@
               <div class="galeri-overlay"><span>Kegiatan Lainnya</span></div>
             </div>
           </div>
-          <div class="swiper-pagination"></div>
-        </div>
-      </section>
-
-      <hr class="section-divider">
-
-      <section class="berita-utama">
-        <!-- [PERUBAHAN] Wrapper untuk judul dan tombol "Lihat Semua" -->
-        <div class="section-header">
-          <h2>Berita Utama</h2>
-          <a href="berita.html" class="lihat-semua-btn">Lihat Semua</a>
-        </div>
-        <div class="swiper mySwiper">
-          <div class="swiper-wrapper" id="berita-container"></div>
-          <div class="swiper-button-next"></div>
-          <div class="swiper-button-prev"></div>
           <div class="swiper-pagination"></div>
         </div>
       </section>

@@ -332,11 +332,12 @@ async function tampilkanBerita() {
     const q = query(
       collection(db, "berita"),
       orderBy("tanggal", "desc"),
-      limit(5)
+      limit(4)
     );
     const querySnapshot = await getDocs(q);
 
     beritaContainer.innerHTML = "";
+    let index = 0;
     querySnapshot.forEach((doc) => {
       const berita = doc.data();
       const beritaId = doc.id;
@@ -349,49 +350,35 @@ async function tampilkanBerita() {
           year: "numeric",
         });
 
+      // Buat ringkasan teks
+      let isiRingkas = "";
+      if (berita.isi) {
+        // Hapus tag HTML jika ada dan ambil 120 karakter pertama
+        isiRingkas = berita.isi.replace(/(<([^>]+)>)/gi, "").substring(0, 120) + "...";
+      }
+      const kategori = berita.kategori || "Berita Utama";
+
       const kartuHTML = `
-        <a href="../berita-detail.html?id=${beritaId}" class="kartu-berita">
-            <img src="${berita.gambarUrl}" alt="Gambar Berita">
+        <a href="../berita-detail.html?id=${beritaId}" class="magazine-card">
+            <div class="gambar-wrapper">
+              <img src="${berita.gambarUrl}" alt="Gambar Berita">
+              <span class="badge-kategori">${kategori}</span>
+            </div>
             <div class="konten-kartu">
                 <span class="tanggal">${tanggalFormatted}</span>
                 <h3>${berita.judul}</h3>
+                <p class="ringkasan">${isiRingkas}</p>
             </div>
         </a>
       `;
-      const slideWrapper = document.createElement("div");
-      slideWrapper.className = "swiper-slide";
-      slideWrapper.innerHTML = kartuHTML;
-      beritaContainer.appendChild(slideWrapper);
+      // We can just append the HTML directly
+      beritaContainer.insertAdjacentHTML('beforeend', kartuHTML);
+      index++;
     });
-    initializeSwiper();
   } catch (error) {
     console.error("Error mengambil data berita: ", error);
     beritaContainer.innerHTML = "<p>Gagal memuat berita.</p>";
   }
-}
-
-function initializeSwiper() {
-  const swiper = new Swiper(".mySwiper", {
-    slidesPerView: 1,
-    spaceBetween: 30,
-    loop: true,
-    autoplay: {
-      delay: 3000,
-      disableOnInteraction: false,
-    },
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-    breakpoints: {
-      640: { slidesPerView: 2, spaceBetween: 20 },
-      1024: { slidesPerView: 3, spaceBetween: 30 },
-    },
-  });
 }
 
 // --- FUNGSI ANIMASI ANGKA ---
