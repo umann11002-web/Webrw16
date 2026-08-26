@@ -9,3 +9,12 @@
 @import url("./css/pages/galeri.css");
 @import url("./css/pages/admin.css");
 @import url("./css/misc.css");
+
+/* Section Divider */
+.section-divider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 80px 0; /* Margin dibesarin biar halamannya kerasa lebih luas dan lega */
+  width: 100%; /* Lebar full ngikutin hero carousel */
+  max-width: none;
+}

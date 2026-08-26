@@ -6,14 +6,17 @@ main,
 .berita-main {
   padding: 3rem 5%;
 }
+
 /* [BARU] Gaya untuk Hero Carousel */
 .hero-carousel-section {
   margin-bottom: 0;
 }
+
 .heroSwiper {
   width: 100%;
   height: 100vh;
 }
+
 .heroSwiper .swiper-slide img {
   width: 100%;
   height: 100%;
@@ -31,33 +34,39 @@ main,
   box-shadow: var(--card-shadow);
   overflow: hidden;
 }
+
 .sambutan-foto {
   flex: 0 0 40%;
   min-height: 400px;
 }
+
 .sambutan-foto img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
+
 .sambutan-teks {
   padding: 4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+
 .sambutan-teks h2 {
   border-left: none;
   padding-left: 0;
   margin-bottom: 1rem;
   font-size: 2.5rem;
 }
+
 .sambutan-teks h3 {
   margin: 0;
   font-size: 1.8rem;
   font-weight: 600;
 }
+
 .sambutan-teks p:first-of-type {
   color: var(--primary-color);
   font-weight: 600;
@@ -66,6 +75,7 @@ main,
   letter-spacing: 2px;
   font-size: 0.9rem;
 }
+
 .sambutan-teks p:last-of-type {
   line-height: 1.8;
   color: var(--light-text);
@@ -76,25 +86,33 @@ main,
   .sambutan-ketua {
     flex-direction: column;
   }
+
   .sambutan-foto {
     min-height: 300px;
   }
+
   .sambutan-teks {
     padding: 2rem;
   }
+
   .sambutan-teks h2 {
     font-size: 2rem;
   }
 }
+
 .informasi {
   margin-bottom: 4rem;
 }
-.info-buttons {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+
+/* [BARU] Interactive Info Container */
+.info-interactive-container {
+  display: flex;
   gap: 1rem;
+  width: 100%;
 }
+
 .info-btn {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,40 +123,172 @@ main,
   color: white;
   font-weight: 600;
   gap: 0.5rem;
-  transition: transform 0.2s;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
 }
-.info-btn:hover {
-  transform: translateY(-5px);
-}
+
 .info-btn i {
   font-size: 2rem;
+  transition: transform 0.3s;
 }
+
+.info-btn:hover i {
+  transform: translateY(-5px);
+}
+
+.info-detail-panel {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .info-interactive-container {
+    min-height: 450px;
+    /* Diperbesar supaya luas dan lega kayak hero carousel */
+  }
+
+  .info-btn {
+    white-space: nowrap;
+  }
+
+  .info-detail-panel {
+    display: flex;
+    flex: 0;
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    align-items: flex-start;
+    /* Ubah dari center ke flex-start biar nggak kepotong atasnya */
+    border: 1px solid #e0e0e0;
+  }
+
+  .info-detail-content {
+    display: none;
+    padding: 2rem;
+    min-width: 450px;
+  }
+
+  .info-detail-content h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+  }
+
+  .info-detail-content p {
+    color: var(--light-text);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .info-detail-content.show {
+    display: block;
+    animation: fadeInContent 0.4s forwards 0.2s;
+    opacity: 0;
+  }
+
+  @keyframes fadeInContent {
+    to {
+      opacity: 1;
+    }
+  }
+
+  .info-interactive-container.has-active .info-btn:not(.active) {
+    flex: 0 0 80px;
+    /* Jangan hilangin 100%, sisain 80px buat kursor! */
+    opacity: 0.7;
+    /* Agak transparan biar fokus ke yang aktif */
+  }
+
+  .info-interactive-container.has-active .info-btn:not(.active) span {
+    display: none;
+    /* Sembunyiin teksnya aja, ikon tetep ada */
+  }
+
+  .info-interactive-container.has-active .info-btn:not(.active):hover {
+    opacity: 1;
+    /* Terang lagi kalau dideketin kursor */
+  }
+
+  .info-interactive-container.has-active .info-btn.active {
+    flex: 0 0 25%;
+    opacity: 1;
+  }
+
+  .info-interactive-container.has-active .info-detail-panel {
+    flex: 1;
+    width: auto;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .info-interactive-container {
+    flex-wrap: wrap;
+  }
+
+  .info-btn {
+    flex: 0 0 calc(50% - 0.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .info-btn {
+    flex: 0 0 100%;
+  }
+}
+
+.detail-link-btn {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: background 0.3s;
+}
+
+.detail-link-btn:hover {
+  background: var(--dark-text);
+  color: white;
+}
+
 .penduduk {
   background-color: var(--primary-color);
 }
+
 .bansos {
   background-color: var(--primary-color);
 }
+
 .struktur-rw {
   background-color: var(--primary-color);
   color: white;
 }
+
 .struktur-rt {
   background-color: var(--primary-color);
 }
+
 .home-stats {
   padding: 0 5%;
   margin-bottom: 4rem;
 }
-.home-stats > p {
+
+.home-stats>p {
   color: var(--light-text);
   margin-bottom: 1.5rem;
 }
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
+
 .stat-card {
   background-color: var(--primary-color);
   color: white;
@@ -149,36 +299,44 @@ main,
   align-items: center;
   transition: transform 0.2s;
 }
+
 .stat-card:hover {
   transform: scale(1.03);
 }
+
 .stat-card span {
   font-size: 2.5rem;
   font-weight: 700;
 }
+
 .stat-card p {
   margin: 0;
   font-size: 1rem;
   font-weight: 500;
   text-align: right;
 }
+
 .berita-utama {
   margin-bottom: 4rem;
 }
+
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
 }
+
 .section-header h2 {
   margin-bottom: 0;
 }
+
 .lihat-semua-btn {
   text-decoration: none;
   color: var(--primary-color);
   font-weight: 500;
 }
+
 .kartu-berita {
   background: white;
   border-radius: 8px;
@@ -190,25 +348,30 @@ main,
   display: flex;
   flex-direction: column;
 }
+
 .kartu-berita:hover {
   transform: translateY(-5px);
 }
+
 .kartu-berita img {
   width: 100%;
   height: 200px;
   object-fit: cover;
 }
+
 .konten-kartu {
   padding: 1rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
+
 .konten-kartu h3 {
   font-size: 1.1rem;
   line-height: 1.4;
   margin-bottom: 0.5rem;
 }
+
 .konten-kartu .cuplikan {
   font-size: 0.9rem;
   color: var(--light-text);
@@ -216,6 +379,7 @@ main,
   margin-bottom: 1rem;
   flex-grow: 1;
 }
+
 .meta-info-kartu {
   display: flex;
   gap: 1rem;
@@ -224,17 +388,20 @@ main,
   border-top: 1px solid var(--border-color);
   padding-top: 0.8rem;
 }
+
 .meta-info-kartu span {
   display: flex;
   align-items: center;
   gap: 0.4rem;
 }
+
 .info-summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
   margin-bottom: 3rem;
 }
+
 .summary-card {
   background: white;
   padding: 1.5rem;
@@ -244,6 +411,7 @@ main,
   align-items: center;
   gap: 1rem;
 }
+
 .summary-card .icon {
   font-size: 2rem;
   width: 60px;
@@ -255,36 +423,44 @@ main,
   color: white;
   flex-shrink: 0;
 }
+
 .summary-card .icon.total {
   background-color: #ffc107;
 }
+
 .summary-card .icon.kk {
   background-color: #17a2b8;
 }
+
 .summary-card .icon.wanita {
   background-color: #dc3545;
 }
+
 .summary-card .icon.pria {
   background-color: #007bff;
 }
+
 .summary-card .text h3 {
   margin: 0;
   font-size: 0.9rem;
   color: #6c757d;
   font-weight: 500;
 }
+
 .summary-card .text p {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
   color: #343a40;
 }
+
 .chart-container {
   background: white;
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
+
 .chart-container h2 {
   border-left: 5px solid var(--primary-color);
   padding-left: 10px;
@@ -296,6 +472,7 @@ main,
   display: grid;
   gap: 1.5rem;
 }
+
 .kartu-analisis {
   background-color: #fff;
   padding: 1.5rem;
@@ -305,6 +482,7 @@ main,
   font-size: 0.95rem;
   border-left: 5px solid var(--primary-color);
 }
+
 .kartu-analisis strong {
   color: var(--dark-text);
 }
@@ -313,104 +491,201 @@ main,
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
-}
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-.album-card-public {
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.album-card-public:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-}
-.album-card-public img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  display: block;
-}
-.album-card-public .album-title-public {
-  padding: 1rem;
-  font-weight: 600;
-  background-color: white;
-}
-.photo-item {
-  cursor: pointer;
-  overflow: hidden;
-  border-radius: 8px;
-}
-.photo-item img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.3s ease;
-}
-.photo-item:hover img {
-  transform: scale(1.05);
-}
-#back-to-albums-btn {
-  margin-bottom: 1.5rem;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  background-color: #6c757d;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.lightbox-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 3000;
-}
-.lightbox-content img {
-  max-width: 90vw;
-  max-height: 80vh;
-  border-radius: 4px;
-}
-.lightbox-close {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  color: white;
-  font-size: 2rem;
-  cursor: pointer;
-}
+  /* === CSS BARU UNTUK MINI STATS DI DALAM HOVER PANEL === */
+  .stats-grid-mini {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
 
-@media (max-width: 768px) {
+  .stat-card-mini {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-bottom: 4px solid var(--primary-color);
+    padding: 1.2rem 0.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .stat-card-mini span {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    line-height: 1;
+  }
+
+  .stat-card-mini p {
+    margin: 0 !important;
+    font-size: 0.8rem !important;
+    color: var(--light-text) !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 0.5rem !important;
+  }
+
+  /* === CSS BARU UNTUK GALERI HOME (3D CAROUSEL) === */
+  .galeri-section {
+    margin-bottom: 4rem;
+    overflow: hidden;
+    /* Biar bayangan 3D gak bikin scroll horizontal */
+  }
+
+  .galeriCoverflowSwiper {
+    width: 100%;
+    padding-top: 30px;
+    padding-bottom: 50px;
+  }
+
+  .galeriCoverflowSwiper .swiper-slide {
+    background-position: center;
+    background-size: cover;
+    width: 350px;
+    height: 250px;
+  }
+
+  .galeri-home-item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    display: block;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .galeri-home-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .galeri-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 3rem 1rem 1rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+    color: white;
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .album-card-public {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .album-card-public:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .album-card-public img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .album-card-public .album-title-public {
+    padding: 1rem;
+    font-weight: 600;
+    background-color: white;
+  }
+
+  .photo-item {
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+  .photo-item img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .photo-item:hover img {
+    transform: scale(1.05);
+  }
+
+  #back-to-albums-btn {
+    margin-bottom: 1.5rem;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    background-color: #6c757d;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+  }
+
+  .lightbox-content img {
+    max-width: 90vw;
+    max-height: 80vh;
+    border-radius: 4px;
+  }
+
   .lightbox-close {
-    top: 10px;
-    right: 15px;
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
   }
-}
 
-/* === RESPONSIVE LAYOUT (MOBILE) === */
-@media (max-width: 768px) {
-  .info-buttons {
-    grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 768px) {
+    .lightbox-close {
+      top: 10px;
+      right: 15px;
+    }
   }
-}
 
-@media (max-width: 480px) {
-  .info-buttons {
-    grid-template-columns: 1fr;
+  /* === RESPONSIVE LAYOUT (MOBILE) === */
+  @media (max-width: 768px) {
+    .info-buttons {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
-  .stats-grid {
-    grid-template-columns: 1fr;
+
+  @media (max-width: 480px) {
+    .info-buttons {
+      grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
   }
 }

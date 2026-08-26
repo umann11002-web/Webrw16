@@ -88,13 +88,57 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- Logika untuk Statistik di Home ---
-  if (document.getElementById("home-total-penduduk")) {
-    loadHomeStats();
-  }
+  // Dihapus: sekarang dipanggil saat hover tab Penduduk
 
   // Logika untuk Sambutan Ketua RW (hanya di index.html)
   if (document.querySelector(".sambutan-ketua")) {
     loadSambutan();
+  }
+
+  // --- Logika untuk Hover Efek Informasi ---
+  const infoContainer = document.getElementById('info-interactive-container');
+  const infoBtns = document.querySelectorAll('.info-interactive-container .info-btn');
+  const detailContents = document.querySelectorAll('.info-detail-content');
+
+  if (infoContainer) {
+    infoBtns.forEach(btn => {
+      btn.addEventListener('mouseenter', () => {
+        // Cek jika layar bukan mobile, baru jalankan efek hover
+        if (window.innerWidth >= 769) {
+          const targetId = btn.getAttribute('data-target');
+          
+          // [BARU] Load stats animasi saat tab penduduk dihover pertama kali
+          if (targetId === 'penduduk' && !window.statsLoaded && document.getElementById("home-total-penduduk")) {
+            loadHomeStats();
+            window.statsLoaded = true;
+          }
+
+          infoContainer.classList.add('has-active');
+          
+          infoBtns.forEach(b => {
+            if (b === btn) {
+              b.classList.add('active');
+            } else {
+              b.classList.remove('active');
+            }
+          });
+          
+          detailContents.forEach(content => {
+            if (content.id === `detail-${targetId}`) {
+              content.classList.add('show');
+            } else {
+              content.classList.remove('show');
+            }
+          });
+        }
+      });
+    });
+
+    infoContainer.addEventListener('mouseleave', () => {
+      infoContainer.classList.remove('has-active');
+      infoBtns.forEach(b => b.classList.remove('active'));
+      detailContents.forEach(content => content.classList.remove('show'));
+    });
   }
 
   // --- Logika untuk Hamburger Menu ---
@@ -189,6 +233,31 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+  // --- Logika untuk Galeri Coverflow (3D Carousel) ---
+  if (document.querySelector(".galeriCoverflowSwiper")) {
+    new Swiper(".galeriCoverflowSwiper", {
+      effect: "coverflow",
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: "auto",
+      coverflowEffect: {
+        rotate: 40,
+        stretch: 0,
+        depth: 150,
+        modifier: 1,
+        slideShadows: true,
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      loop: true,
+      autoplay: {
+        delay: 3500,
+        disableOnInteraction: false,
+      }
+    });
+  }
 });
 
 // === FUNGSI-FUNGSI PEMBANTU ===
