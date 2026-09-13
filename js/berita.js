@@ -19,81 +19,148 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// [DIUBAH] Menggunakan ID yang benar dari kode lama Anda
 const beritaGridContainer = document.getElementById("berita-grid-container");
+const heroNewsContainer = document.getElementById("hero-news-container");
+const categoryFilters = document.querySelectorAll(".filter-pill");
+const searchInput = document.getElementById("search-input");
+const sortSelect = document.getElementById("sort-select");
 
-// Fungsi format tanggal (tetap sama)
+let allNewsData = [];
+let currentCategory = "Semua";
+let searchQuery = "";
+let currentSort = "terbaru";
+
 function formatDate(timestamp, formatOptions) {
   if (!timestamp) return "";
   return timestamp.toDate().toLocaleDateString("id-ID", formatOptions);
 }
 
-// Ganti fungsi lama Anda dengan yang ini
-async function tampilkanSemuaBerita() {
+function renderSkeleton() {
+  heroNewsContainer.innerHTML = `
+    <div class="skeleton skeleton-hero"></div>
+  `;
+  
+  let skeletonCards = "";
+  for (let i = 0; i < 6; i++) {
+    skeletonCards += `
+      <div class="skeleton-card">
+        <div class="skeleton skeleton-img"></div>
+        <div class="skeleton skeleton-text" style="width: 100%; margin-top: 1rem;"></div>
+        <div class="skeleton skeleton-text" style="width: 70%;"></div>
+      </div>
+    `;
+  }
+  beritaGridContainer.innerHTML = skeletonCards;
+}
+
+function renderNews() {
+  // Filter Data
+  let filteredNews = allNewsData.filter(berita => {
+    const matchCategory = currentCategory === "Semua" || (berita.kategori && berita.kategori === currentCategory);
+    const matchSearch = berita.judul.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchCategory && matchSearch;
+  });
+
+  // Sort Data
+  if (currentSort === "terpopuler") {
+    filteredNews.sort((a, b) => (b.dilihat || 0) - (a.dilihat || 0));
+  } else {
+    // "terbaru"
+    filteredNews.sort((a, b) => b.tanggal.toMillis() - a.tanggal.toMillis());
+  }
+
+  heroNewsContainer.innerHTML = "";
+  beritaGridContainer.innerHTML = "";
+
+  if (filteredNews.length === 0) {
+    beritaGridContainer.innerHTML = "<p>Tidak ada berita ditemukan.</p>";
+    return;
+  }
+
+  // 1. Render Featured Hero News (first item)
+  const heroBerita = filteredNews[0];
+  const heroCuplikan = heroBerita.isi ? heroBerita.isi.replace(/(<([^>]+)>)/gi, "").substring(0, 150) + "..." : "";
+  const heroTanggal = formatDate(heroBerita.tanggal, { day: "numeric", month: "long", year: "numeric" });
+  
+  heroNewsContainer.innerHTML = `
+    <a href="../berita-detail.html?id=${heroBerita.id}" class="hero-news-card" style="animation-delay: 0.1s;">
+      <div class="hero-image-wrapper">
+        <img src="${heroBerita.gambarUrl || 'https://placehold.co/800x400/eee/ccc?text=Gambar'}" alt="Hero Image">
+        <span class="badge-kategori">${heroBerita.kategori || 'Berita'}</span>
+      </div>
+      <div class="hero-content">
+        <span class="tanggal"><i class="fas fa-calendar-alt"></i> ${heroTanggal}</span>
+        <h2>${heroBerita.judul}</h2>
+        <p class="cuplikan">${heroCuplikan}</p>
+        <span class="baca-selengkapnya">Baca Selengkapnya <i class="fas fa-arrow-right"></i></span>
+      </div>
+    </a>
+  `;
+
+  // 2. Render Archive Grid News
+  let gridHTML = "";
+  for (let i = 1; i < filteredNews.length; i++) {
+    const berita = filteredNews[i];
+    const cuplikan = berita.isi ? berita.isi.replace(/(<([^>]+)>)/gi, "").substring(0, 80) + "..." : "";
+    const tanggalPublish = formatDate(berita.tanggal, { day: "numeric", month: "long", year: "numeric" });
+    const delay = 0.2 + (i * 0.1); // Staggered delay
+
+    gridHTML += `
+      <a href="../berita-detail.html?id=${berita.id}" class="kartu-berita staggered-animate" style="animation-delay: ${delay}s;">
+          <div class="image-wrapper">
+            <img src="${berita.gambarUrl || "https://placehold.co/400x250/eee/ccc?text=Gambar"}" alt="Gambar Berita">
+            <span class="badge-kategori">${berita.kategori || 'Berita'}</span>
+          </div>
+          <div class="konten-kartu">
+              <h3>${berita.judul}</h3>
+              <p class="cuplikan">${cuplikan}</p>
+              <div class="meta-info-kartu">
+                  <span><i class="fas fa-calendar-alt"></i> ${tanggalPublish}</span>
+                  <span><i class="fas fa-eye"></i> ${berita.dilihat || 0}</span>
+              </div>
+          </div>
+      </a>
+    `;
+  }
+  beritaGridContainer.innerHTML = gridHTML;
+}
+
+async function fetchAndRenderNews() {
+  renderSkeleton();
   try {
     const q = query(collection(db, "berita"), orderBy("tanggal", "desc"));
     const querySnapshot = await getDocs(q);
 
-    if (querySnapshot.empty) {
-      beritaGridContainer.innerHTML =
-        "<p>Belum ada berita yang dipublikasikan.</p>";
-      return;
-    }
-
-    // 1. Buat variabel kosong untuk menampung semua HTML kartu
-    let semuaKartuHTML = "";
-
+    allNewsData = [];
     querySnapshot.forEach((doc) => {
-      const berita = doc.data();
-      const beritaId = doc.id;
-      const cuplikan = berita.isi ? berita.isi.substring(0, 100) + "..." : "";
-
-      const tanggalPublish = formatDate(berita.tanggal, {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      });
-
-      let infoJadwalHTML = "";
-      if (berita.tanggalMulaiAcara) {
-        const tglMulai = formatDate(berita.tanggalMulaiAcara, {
-          day: "numeric",
-          month: "short",
-        });
-        infoJadwalHTML = `<p class="info-jadwal-kartu"><i class="fas fa-calendar-check"></i> Acara mulai ${tglMulai}</p>`;
-      }
-
-      const kartuHTML = `
-        <a href="../berita-detail.html?id=${beritaId}" class="kartu-berita">
-            <img src="${
-              berita.gambarUrl ||
-              "https://placehold.co/400x250/eee/ccc?text=Gambar"
-            }" alt="Gambar Berita">
-            <div class="konten-kartu">
-                <h3>${berita.judul}</h3>
-                <p class="cuplikan">${cuplikan}</p>
-                ${infoJadwalHTML}
-                <div class="meta-info-kartu">
-                    <span><i class="fas fa-calendar-alt"></i> ${tanggalPublish}</span>
-                    <span><i class="fas fa-eye"></i> ${
-                      berita.dilihat || 0
-                    }</span>
-                </div>
-            </div>
-        </a>
-      `;
-
-      // 2. Tambahkan setiap kartu ke variabel penampung (bukan ke halaman langsung)
-      semuaKartuHTML += kartuHTML;
+      allNewsData.push({ id: doc.id, ...doc.data() });
     });
 
-    // 3. Setelah loop selesai, masukkan semua HTML ke halaman sekaligus
-    beritaGridContainer.innerHTML = semuaKartuHTML;
+    renderNews();
   } catch (error) {
     console.error("Error mengambil semua berita: ", error);
-    beritaGridContainer.innerHTML =
-      '<p style="color: red;">Gagal memuat berita.</p>';
+    beritaGridContainer.innerHTML = '<p style="color: red;">Gagal memuat berita.</p>';
   }
 }
 
-document.addEventListener("DOMContentLoaded", tampilkanSemuaBerita);
+// Event Listeners
+categoryFilters.forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    categoryFilters.forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    currentCategory = e.target.getAttribute('data-category');
+    renderNews();
+  });
+});
+
+searchInput.addEventListener('input', (e) => {
+  searchQuery = e.target.value;
+  renderNews();
+});
+
+sortSelect.addEventListener('change', (e) => {
+  currentSort = e.target.value;
+  renderNews();
+});
+
+document.addEventListener("DOMContentLoaded", fetchAndRenderNews);

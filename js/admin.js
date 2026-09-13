@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (tableBody) {
           populateFilterDropdown();
           tampilkanPengajuan();
+          loadSummaryCounts();
         }
       } else {
         window.location.href = "../index.html";
@@ -88,7 +89,7 @@ async function populateFilterDropdown() {
 async function tampilkanPengajuan(filterValue = "semua") {
   const tableBody = document.getElementById("pengajuan-table-body");
   tableBody.innerHTML =
-    '<tr><td colspan="7" style="text-align:center;">Memuat data...</td></tr>';
+    '<tr><td colspan="7" style="text-align:center; color: #94a3b8; padding: 2rem;"><i class="fas fa-spinner fa-spin"></i> Memuat data...</td></tr>';
 
   try {
     let q;
@@ -110,7 +111,7 @@ async function tampilkanPengajuan(filterValue = "semua") {
 
     if (querySnapshot.empty) {
       tableBody.innerHTML =
-        '<tr><td colspan="7" style="text-align:center;">Tidak ada pengajuan surat yang cocok.</td></tr>';
+        '<tr><td colspan="7" style="text-align:center; color: #94a3b8; padding: 2rem;"><i class="fas fa-folder-open"></i> Tidak ada pengajuan surat yang cocok.</td></tr>';
       return;
     }
 
@@ -126,20 +127,67 @@ async function tampilkanPengajuan(filterValue = "semua") {
       }
       let aksiLanjutanHTML = "";
       if (data.fileUrl) {
-        aksiLanjutanHTML += `<a href="${data.fileUrl}" target="_blank">Lihat Syarat</a><br>`;
+        aksiLanjutanHTML += `<a href="${data.fileUrl}" target="_blank" class="btn-lihat-syarat"><i class="fas fa-file-alt"></i> Lihat Syarat</a>`;
       } else {
-        aksiLanjutanHTML += `<span>(Tanpa File)</span><br>`;
+        aksiLanjutanHTML += `<span class="badge-no-file"><i class="fas fa-minus-circle"></i> Tanpa File</span>`;
       }
       if (data.status === "Disetujui") {
         aksiLanjutanHTML += `<button class="action-btn btn-approve btn-tandai-selesai" data-id="${docId}" style="margin-top:5px;">Tandai Selesai</button>`;
       }
-      const row = `<tr><td>${tanggal}</td><td>${data.userEmail}</td><td>${data.jenisSurat}</td><td>${data.keperluan}</td><td>${data.status}</td><td>${aksiAwalHTML}</td><td>${aksiLanjutanHTML}</td></tr>`;
+      
+      // Status badge
+      let statusBadge = data.status;
+      const statusClass = getStatusClass(data.status);
+      statusBadge = `<span class="status-badge ${statusClass}">${data.status}</span>`;
+      
+      const row = `<tr><td>${tanggal}</td><td>${data.userEmail}</td><td>${data.jenisSurat}</td><td>${data.keperluan}</td><td>${statusBadge}</td><td>${aksiAwalHTML}</td><td>${aksiLanjutanHTML}</td></tr>`;
       tableBody.innerHTML += row;
     });
     addEventListenersToButtons();
   } catch (error) {
     console.error("Error mengambil data pengajuan: ", error);
-    tableBody.innerHTML = '<tr><td colspan="7">Gagal memuat data.</td></tr>';
+    tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: #ef4444;"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data.</td></tr>';
+  }
+}
+
+// --- Fungsi Helper Status Badge ---
+function getStatusClass(status) {
+  switch(status) {
+    case 'Menunggu Persetujuan': return 'status-menunggu';
+    case 'Disetujui': return 'status-disetujui';
+    case 'Ditolak': return 'status-ditolak';
+    case 'Selesai': return 'status-selesai';
+    default: return '';
+  }
+}
+
+// --- Fungsi Load Summary Counts ---
+async function loadSummaryCounts() {
+  try {
+    const baseQuery = collection(db, "pengajuanSurat");
+    const allDocs = await getDocs(baseQuery);
+
+    let total = 0, menunggu = 0, disetujui = 0, selesai = 0;
+
+    allDocs.forEach((doc) => {
+      const data = doc.data();
+      total++;
+      if (data.status === 'Menunggu Persetujuan') menunggu++;
+      else if (data.status === 'Disetujui') disetujui++;
+      else if (data.status === 'Selesai') selesai++;
+    });
+
+    const countTotal = document.getElementById('count-total');
+    const countMenunggu = document.getElementById('count-menunggu');
+    const countDisetujui = document.getElementById('count-disetujui');
+    const countSelesai = document.getElementById('count-selesai');
+
+    if (countTotal) countTotal.textContent = total;
+    if (countMenunggu) countMenunggu.textContent = menunggu;
+    if (countDisetujui) countDisetujui.textContent = disetujui;
+    if (countSelesai) countSelesai.textContent = selesai;
+  } catch (error) {
+    console.error('Error loading summary counts:', error);
   }
 }
 

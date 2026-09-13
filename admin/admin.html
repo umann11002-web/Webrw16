@@ -9,22 +9,24 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
-    <!-- BLOK <style>...</style> SUDAH DIHAPUS DARI SINI -->
   </head>
   <body>
-    <!-- [PERBAIKAN] Struktur header disederhanakan -->
     <header class="admin-nav">
       <div class="nav-title">
+        <i class="fas fa-shield-halved"></i>
         <strong>RW 16 Admin Panel</strong>
       </div>
       <button class="hamburger-btn" id="admin-hamburger-btn">
         <i class="fas fa-bars"></i>
       </button>
       <div class="nav-links" id="admin-nav-links">
-        <a href="admin.html">Dashboard</a>
+        <a href="admin.html" class="nav-link-item active"
+          ><i class="fas fa-tachometer-alt"></i> Dashboard</a
+        >
         <div class="dropdown">
-          <a href="#" class="dropdown-toggle"
-            >Kelola Data <i class="fas fa-chevron-down"></i
+          <a href="#" class="dropdown-toggle nav-link-item"
+            ><i class="fas fa-database"></i> Kelola Data
+            <i class="fas fa-chevron-down"></i
           ></a>
           <div class="dropdown-menu">
             <a href="manage-layanan.html">Layanan</a>
@@ -35,15 +37,71 @@
             <a href="manage-struktur-rt.html">Struktur RT</a>
           </div>
         </div>
-        <a href="#" id="admin-logout-btn" class="logout-btn">Logout</a>
+        <a href="#" id="admin-logout-btn" class="logout-btn"
+          ><i class="fas fa-sign-out-alt"></i> Logout</a
+        >
       </div>
     </header>
 
     <main id="admin-main" class="admin-main">
-      <h1>Selamat Datang Admin</h1>
-      <div id="admin-content">
-        <h2>Daftar Pengajuan Surat Masuk</h2>
-        <div style="overflow-x: auto">
+      <!-- Welcome Banner -->
+      <div class="admin-welcome-banner">
+        <div class="welcome-text">
+          <h1><i class="fas fa-hand-wave"></i> Selamat Datang, Admin!</h1>
+          <p>Kelola dan pantau semua pengajuan surat warga dari sini.</p>
+        </div>
+        <div class="welcome-date">
+          <i class="fas fa-calendar-alt"></i>
+          <span id="admin-date"></span>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="admin-summary-cards" id="admin-summary-cards">
+        <div class="summary-stat-card card-total">
+          <div class="summary-icon">
+            <i class="fas fa-inbox"></i>
+          </div>
+          <div class="summary-info">
+            <span class="summary-count" id="count-total">0</span>
+            <span class="summary-label">Total Pengajuan</span>
+          </div>
+        </div>
+        <div class="summary-stat-card card-menunggu">
+          <div class="summary-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="summary-info">
+            <span class="summary-count" id="count-menunggu">0</span>
+            <span class="summary-label">Menunggu</span>
+          </div>
+        </div>
+        <div class="summary-stat-card card-disetujui">
+          <div class="summary-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="summary-info">
+            <span class="summary-count" id="count-disetujui">0</span>
+            <span class="summary-label">Disetujui</span>
+          </div>
+        </div>
+        <div class="summary-stat-card card-selesai">
+          <div class="summary-icon">
+            <i class="fas fa-flag-checkered"></i>
+          </div>
+          <div class="summary-info">
+            <span class="summary-count" id="count-selesai">0</span>
+            <span class="summary-label">Selesai</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Section -->
+      <div class="admin-table-card" id="admin-content">
+        <div class="table-card-header">
+          <h2><i class="fas fa-file-signature"></i> Daftar Pengajuan Surat</h2>
+        </div>
+        <div class="table-responsive-wrapper">
           <table>
             <thead>
               <tr>
@@ -100,5 +158,20 @@
 
     <script src="../js/admin-nav.js" type="module"></script>
     <script src="../js/admin.js" type="module"></script>
+    <script>
+      // Set current date
+      document.addEventListener('DOMContentLoaded', () => {
+        const dateEl = document.getElementById('admin-date');
+        if (dateEl) {
+          const now = new Date();
+          dateEl.textContent = now.toLocaleDateString('id-ID', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          });
+        }
+      });
+    </script>
   </body>
 </html>

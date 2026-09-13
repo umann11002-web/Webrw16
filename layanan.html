@@ -6,6 +6,7 @@
     <title>Layanan Administrasi - RW 16</title>
     <!-- CSS sekarang hanya dari file eksternal -->
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/pages/layanan.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -13,6 +14,7 @@
     <!-- BLOK <style>...</style> SUDAH DIHAPUS DARI SINI -->
   </head>
   <body>
+    <div class="page-wrapper">
     <header>
       <div class="header-content">
         <div class="logo">
@@ -55,13 +57,30 @@
     </header>
 
     <main class="layanan-container">
-      <h1>Administrasi Kependudukan</h1>
-      <a href="riwayat.html" class="tombol-ajukan" style="margin-bottom: 2rem">
-        Lihat Riwayat Pengajuan Saya
-      </a>
+      <div class="layanan-header-portal">
+        <div class="layanan-header-text">
+          <div class="layanan-header-badge">
+            <i class="fas fa-shield-alt"></i> Pelayanan Warga RW 16
+          </div>
+          <h1>Administrasi Kependudukan</h1>
+          <p class="layanan-header-desc">
+            Ajukan berbagai layanan administrasi kependudukan secara online melalui RW 16. Cepat, praktis, dan dapat dipantau status pengajuannya kapan saja.
+          </p>
+        </div>
+        <div class="layanan-header-actions">
+          <a href="riwayat.html" class="btn-riwayat-portal">
+            <i class="fas fa-clock-rotate-left"></i>
+            <span>Lihat Riwayat Pengajuan Saya</span>
+          </a>
+        </div>
+      </div>
+
       <!-- Wadah kosong ini akan diisi oleh JavaScript -->
       <div class="layanan-grid" id="layanan-grid-container">
-        <p>Memuat daftar layanan...</p>
+        <div class="layanan-loading">
+          <i class="fas fa-spinner fa-spin"></i>
+          <p>Memuat daftar layanan...</p>
+        </div>
       </div>
     </main>
 
@@ -175,6 +194,7 @@
         </div>
       </div>
     </footer>
+    </div>
 
     <nav class="bottom-nav">
       <a href="index.html" class="bottom-nav-item active">

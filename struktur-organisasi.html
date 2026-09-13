@@ -13,6 +13,7 @@
       .main-content {
         padding: 2rem 5%;
         background-color: #f4f7f6;
+        min-height: 60vh;
       }
       .intro-box {
         background: white;
@@ -24,45 +25,123 @@
       }
       .intro-box h1 {
         margin-top: 0;
+        border-left: none;
       }
-      .org-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.5rem;
+      .intro-box p {
+        color: #6c757d;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
       }
-      .org-card-link {
-        text-decoration: none;
-        color: inherit;
-      }
-      .org-card {
+
+      /* Container gambar struktur */
+      .struktur-image-container {
         background: white;
         border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        padding: 1.5rem;
         overflow: hidden;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        transition: transform 0.2s, box-shadow 0.2s;
       }
-      .org-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      .struktur-image-container img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 8px;
+        cursor: zoom-in;
+        transition: transform 0.3s ease;
       }
-      .org-card-title {
-        padding: 1rem 1.5rem;
-        font-weight: 700;
-        font-size: 1.2rem;
+      .struktur-image-container img:hover {
+        transform: scale(1.01);
+      }
+
+      /* Hint text di bawah gambar */
+      .image-hint {
         text-align: center;
+        margin-top: 1rem;
+        color: #999;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
       }
-      .org-card-desc {
-        padding: 0 1.5rem 1.5rem 1.5rem;
-        color: #6c757d;
-        text-align: center;
+
+      /* Lightbox untuk zoom gambar */
+      .img-lightbox {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 3000;
+        cursor: zoom-out;
+        padding: 1rem;
+      }
+      .img-lightbox.active {
+        display: flex;
+      }
+      .img-lightbox img {
+        max-width: 95vw;
+        max-height: 90vh;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+      }
+      .lightbox-close-btn {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: white;
+        font-size: 2rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+        z-index: 3001;
+        transition: transform 0.2s;
+      }
+      .lightbox-close-btn:hover {
+        transform: scale(1.2);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .main-content {
+          padding: 1rem 3%;
+        }
+        .intro-box {
+          padding: 1.5rem 1rem;
+        }
+        .intro-box h1 {
+          font-size: 1.5rem;
+        }
+        .intro-box p {
+          font-size: 0.9rem;
+        }
+        .struktur-image-container {
+          padding: 0.75rem;
+          border-radius: 8px;
+        }
+        .struktur-image-container img {
+          border-radius: 4px;
+        }
+        /* Allow horizontal scroll for pinch-zoom on mobile */
+        .struktur-image-container {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
       }
     </style>
   </head>
   <body>
+    <div class="page-wrapper">
     <header>
       <div class="header-content">
         <div class="logo">
-          <img src="images/logo16.png" alt="Logo RW 16" />
+          <img src="images/Logo.png" alt="Logo RW 16" />
           <span>RW 16 Kel. Cibabat</span>
         </div>
 
@@ -105,60 +184,40 @@
         <h1>Struktur Organisasi</h1>
         <p>
           Kenali lebih dekat para pengurus yang berdedikasi untuk melayani dan
-          memajukan lingkungan RW 16.
+          memajukan lingkungan RW 16 Kelurahan Cibabat.
         </p>
       </div>
 
-      <div class="org-grid">
-        <a href="struktur-rw.html" class="org-card-link">
-          <div class="org-card">
-            <div class="org-card-title">Struktur RW</div>
-            <div class="org-card-desc">
-              Lihat bagan kepengurusan tingkat Rukun Warga.
-            </div>
-          </div>
-        </a>
-        <a href="struktur-rt.html" class="org-card-link">
-          <div class="org-card">
-            <div class="org-card-title">Struktur RT</div>
-            <div class="org-card-desc">
-              Temukan informasi pengurus di setiap Rukun Tetangga.
-            </div>
-          </div>
-        </a>
-        <a href="karang-taruna.html" class="org-card-link">
-          <div class="org-card">
-            <div class="org-card-title">Karang Taruna</div>
-            <div class="org-card-desc">
-              Organisasi pemuda-pemudi yang aktif dan kreatif.
-            </div>
-          </div>
-        </a>
-        <a href="#" class="org-card-link">
-          <div class="org-card">
-            <div class="org-card-title">PKK</div>
-            <div class="org-card-desc">
-              Gerakan pemberdayaan dan kesejahteraan keluarga.
-            </div>
-          </div>
-        </a>
+      <div class="struktur-image-container">
+        <img
+          id="struktur-img"
+          src="https://placehold.co/1200x800/f0f4f8/2c3e50?text=Struktur+Organisasi+RW+16%0A%0A(Ganti+dengan+gambar+asli)"
+          alt="Bagan Struktur Organisasi RW 16 Kelurahan Cibabat"
+          loading="lazy"
+        />
       </div>
+      <p class="image-hint">
+        <i class="fas fa-search-plus"></i>
+        Klik gambar untuk memperbesar
+      </p>
     </main>
+    <div class="img-lightbox" id="img-lightbox">
+      <button class="lightbox-close-btn" id="lightbox-close">&times;</button>
+      <img id="lightbox-img" src="" alt="Struktur Organisasi" />
+    </div>
 
     <footer>
       <div class="footer-container">
         <div class="footer-grid">
           <!-- Kolom 1: Informasi RW -->
           <div class="footer-column">
-            <!-- [DIUBAH] Judul sekarang punya class dan ikon -->
             <h4 class="footer-toggle">
               Pemerintahan RW 16
               <i class="fas fa-chevron-down"></i>
             </h4>
-            <!-- [DIUBAH] Konten dibungkus dalam div -->
             <div class="footer-content">
               <div class="info-rw">
-                <img src="images/logo16.png" alt="Logo RW 16" />
+                <img src="images/Logo.png" alt="Logo RW 16" />
                 <div>
                   <strong>RW 16 Kelurahan Cibabat</strong>
                   <p>Kecamatan Cimahi Utara, Kota Cimahi, Jawa Barat</p>
@@ -255,6 +314,38 @@
         </div>
       </div>
     </footer>
+    </div> <!-- Penutup .page-wrapper -->
+
     <script src="js/script.js" type="module"></script>
+    <script>
+      // Lightbox zoom functionality
+      document.addEventListener('DOMContentLoaded', () => {
+        const img = document.getElementById('struktur-img');
+        const lightbox = document.getElementById('img-lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const closeBtn = document.getElementById('lightbox-close');
+
+        if (img && lightbox) {
+          img.addEventListener('click', () => {
+            lightboxImg.src = img.src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+          });
+
+          const closeLightbox = () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+          };
+
+          closeBtn.addEventListener('click', closeLightbox);
+          lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+          });
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+          });
+        }
+      });
+    </script>
   </body>
 </html>

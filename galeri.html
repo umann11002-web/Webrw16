@@ -11,6 +11,7 @@
     />
   </head>
   <body>
+    <div class="page-wrapper">
     <header>
       <div class="header-content">
         <div class="logo">
@@ -52,23 +53,30 @@
       </div>
     </header>
 
-    <main class="main-content">
-      <h1 id="page-title">Galeri Album</h1>
-
-      <!-- Tombol ini akan muncul saat melihat isi album -->
-      <button id="back-to-albums-btn" style="display: none">
-        &larr; Kembali ke Daftar Album
-      </button>
+    <main class="main-content gallery-page-container">
+      <div class="gallery-header-section">
+        <div class="gallery-title-wrapper">
+          <h1 id="page-title">Galeri Album</h1>
+          <p class="gallery-subtitle" id="gallery-subtitle">Dokumentasi kegiatan dan momen kebersamaan warga RW 16 Kelurahan Cibabat.</p>
+        </div>
+        <!-- Tombol ini akan muncul saat melihat isi album -->
+        <button id="back-to-albums-btn" style="display: none">
+          <i class="fas fa-arrow-left"></i> Kembali ke Daftar Album
+        </button>
+      </div>
 
       <!-- Container ini akan menampilkan album atau foto -->
-      <div class="grid-container" id="gallery-container">
-        <p>Memuat galeri...</p>
+      <div class="grid-container album-grid-view" id="gallery-container">
+        <div class="gallery-empty">
+          <i class="fas fa-spinner fa-spin"></i>
+          <p>Memuat galeri...</p>
+        </div>
       </div>
     </main>
 
     <!-- Modal Lightbox untuk menampilkan foto besar -->
     <div class="lightbox-overlay" id="lightbox-modal">
-      <span class="lightbox-close" id="lightbox-close-btn">&times;</span>
+      <button class="lightbox-close" id="lightbox-close-btn" aria-label="Tutup foto">&times;</button>
       <div class="lightbox-content">
         <img src="" alt="Tampilan foto" id="lightbox-image" />
       </div>
@@ -184,6 +192,7 @@
         </div>
       </div>
     </footer>
+    </div>
 
     <nav class="bottom-nav">
       <a href="index.html" class="bottom-nav-item active">

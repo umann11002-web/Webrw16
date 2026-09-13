@@ -23,6 +23,7 @@ const db = getFirestore(app);
 // Elemen UI
 const galleryContainer = document.getElementById("gallery-container");
 const pageTitle = document.getElementById("page-title");
+const pageSubtitle = document.getElementById("gallery-subtitle");
 const backBtn = document.getElementById("back-to-albums-btn");
 const lightboxModal = document.getElementById("lightbox-modal");
 const lightboxImage = document.getElementById("lightbox-image");
@@ -31,8 +32,12 @@ const lightboxCloseBtn = document.getElementById("lightbox-close-btn");
 // Fungsi untuk menampilkan daftar album
 async function showAlbums() {
   pageTitle.textContent = "Galeri Album";
+  if (pageSubtitle) {
+    pageSubtitle.textContent = "Dokumentasi kegiatan dan momen kebersamaan warga RW 16 Kelurahan Cibabat.";
+  }
   backBtn.style.display = "none";
-  galleryContainer.innerHTML = "<p>Memuat album...</p>";
+  galleryContainer.className = "grid-container album-grid-view";
+  galleryContainer.innerHTML = '<div class="gallery-empty"><i class="fas fa-spinner fa-spin"></i><p>Memuat album kegiatan...</p></div>';
 
   try {
     const q = query(collection(db, "albums"), orderBy("dibuatPada", "desc"));
@@ -40,36 +45,43 @@ async function showAlbums() {
 
     galleryContainer.innerHTML = "";
     if (querySnapshot.empty) {
-      galleryContainer.innerHTML = "<p>Belum ada album foto.</p>";
+      galleryContainer.innerHTML = '<div class="gallery-empty"><i class="fas fa-folder-open"></i><p>Belum ada album kegiatan saat ini.</p></div>';
       return;
     }
 
     querySnapshot.forEach((doc) => {
       const album = doc.data();
       const itemHTML = `
-        <div class="album-card-public" data-id="${doc.id}" data-title="${
-        album.judul
-      }">
-          <img src="${
-            album.coverImageUrl ||
-            "https://placehold.co/600x400/EEE/31343C?text=Album"
-          }" alt="${album.judul}">
-          <div class="album-title-public">${album.judul}</div>
+        <div class="album-card-public" data-id="${doc.id}" data-title="${album.judul}">
+          <div class="album-cover-wrapper">
+            <img src="${
+              album.coverImageUrl ||
+              "https://placehold.co/600x450/f0f2f5/94a3b8?text=Album"
+            }" alt="${album.judul}" loading="lazy">
+          </div>
+          <div class="album-title-public">
+            <i class="fas fa-images"></i>
+            <span>${album.judul}</span>
+          </div>
         </div>
       `;
       galleryContainer.innerHTML += itemHTML;
     });
   } catch (error) {
     console.error("Error memuat album: ", error);
-    galleryContainer.innerHTML = "<p>Gagal memuat album.</p>";
+    galleryContainer.innerHTML = '<div class="gallery-empty"><i class="fas fa-exclamation-triangle"></i><p>Gagal memuat album kegiatan.</p></div>';
   }
 }
 
 // Fungsi untuk menampilkan foto di dalam album yang dipilih
 async function showPhotosInAlbum(albumId, albumTitle) {
-  pageTitle.textContent = `Album: ${albumTitle}`;
-  backBtn.style.display = "block";
-  galleryContainer.innerHTML = "<p>Memuat foto...</p>";
+  pageTitle.textContent = albumTitle;
+  if (pageSubtitle) {
+    pageSubtitle.textContent = `Dokumentasi foto kegiatan ${albumTitle}. Klik foto untuk melihat ukuran penuh.`;
+  }
+  backBtn.style.display = "inline-flex";
+  galleryContainer.className = "grid-container photo-grid-view";
+  galleryContainer.innerHTML = '<div class="gallery-empty"><i class="fas fa-spinner fa-spin"></i><p>Memuat foto...</p></div>';
 
   try {
     const q = query(
@@ -81,22 +93,24 @@ async function showPhotosInAlbum(albumId, albumTitle) {
 
     galleryContainer.innerHTML = "";
     if (querySnapshot.empty) {
-      galleryContainer.innerHTML = "<p>Album ini belum memiliki foto.</p>";
+      galleryContainer.innerHTML = '<div class="gallery-empty"><i class="fas fa-image"></i><p>Album ini belum memiliki foto dokumentasi.</p></div>';
       return;
     }
 
     querySnapshot.forEach((doc) => {
       const photo = doc.data();
       const itemHTML = `
-        <div class="photo-item" data-img-src="${photo.imageUrl}">
-          <img src="${photo.imageUrl}" alt="Foto dari album ${albumTitle}">
+        <div class="photo-item" data-img-src="${photo.imageUrl}" title="Klik untuk memperbesar">
+          <div class="photo-item-wrapper">
+            <img src="${photo.imageUrl}" alt="Foto dari album ${albumTitle}" loading="lazy">
+          </div>
         </div>
       `;
       galleryContainer.innerHTML += itemHTML;
     });
   } catch (error) {
     console.error("Error memuat foto: ", error);
-    galleryContainer.innerHTML = "<p>Gagal memuat foto.</p>";
+    galleryContainer.innerHTML = '<div class="gallery-empty"><i class="fas fa-exclamation-triangle"></i><p>Gagal memuat foto dokumentasi.</p></div>';
   }
 }
 
@@ -129,6 +143,11 @@ lightboxCloseBtn.addEventListener("click", () => {
 });
 lightboxModal.addEventListener("click", (e) => {
   if (e.target === lightboxModal) {
+    lightboxModal.style.display = "none";
+  }
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && lightboxModal.style.display === "flex") {
     lightboxModal.style.display = "none";
   }
 });
