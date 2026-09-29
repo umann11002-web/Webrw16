@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Form Pengajuan - RW 16</title>
     <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
     <style>
       .form-container {
         max-width: 600px;
@@ -105,9 +109,31 @@
       </div>
     </main>
 
+    <!-- State: User Belum Login (Card Notifikasi Ramah) -->
+    <div id="auth-notice-section" style="display: none; padding: 2rem 1rem;">
+      <div class="auth-notice-card">
+        <div class="auth-notice-icon">
+          <i class="fas fa-user-lock"></i>
+        </div>
+        <h2>Upss, Anda Perlu Login!</h2>
+        <p>
+          Untuk mengajukan permohonan surat administrasi ini, Anda harus masuk ke akun warga RW 16 terlebih dahulu.
+        </p>
+        <div class="auth-notice-actions">
+          <a href="#" id="auth-notice-login-btn" class="auth-btn-primary" style="max-width: 200px;">
+            <i class="fas fa-sign-in-alt"></i> Login Sekarang
+          </a>
+          <a href="layanan.html" class="auth-btn-secondary" style="max-width: 200px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+            <i class="fas fa-arrow-left" style="margin-right: 6px;"></i> Ke Layanan
+          </a>
+        </div>
+      </div>
+    </div>
+
     <!-- Indikator loading -->
-    <div id="loading-indicator" style="text-align: center; margin-top: 5rem">
-      <h2>Memuat Form...</h2>
+    <div id="loading-indicator" style="text-align: center; margin-top: 5rem; color: #64748b;">
+      <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #0284c7; margin-bottom: 0.75rem; display: block;"></i>
+      <p>Memeriksa status dan memuat formulir...</p>
     </div>
 
     <!-- Memuat skrip untuk halaman ini -->

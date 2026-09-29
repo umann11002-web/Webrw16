@@ -3,6 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebas
 import {
   getAuth,
   createUserWithEmailAndPassword,
+  signOut,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 import {
   getFirestore,
@@ -54,8 +55,8 @@ registerForm.addEventListener("submit", async (e) => {
     });
 
     console.log("Dokumen user dengan peran berhasil dibuat di Firestore.");
-    alert("Registrasi berhasil!.");
-    window.location.href = "../admin/login.html";
+    await signOut(auth);
+    window.location.href = "../admin/login.html?registered=true";
   } catch (error) {
     console.error("Registrasi Gagal:", error.message);
     if (error.code === "auth/email-already-in-use") {

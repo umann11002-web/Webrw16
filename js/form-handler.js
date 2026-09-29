@@ -99,15 +99,24 @@ async function loadFormDetails() {
 
 // Satpam digital (ROUTE GUARD)
 onAuthStateChanged(auth, (user) => {
+  const loadingIndicator = document.getElementById("loading-indicator");
+  const authNoticeSection = document.getElementById("auth-notice-section");
+  const mainContent = document.getElementById("main-content");
+  const authNoticeLoginBtn = document.getElementById("auth-notice-login-btn");
+
   if (user) {
     currentUser = user;
+    if (authNoticeSection) authNoticeSection.style.display = "none";
     loadFormDetails();
   } else {
-    const currentUrl = window.location.href;
-    alert("Anda harus login untuk mengakses halaman ini.");
-    window.location.href = `login.html?redirect=${encodeURIComponent(
-      currentUrl
-    )}`;
+    if (loadingIndicator) loadingIndicator.style.display = "none";
+    if (mainContent) mainContent.style.display = "none";
+    if (authNoticeSection) {
+      if (authNoticeLoginBtn) {
+        authNoticeLoginBtn.href = `admin/login.html?redirect=${encodeURIComponent(window.location.href)}`;
+      }
+      authNoticeSection.style.display = "block";
+    }
   }
 });
 

@@ -3,6 +3,8 @@ import {
   getFirestore,
   collection,
   getDocs,
+  doc,
+  getDoc,
   query,
   orderBy,
   where,
@@ -75,6 +77,20 @@ async function showAlbums() {
 
 // Fungsi untuk menampilkan foto di dalam album yang dipilih
 async function showPhotosInAlbum(albumId, albumTitle) {
+  // Jika albumTitle tidak ada (misal diakses via link URL langsung tanpa judul), coba ambil dari database
+  if (!albumTitle) {
+    try {
+      const albumDoc = await getDoc(doc(db, "albums", albumId));
+      if (albumDoc.exists()) {
+        albumTitle = albumDoc.data().judul || "Detail Album";
+      } else {
+        albumTitle = "Detail Album";
+      }
+    } catch (e) {
+      albumTitle = "Detail Album";
+    }
+  }
+
   pageTitle.textContent = albumTitle;
   if (pageSubtitle) {
     pageSubtitle.textContent = `Dokumentasi foto kegiatan ${albumTitle}. Klik foto untuk melihat ukuran penuh.`;
@@ -123,6 +139,13 @@ galleryContainer.addEventListener("click", (e) => {
   if (albumCard) {
     const albumId = albumCard.dataset.id;
     const albumTitle = albumCard.dataset.title;
+
+    // Simpan parameter di URL agar bisa dibagikan atau diback
+    const url = new URL(window.location.href);
+    url.searchParams.set("albumId", albumId);
+    if (albumTitle) url.searchParams.set("albumTitle", albumTitle);
+    window.history.pushState({ albumId, albumTitle }, albumTitle, url.toString());
+
     showPhotosInAlbum(albumId, albumTitle);
   }
 
@@ -135,7 +158,25 @@ galleryContainer.addEventListener("click", (e) => {
 });
 
 // Event listener untuk tombol kembali
-backBtn.addEventListener("click", showAlbums);
+backBtn.addEventListener("click", () => {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("albumId");
+  url.searchParams.delete("albumTitle");
+  window.history.pushState({}, "Galeri Album", url.pathname);
+  showAlbums();
+});
+
+// Event listener untuk navigasi back/forward browser
+window.addEventListener("popstate", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const albumId = urlParams.get("albumId");
+  const albumTitle = urlParams.get("albumTitle");
+  if (albumId) {
+    showPhotosInAlbum(albumId, albumTitle);
+  } else {
+    showAlbums();
+  }
+});
 
 // Event listener untuk menutup lightbox
 lightboxCloseBtn.addEventListener("click", () => {
@@ -152,5 +193,14 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// Memuat daftar album saat halaman pertama kali dibuka
-document.addEventListener("DOMContentLoaded", showAlbums);
+// Memuat galeri saat halaman pertama kali dibuka
+document.addEventListener("DOMContentLoaded", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const albumId = urlParams.get("albumId");
+  const albumTitle = urlParams.get("albumTitle");
+  if (albumId) {
+    showPhotosInAlbum(albumId, albumTitle);
+  } else {
+    showAlbums();
+  }
+});

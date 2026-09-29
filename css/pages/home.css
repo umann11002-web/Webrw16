@@ -649,7 +649,10 @@ main,
   border-radius: 12px;
   overflow: hidden;
   display: block;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .galeri-home-item img {
@@ -657,6 +660,15 @@ main,
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.4s ease;
+}
+
+.galeri-home-item:hover img {
+  transform: scale(1.06);
+}
+
+.galeri-home-item:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.28);
 }
 
 .galeri-overlay {
@@ -664,12 +676,21 @@ main,
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 3rem 1rem 1rem;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  padding: 3.5rem 1.25rem 1.25rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
   color: white;
   font-weight: 600;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background 0.3s ease;
+}
+
+.galeri-home-item:hover .galeri-overlay {
+  background: linear-gradient(to top, rgba(14, 116, 144, 0.95) 0%, rgba(14, 116, 144, 0.5) 60%, transparent 100%);
 }
 
 /* === CSS BARU UNTUK BERITA UTAMA (MAGAZINE GRID) === */

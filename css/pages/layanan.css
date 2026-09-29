@@ -11,6 +11,28 @@
 }
 
 /* --- Portal Header Banner --- */
+@keyframes portalHeaderEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardStaggerEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .layanan-header-portal {
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.07);
@@ -25,6 +47,7 @@
   gap: 1.75rem;
   position: relative;
   overflow: hidden;
+  animation: portalHeaderEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .layanan-header-portal::before {
@@ -121,6 +144,8 @@
   flex-direction: column;
   height: 100%;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  opacity: 0;
+  animation: cardStaggerEntrance 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
               box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
               border-color 0.25s ease;

@@ -29,21 +29,28 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const tableBody = document.getElementById("riwayat-table-body");
+const loadingEl = document.getElementById("riwayat-loading");
+const authNoticeSection = document.getElementById("auth-notice-section");
+const contentSection = document.getElementById("riwayat-content-section");
 
 // Satpam digital + pemuat data
 onAuthStateChanged(auth, (user) => {
+  if (loadingEl) loadingEl.style.display = "none";
+
   if (user) {
-    // Jika user login, ambil riwayat pengajuannya
+    // Jika user login, sembunyikan notice dan tampilkan riwayat
+    if (authNoticeSection) authNoticeSection.style.display = "none";
+    if (contentSection) contentSection.style.display = "block";
     tampilkanRiwayat(user.uid);
   } else {
-    // Jika tidak, tendang ke halaman login
-    window.location.href = "../admin/login.html";
+    // Jika belum login, tampilkan card notifikasi ramah tanpa redirect paksa
+    if (contentSection) contentSection.style.display = "none";
+    if (authNoticeSection) authNoticeSection.style.display = "block";
   }
 });
 
 async function tampilkanRiwayat(userId) {
   try {
-    // Query khusus: cari di 'pengajuanSurat' HANYA yang 'userId'-nya sama dengan ID user yang login
     const q = query(
       collection(db, "pengajuanSurat"),
       where("userId", "==", userId),
@@ -55,38 +62,51 @@ async function tampilkanRiwayat(userId) {
 
     if (querySnapshot.empty) {
       tableBody.innerHTML =
-        '<tr><td colspan="5" style="text-align: center;">Anda belum pernah mengajukan surat.</td></tr>';
+        '<tr><td colspan="5" style="text-align: center; padding: 2.5rem; color: #64748b;"><i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 0.5rem; display: block; color: #cbd5e1;"></i>Anda belum pernah mengajukan surat.</td></tr>';
       return;
     }
 
     querySnapshot.forEach((doc) => {
       const data = doc.data();
       const tanggal = data.tanggalPengajuan
-        .toDate()
-        .toLocaleDateString("id-ID");
+        ? data.tanggalPengajuan.toDate().toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          })
+        : "-";
+
+      // Format status badge
+      let statusBadge = `<span class="badge-status status-menunggu">${data.status || "Menunggu"}</span>`;
+      if (data.status === "Selesai") {
+        statusBadge = `<span class="badge-status status-selesai">Disetujui / Selesai</span>`;
+      } else if (data.status === "Ditolak") {
+        statusBadge = `<span class="badge-status status-ditolak">Ditolak</span>`;
+      }
 
       // Siapkan tombol download (nonaktif jika belum selesai)
       const isSelesai = data.status === "Selesai";
       const hasFileLink =
         data.fileSuratJadiUrl && data.fileSuratJadiUrl !== "#";
-      const downloadButton = isSelesai
-        ? `<a href="${data.fileSuratJadiUrl}" class="download-btn" target="_blank">Download</a>`
-        : `<button class="download-btn disabled" disabled>Download</button>`;
+      const downloadButton =
+        isSelesai && hasFileLink
+          ? `<a href="${data.fileSuratJadiUrl}" class="download-btn" target="_blank"><i class="fas fa-download"></i> Unduh</a>`
+          : `<button class="download-btn disabled" disabled title="Surat belum selesai atau belum diunggah pengurus">Unduh</button>`;
 
       const row = `
-                <tr>
-                    <td>${tanggal}</td>
-                    <td>${data.jenisSurat}</td>
-                    <td>${data.keperluan}</td>
-                    <td>${data.status}</td>
-                    <td>${downloadButton}</td>
-                </tr>
-            `;
+        <tr>
+          <td>${tanggal}</td>
+          <td><strong>${data.jenisSurat || "-"}</strong></td>
+          <td>${data.keperluan || "-"}</td>
+          <td>${statusBadge}</td>
+          <td>${downloadButton}</td>
+        </tr>
+      `;
       tableBody.innerHTML += row;
     });
   } catch (error) {
     console.error("Error mengambil riwayat: ", error);
     tableBody.innerHTML =
-      '<tr><td colspan="5" style="text-align: center; color: red;">Gagal memuat riwayat.</td></tr>';
+      '<tr><td colspan="5" style="text-align: center; padding: 2rem; color: #ef4444;"><i class="fas fa-exclamation-triangle" style="margin-right: 6px;"></i> Gagal memuat riwayat.</td></tr>';
   }
 }

@@ -207,8 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       signOut(auth)
         .then(() => {
-          alert("Anda berhasil logout.");
-          window.location.href = "../index.html";
+          window.location.href = "index.html";
         })
         .catch((error) => {
           console.error("Error saat logout:", error);
@@ -233,30 +232,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-  // --- Logika untuk Galeri Coverflow (3D Carousel) ---
-  if (document.querySelector(".galeriCoverflowSwiper")) {
-    new Swiper(".galeriCoverflowSwiper", {
-      effect: "coverflow",
-      grabCursor: true,
-      centeredSlides: true,
-      slidesPerView: "auto",
-      coverflowEffect: {
-        rotate: 40,
-        stretch: 0,
-        depth: 150,
-        modifier: 1,
-        slideShadows: true,
-      },
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      loop: true,
-      autoplay: {
-        delay: 3500,
-        disableOnInteraction: false,
-      }
-    });
+  // --- Logika untuk Galeri Coverflow (3D Carousel Dinamis) ---
+  if (document.getElementById("galeri-coverflow-wrapper")) {
+    loadGaleriHome();
   }
 });
 
@@ -378,6 +356,89 @@ async function tampilkanBerita() {
   } catch (error) {
     console.error("Error mengambil data berita: ", error);
     beritaContainer.innerHTML = "<p>Gagal memuat berita.</p>";
+  }
+}
+
+// --- FUNGSI LOAD GALERI HOME (DYNAMIC COVERFLOW) ---
+async function loadGaleriHome() {
+  const wrapper = document.getElementById("galeri-coverflow-wrapper");
+  if (!wrapper) return;
+
+  try {
+    const q = query(
+      collection(db, "albums"),
+      orderBy("dibuatPada", "desc"),
+      limit(8)
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      wrapper.innerHTML = `
+        <div class="swiper-slide galeri-home-item" style="display: flex; align-items: center; justify-content: center; background: #f8fafc; border: 1px dashed #cbd5e1;">
+          <div style="text-align: center; color: #64748b; padding: 1.5rem;">
+            <i class="fas fa-images" style="font-size: 2rem; margin-bottom: 0.5rem; display: block; color: #94a3b8;"></i>
+            <span style="font-weight: 500;">Belum ada album kegiatan</span>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    let slidesHTML = "";
+    querySnapshot.forEach((docSnap) => {
+      const album = docSnap.data();
+      const albumId = docSnap.id;
+      const coverUrl = album.coverImageUrl || "https://placehold.co/600x450/f0f2f5/94a3b8?text=Album";
+      const judul = album.judul || "Album Kegiatan";
+
+      slidesHTML += `
+        <a href="galeri.html?albumId=${albumId}&albumTitle=${encodeURIComponent(judul)}" 
+           class="swiper-slide galeri-home-item" 
+           title="Buka Album: ${judul}">
+          <img src="${coverUrl}" alt="${judul}" loading="lazy" onerror="this.src='https://placehold.co/600x450/f0f2f5/94a3b8?text=Album'">
+          <div class="galeri-overlay">
+            <i class="fas fa-images"></i>
+            <span>${judul}</span>
+          </div>
+        </a>
+      `;
+    });
+
+    wrapper.innerHTML = slidesHTML;
+
+    // Inisialisasi Swiper 3D Coverflow setelah slide dirender
+    new Swiper(".galeriCoverflowSwiper", {
+      effect: "coverflow",
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: "auto",
+      coverflowEffect: {
+        rotate: 35,
+        stretch: 0,
+        depth: 140,
+        modifier: 1,
+        slideShadows: true,
+      },
+      pagination: {
+        el: ".galeriCoverflowSwiper .swiper-pagination",
+        clickable: true,
+      },
+      loop: querySnapshot.docs.length >= 3,
+      autoplay: {
+        delay: 3500,
+        disableOnInteraction: false,
+      },
+    });
+  } catch (error) {
+    console.error("Error mengambil galeri untuk home:", error);
+    wrapper.innerHTML = `
+      <div class="swiper-slide galeri-home-item" style="display: flex; align-items: center; justify-content: center; background: #fff1f2;">
+        <div style="text-align: center; color: #e11d48; padding: 1.5rem;">
+          <i class="fas fa-exclamation-circle" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
+          <span>Gagal memuat album kegiatan</span>
+        </div>
+      </div>
+    `;
   }
 }
 

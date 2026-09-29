@@ -5,6 +5,10 @@ import {
   collection,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
 // Konfigurasi Firebase-mu
 const firebaseConfig = {
@@ -19,6 +23,13 @@ const firebaseConfig = {
 // Inisialisasi Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+
+// Status login user
+let currentUser = null;
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+});
 
 // Ambil elemen kontainer dari HTML
 const layananContainer = document.getElementById("layanan-grid-container");
@@ -75,11 +86,13 @@ async function tampilkanLayanan() {
       return;
     }
 
-    // Looping untuk setiap dokumen (layanan) yang ditemukan
+    // Looping untuk setiap dokumen (layanan) yang ditemukan dengan staggered animation
+    let cardIndex = 0;
     querySnapshot.forEach((doc) => {
       const layanan = doc.data();
       const layananId = doc.id; // ID dokumen (misal: 'sktm')
       const visual = getLayananVisualIdentity(layanan.namaLayanan, layananId);
+      const delay = (cardIndex * 0.12).toFixed(2);
 
       // Normalisasi daftar persyaratan dari array
       const rawPersyaratan = Array.isArray(layanan.persyaratan)
@@ -97,9 +110,9 @@ async function tampilkanLayanan() {
         persyaratanListHTML = `<li><i class="fas fa-info-circle" style="color: #94a3b8;"></i> <span>Hubungi pengurus RT/RW untuk informasi dokumen.</span></li>`;
       }
 
-      // Membuat HTML untuk satu kartu layanan dengan struktur flex equal-height
+      // Membuat HTML untuk satu kartu layanan dengan animasi beruntun (waterfall effect)
       const kartuHTML = `
-        <div class="kartu-layanan">
+        <div class="kartu-layanan" style="animation-delay: ${delay}s;">
           <div class="kartu-layanan-header">
             <div class="layanan-icon-badge" style="color: ${visual.color}; background-color: ${visual.color}15;">
               <i class="fas ${visual.icon}"></i>
@@ -133,6 +146,7 @@ async function tampilkanLayanan() {
       `;
       // Tambahkan kartu yang sudah jadi ke dalam kontainer
       layananContainer.innerHTML += kartuHTML;
+      cardIndex++;
     });
   } catch (error) {
     console.error("Error mengambil data layanan: ", error);
@@ -145,5 +159,94 @@ async function tampilkanLayanan() {
   }
 }
 
-// Panggil fungsi saat halaman selesai dimuat
-document.addEventListener("DOMContentLoaded", tampilkanLayanan);
+// ============================================
+// === KONTROL MODAL NOTIFIKASI LOGIN ===
+// ============================================
+
+function openAuthModal(title, desc, targetUrl) {
+  const modal = document.getElementById("auth-modal");
+  const modalTitle = document.getElementById("auth-modal-title");
+  const modalDesc = document.getElementById("auth-modal-desc");
+  const loginBtn = document.getElementById("auth-modal-login-btn");
+
+  if (!modal) return;
+  if (title && modalTitle) modalTitle.textContent = title;
+  if (desc && modalDesc) modalDesc.textContent = desc;
+
+  if (loginBtn) {
+    if (targetUrl) {
+      const redirectPath = targetUrl.startsWith("../") ? targetUrl : `../${targetUrl}`;
+      loginBtn.href = `admin/login.html?redirect=${encodeURIComponent(redirectPath)}`;
+    } else {
+      loginBtn.href = "admin/login.html";
+    }
+  }
+
+  modal.style.display = "flex";
+  requestAnimationFrame(() => {
+    modal.classList.add("active");
+  });
+}
+
+function closeAuthModal() {
+  const modal = document.getElementById("auth-modal");
+  if (!modal) return;
+  modal.classList.remove("active");
+  setTimeout(() => {
+    modal.style.display = "none";
+  }, 250);
+}
+
+// Inisialisasi event listener modal dan tombol layanan
+document.addEventListener("DOMContentLoaded", () => {
+  tampilkanLayanan();
+
+  // Tombol close modal
+  const modalCloseBtn = document.getElementById("auth-modal-close");
+  const modalCancelBtn = document.getElementById("auth-modal-cancel-btn");
+  const modalOverlay = document.getElementById("auth-modal");
+
+  if (modalCloseBtn) modalCloseBtn.addEventListener("click", closeAuthModal);
+  if (modalCancelBtn) modalCancelBtn.addEventListener("click", closeAuthModal);
+  if (modalOverlay) {
+    modalOverlay.addEventListener("click", (e) => {
+      if (e.target === modalOverlay) closeAuthModal();
+    });
+  }
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeAuthModal();
+  });
+
+  // Tombol "Lihat Riwayat Pengajuan Saya"
+  const btnRiwayat = document.getElementById("btn-riwayat-portal");
+  if (btnRiwayat) {
+    btnRiwayat.addEventListener("click", (e) => {
+      if (!currentUser) {
+        e.preventDefault();
+        openAuthModal(
+          "Akses Riwayat Pengajuan",
+          "Untuk melihat riwayat dan memantau status pengajuan surat Anda, silakan masuk ke akun warga terlebih dahulu.",
+          "riwayat.html"
+        );
+      }
+    });
+  }
+
+  // Delegasi klik tombol "Ajukan Surat" di dalam kartu layanan
+  if (layananContainer) {
+    layananContainer.addEventListener("click", (e) => {
+      const btnAjukan = e.target.closest(".btn-ajukan-layanan");
+      if (btnAjukan) {
+        if (!currentUser) {
+          e.preventDefault();
+          const targetHref = btnAjukan.getAttribute("href");
+          openAuthModal(
+            "Pengajuan Layanan Surat",
+            "Untuk mengajukan surat administrasi secara online di RW 16, Anda perlu login ke akun warga terlebih dahulu.",
+            targetHref
+          );
+        }
+      }
+    });
+  }
+});

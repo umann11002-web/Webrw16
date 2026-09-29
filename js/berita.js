@@ -103,7 +103,7 @@ function renderNews() {
     const berita = filteredNews[i];
     const cuplikan = berita.isi ? berita.isi.replace(/(<([^>]+)>)/gi, "").substring(0, 80) + "..." : "";
     const tanggalPublish = formatDate(berita.tanggal, { day: "numeric", month: "long", year: "numeric" });
-    const delay = 0.2 + (i * 0.1); // Staggered delay
+    const delay = (0.28 + ((i - 1) * 0.12)).toFixed(2); // Relaxed staggered delay
 
     gridHTML += `
       <a href="../berita-detail.html?id=${berita.id}" class="kartu-berita staggered-animate" style="animation-delay: ${delay}s;">

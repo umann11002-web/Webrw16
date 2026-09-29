@@ -68,7 +68,7 @@
           </p>
         </div>
         <div class="layanan-header-actions">
-          <a href="riwayat.html" class="btn-riwayat-portal">
+          <a href="riwayat.html" class="btn-riwayat-portal" id="btn-riwayat-portal">
             <i class="fas fa-clock-rotate-left"></i>
             <span>Lihat Riwayat Pengajuan Saya</span>
           </a>
@@ -80,6 +80,32 @@
         <div class="layanan-loading">
           <i class="fas fa-spinner fa-spin"></i>
           <p>Memuat daftar layanan...</p>
+        </div>
+      </div>
+
+      <!-- Modal Notifikasi Perlu Login -->
+      <div class="auth-modal-overlay" id="auth-modal" style="display: none;">
+        <div class="auth-modal-card">
+          <button class="auth-modal-close" id="auth-modal-close" aria-label="Tutup modal">&times;</button>
+          <div class="auth-modal-icon">
+            <i class="fas fa-user-lock"></i>
+          </div>
+          <h3 id="auth-modal-title">Perlu Login Terlebih Dahulu</h3>
+          <p id="auth-modal-desc">
+            Untuk mengakses fitur ini, silakan masuk ke akun warga Anda terlebih dahulu.
+          </p>
+          <div class="auth-modal-actions">
+            <a href="admin/login.html" id="auth-modal-login-btn" class="auth-btn-primary">
+              <i class="fas fa-sign-in-alt"></i> Login Sekarang
+            </a>
+            <button type="button" id="auth-modal-cancel-btn" class="auth-btn-secondary">
+              Nanti Saja
+            </button>
+          </div>
+          <div class="auth-modal-footer">
+            <span>Belum punya akun warga?</span>
+            <a href="admin/register.html">Daftar di sini</a>
+          </div>
         </div>
       </div>
     </main>

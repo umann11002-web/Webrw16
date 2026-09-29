@@ -5,67 +5,169 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Riwayat Pengajuan - RW 16</title>
     <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
     <style>
       .riwayat-container {
-        padding: 2rem 5%;
+        padding: 2.5rem 5%;
+        max-width: 1100px;
+        margin: 0 auto;
+        min-height: 75vh;
+      }
+      .riwayat-header {
+        margin-bottom: 1.75rem;
+      }
+      .riwayat-back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #0284c7;
+        font-weight: 600;
+        text-decoration: none;
+        margin-bottom: 1.25rem;
+        transition: transform 0.2s ease;
+      }
+      .riwayat-back-btn:hover {
+        transform: translateX(-3px);
       }
       .riwayat-container h1 {
         border: none;
         padding-left: 0;
+        font-size: 2rem;
+        color: #0f172a;
+        margin-bottom: 0.5rem;
       }
-      /* Menggunakan style tabel yang sama dari admin.html */
+      .riwayat-table-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+      }
       table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 1.5rem;
       }
       th,
       td {
-        padding: 12px;
-        border: 1px solid #ddd;
+        padding: 14px 16px;
+        border-bottom: 1px solid #f1f5f9;
         text-align: left;
       }
       thead tr {
-        background-color: #f2f2f2;
+        background-color: #f8fafc;
+        color: #475569;
+        font-size: 0.88rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
       }
       .download-btn {
-        padding: 0.4rem 0.8rem;
+        padding: 0.45rem 1rem;
         border: none;
-        border-radius: 4px;
+        border-radius: 6px;
         color: white;
         cursor: pointer;
         text-decoration: none;
-        background-color: var(--primary-green);
+        background-color: #0284c7;
+        font-size: 0.88rem;
+        font-weight: 500;
+        display: inline-block;
+        transition: opacity 0.2s;
+      }
+      .download-btn:hover:not(.disabled) {
+        opacity: 0.9;
       }
       .download-btn.disabled {
-        background-color: #ccc;
+        background-color: #cbd5e1;
         cursor: not-allowed;
+      }
+      .badge-status {
+        display: inline-block;
+        padding: 0.35rem 0.8rem;
+        border-radius: 9999px;
+        font-size: 0.82rem;
+        font-weight: 600;
+      }
+      .status-selesai {
+        background-color: #dcfce7;
+        color: #166534;
+      }
+      .status-menunggu {
+        background-color: #fef3c7;
+        color: #92400e;
+      }
+      .status-ditolak {
+        background-color: #fee2e2;
+        color: #991b1b;
       }
     </style>
   </head>
   <body>
     <main class="riwayat-container">
-      <h1>Riwayat Pengajuan Surat Anda</h1>
-      <p>Lacak status semua surat yang pernah Anda ajukan di sini.</p>
-      <div style="overflow-x: auto">
-        <table>
-          <thead>
-            <tr>
-              <th>Tanggal</th>
-              <th>Jenis Surat</th>
-              <th>Keperluan</th>
-              <th>Status</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="riwayat-table-body">
-            <tr>
-              <td colspan="5" style="text-align: center">Memuat riwayat...</td>
-            </tr>
-          </tbody>
-        </table>
+      <a href="layanan.html" class="riwayat-back-btn">
+        <i class="fas fa-arrow-left"></i> Kembali ke Layanan
+      </a>
+
+      <!-- State: Sedang Memeriksa Autentikasi -->
+      <div id="riwayat-loading" style="text-align: center; padding: 4rem 1rem; color: #64748b;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #0284c7; margin-bottom: 0.75rem; display: block;"></i>
+        <p>Memeriksa status akun...</p>
+      </div>
+
+      <!-- State: User Belum Login (Card Notifikasi Ramah) -->
+      <div id="auth-notice-section" style="display: none;">
+        <div class="auth-notice-card">
+          <div class="auth-notice-icon">
+            <i class="fas fa-user-lock"></i>
+          </div>
+          <h2>Upss, Anda Perlu Login!</h2>
+          <p>
+            Halaman riwayat pengajuan surat hanya dapat diakses oleh warga yang telah memiliki akun dan login. Silakan login terlebih dahulu untuk memantau surat Anda.
+          </p>
+          <div class="auth-notice-actions">
+            <a href="admin/login.html?redirect=../riwayat.html" class="auth-btn-primary" style="max-width: 200px;">
+              <i class="fas fa-sign-in-alt"></i> Login Sekarang
+            </a>
+            <a href="layanan.html" class="auth-btn-secondary" style="max-width: 200px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+              <i class="fas fa-arrow-left" style="margin-right: 6px;"></i> Ke Layanan
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- State: User Sudah Login (Konten Riwayat Pengajuan) -->
+      <div id="riwayat-content-section" style="display: none;">
+        <div class="riwayat-header">
+          <h1>Riwayat Pengajuan Surat Anda</h1>
+          <p style="color: #64748b;">Lacak status dan unduh surat yang telah selesai diproses oleh pengurus RW 16.</p>
+        </div>
+        <div class="riwayat-table-card">
+          <div style="overflow-x: auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Jenis Surat</th>
+                  <th>Keperluan</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="riwayat-table-body">
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 2rem; color: #64748b;">
+                    <i class="fas fa-spinner fa-spin" style="margin-right: 6px;"></i> Memuat riwayat...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </main>
+
     <script src="js/riwayat.js" type="module"></script>
   </body>
 </html>

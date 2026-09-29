@@ -27,6 +27,17 @@
 .page-header {
   text-align: center;
   margin-bottom: 2rem;
+  animation: pageHeaderEntrance 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes pageHeaderEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .page-header h1 {
   font-size: 2.5rem;
@@ -43,6 +54,17 @@
   flex-direction: column;
   gap: 1.5rem;
   margin-bottom: 2.5rem;
+  animation: newsControlsEntrance 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+@keyframes newsControlsEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @media (min-width: 768px) {
   .news-controls {
@@ -115,7 +137,19 @@
   box-shadow: 0 4px 20px rgba(0,0,0,0.06);
   text-decoration: none;
   color: inherit;
+  opacity: 0;
+  animation: heroEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.22s forwards;
   transition: transform 0.4s ease;
+}
+@keyframes heroEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .hero-news-card:hover {
   transform: translateY(-6px);
@@ -250,12 +284,12 @@
 /* Staggered Animations */
 .staggered-animate {
   opacity: 0;
-  animation: fadeInUp 0.6s ease forwards;
+  animation: fadeInUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(28px);
   }
   to {
     opacity: 1;
