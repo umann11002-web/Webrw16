@@ -402,67 +402,625 @@ th select {
   margin-bottom: 5px;
 }
 /* ======================================= */
-/* === HALAMAN DETAIL ALBUM ADMIN === */
+/* === HALAMAN DETAIL ALBUM & KELOLA ADMIN === */
 /* ======================================= */
+
+/* --- Universal Card Styling for Admin --- */
+.card,
+.admin-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.8rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
+}
+
+.card-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #f1f5f9;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin: 0;
+  border-left: none;
+  padding-left: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.card h2 i {
+  color: var(--primary-color);
+  font-size: 1.15rem;
+}
+
+.card-hint {
+  color: var(--light-text);
+  font-size: 0.88rem;
+  margin: 0.35rem 0 0 0;
+  line-height: 1.5;
+}
+
+/* Header & Back Link */
+.album-detail-header {
+  margin-bottom: 1.8rem;
+}
 
 .back-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  color: var(--dark-text);
+  margin-bottom: 0.8rem;
+  color: #475569;
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 0.4rem 0.8rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
 }
+
 .back-link:hover {
   color: var(--primary-color);
+  border-color: #cbd5e1;
+  transform: translateX(-3px);
+  background: #f8fafc;
+}
+
+.album-desc-subtitle {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+}
+
+/* Badges */
+.badge-status-cover {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-status-active {
+  background-color: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.badge-status-empty {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.badge-counter {
+  background-color: #f1f5f9;
+  color: #334155;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
+}
+
+/* Button Variants */
+.submit-btn.btn-primary {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+}
+.submit-btn.btn-primary:hover {
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
+}
+
+.submit-btn.btn-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+.submit-btn.btn-success:hover {
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+}
+
+.submit-btn.btn-danger,
+.btn-sm.btn-danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+.submit-btn.btn-danger:hover,
+.btn-sm.btn-danger:hover {
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+  transform: translateY(-2px);
+}
+
+.btn-sm {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.btn-large {
+  padding: 0.85rem 1.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.btn-link-danger {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.btn-link-danger:hover {
+  background: #fee2e2;
   text-decoration: underline;
 }
-#preview-container,
-.photo-grid {
+
+/* ======================================= */
+/* === SECTION 1: COVER MANAGER LAYOUT === */
+/* ======================================= */
+.cover-manager-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+  align-items: start;
 }
-.preview-img {
+
+@media (max-width: 860px) {
+  .cover-manager-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.current-cover-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.current-cover-img-wrapper {
   width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-.photo-card {
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
   position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.current-cover-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cover-action-bar {
+  display: flex;
+  justify-content: center;
+}
+
+.cover-upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cover-method-box {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+}
+
+.cover-method-box h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.4rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cover-method-box p {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0 0 0.8rem 0;
+}
+
+.cover-upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.file-upload-box {
+  position: relative;
+}
+
+.file-upload-box input[type="file"] {
+  display: none;
+}
+
+.file-upload-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.2rem;
+  background: white;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #334155;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.file-upload-label:hover {
+  border-color: #0284c7;
+  color: #0284c7;
+  background: #f0f9ff;
+}
+
+.cover-new-preview {
+  position: relative;
+  width: 180px;
+  height: 120px;
   border-radius: 8px;
   overflow: hidden;
+  border: 1px solid #e2e8f0;
+  margin-top: 0.25rem;
 }
-.photo-card img {
+
+.cover-new-preview img {
   width: 100%;
-  height: 120px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 8px;
-  transition: transform 0.2s;
 }
-.photo-card:hover img {
-  transform: scale(1.03);
-}
-.delete-photo-btn {
+
+.btn-cancel-preview {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  background: rgba(220, 53, 69, 0.85);
+  top: 4px;
+  right: 4px;
+  background: rgba(15, 23, 42, 0.75);
   color: white;
   border: none;
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   cursor: pointer;
-  font-size: 1rem;
-  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
 }
-.delete-photo-btn:hover {
-  background: rgba(220, 53, 69, 1);
+
+.cover-tip-box {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  color: #1e40af;
+}
+
+.cover-tip-box i {
+  font-size: 1.2rem;
+  color: #2563eb;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.cover-tip-box strong {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+
+.cover-tip-box p {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ======================================= */
+/* === SECTION 2: PHOTO UPLOAD FORM ====== */
+/* ======================================= */
+.file-upload-dropzone {
+  position: relative;
+  border: 2px dashed #94a3b8;
+  border-radius: 12px;
+  background: #f8fafc;
+  padding: 2.2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.file-upload-dropzone:hover {
+  border-color: #0284c7;
+  background: #f0f9ff;
+}
+
+.file-upload-dropzone input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.dropzone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.dropzone-icon {
+  font-size: 2.8rem;
+  color: #0284c7;
+  margin-bottom: 0.6rem;
+}
+
+.dropzone-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.dropzone-subtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.preview-meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 0.4rem 0.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.preview-grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.preview-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.upload-form-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.upload-progress-text {
+  font-size: 0.88rem;
+  font-weight: 500;
+  margin-top: 0.6rem;
+  color: #475569;
+}
+
+/* ======================================= */
+/* === SECTION 3: PHOTO GRID & CARDS ===== */
+/* ======================================= */
+.admin-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.admin-photo-item {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+}
+
+.admin-photo-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.admin-photo-item.is-cover-item {
+  border: 2px solid #f59e0b;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
+}
+
+.photo-img-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.photo-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.admin-photo-item:hover .photo-img-wrapper img {
+  transform: scale(1.04);
+}
+
+.cover-badge.active {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 5;
+}
+
+.photo-actions {
+  padding: 0.65rem 0.8rem;
+  background: #fafbfc;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.btn-make-cover {
+  padding: 0.35rem 0.75rem;
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.btn-make-cover:hover {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  color: #92400e;
+  transform: translateY(-1px);
+}
+
+.active-cover-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #d97706;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-delete-photo {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.btn-delete-photo:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Modal Cover Preview in manage-galeri */
+.modal-cover-preview {
+  margin-top: 0.5rem;
+}
+.modal-cover-preview img {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Album Card Cover Tag */
+.album-cover-link {
+  position: relative;
+}
+.album-cover-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+}
+.album-cover-tag.tag-has-cover {
+  background: rgba(16, 185, 129, 0.95);
+}
+.album-cover-tag.tag-no-cover {
+  background: rgba(245, 158, 11, 0.95);
 }
 
 /* ======================================= */

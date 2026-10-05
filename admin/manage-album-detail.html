@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kelola Detail Album - Admin</title>
+    <title>Kelola Detail Album - Admin RW 16</title>
     <link rel="stylesheet" href="../style.css" />
     <link
       rel="stylesheet"
@@ -13,45 +13,116 @@
   <body>
     <header class="admin-nav">
       <div class="nav-title">
+        <i class="fas fa-shield-alt"></i>
         <strong>RW 16 Admin Panel</strong>
       </div>
       <button class="hamburger-btn" id="admin-hamburger-btn">
         <i class="fas fa-bars"></i>
       </button>
       <div class="nav-links" id="admin-nav-links">
-        <a href="admin.html">Dashboard</a>
+        <a href="admin.html"><i class="fas fa-chart-line"></i> Dashboard</a>
         <div class="dropdown">
           <a href="#" class="dropdown-toggle"
-            >Kelola Data <i class="fas fa-chevron-down"></i
+            ><i class="fas fa-database"></i> Kelola Data <i class="fas fa-chevron-down"></i
           ></a>
           <div class="dropdown-menu">
             <a href="manage-layanan.html">Layanan</a>
-            <a href="manage-galeri.html">Galeri</a>
+            <a href="manage-galeri.html" class="active">Galeri</a>
             <a href="manage-penduduk.html">Statistik</a>
             <a href="manage-berita.html">Berita</a>
             <a href="manage-struktur.html">Struktur RW</a>
             <a href="manage-struktur-rt.html">Struktur RT</a>
           </div>
         </div>
-        <a href="#" id="admin-logout-btn" class="logout-btn">Logout</a>
+        <a href="#" id="admin-logout-btn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
       </div>
     </header>
 
     <main class="manage-main">
-      <a href="manage-galeri.html" class="back-link"
-        ><i class="fas fa-arrow-left"></i> Kembali ke Daftar Album</a
-      >
-      <h1 id="detail-album-title">Memuat nama album...</h1>
-      <p>Di sini Anda dapat menambah atau menghapus foto di dalam album ini.</p>
+      <div class="album-detail-header">
+        <a href="manage-galeri.html" class="back-link">
+          <i class="fas fa-arrow-left"></i> Kembali ke Daftar Album
+        </a>
+        <h1 id="detail-album-title">Memuat nama album...</h1>
+        <p class="album-desc-subtitle">Kelola foto sampul (cover) dan foto dokumentasi kegiatan di dalam album ini.</p>
+      </div>
 
-      <!-- Form untuk menambah foto baru -->
-      <div class="card">
-        <h2>Tambah Foto Baru ke Album Ini</h2>
+      <!-- KARTU 1: KELOLA SAMPUL ALBUM (DIPISAH DARI UPLOAD BIASA) -->
+      <div class="card album-cover-card">
+        <div class="card-header-flex">
+          <div>
+            <h2><i class="fas fa-image"></i> Foto Sampul (Cover Album)</h2>
+            <p class="card-hint">
+              Foto sampul adalah gambar utama yang menjadi thumbnail album di halaman depan Galeri Warga.
+            </p>
+          </div>
+          <span id="cover-status-badge" class="badge-status-cover badge-status-empty">Memeriksa sampul...</span>
+        </div>
+
+        <div class="cover-manager-layout">
+          <!-- Preview Cover Saat Ini -->
+          <div class="current-cover-display">
+            <div class="current-cover-img-wrapper" id="current-cover-wrapper">
+              <img id="current-cover-img" src="https://placehold.co/400x300/eee/999?text=Belum+Ada+Sampul" alt="Sampul Album" />
+            </div>
+            <div class="cover-action-bar" id="cover-action-bar">
+              <button type="button" class="btn-sm btn-danger" id="remove-cover-btn" style="display: none;">
+                <i class="fas fa-trash-alt"></i> Hapus Sampul Album
+              </button>
+            </div>
+          </div>
+
+          <!-- Pilihan Pengaturan Sampul -->
+          <div class="cover-upload-section">
+            <div class="cover-method-box">
+              <h3><i class="fas fa-cloud-upload-alt"></i> Ganti / Unggah Foto Sampul Khusus</h3>
+              <p>Pilih file gambar khusus dari perangkat Anda untuk langsung dijadikan cover album ini:</p>
+              
+              <form id="upload-cover-form" class="cover-upload-form">
+                <div class="file-upload-box">
+                  <input type="file" id="cover-file-input" accept="image/*" />
+                  <label for="cover-file-input" class="file-upload-label" id="cover-file-label">
+                    <i class="fas fa-camera"></i>
+                    <span id="cover-file-name-text">Pilih File Foto Sampul</span>
+                  </label>
+                </div>
+
+                <div id="cover-preview-container" class="cover-new-preview" style="display: none;">
+                  <img id="cover-new-preview-img" src="" alt="Pratinjau Sampul Baru" />
+                  <button type="button" class="btn-cancel-preview" id="cancel-cover-preview-btn" title="Batal">&times;</button>
+                </div>
+
+                <div>
+                  <button type="submit" class="submit-btn btn-primary" id="save-cover-btn" disabled>
+                    <i class="fas fa-check"></i> Simpan Foto Sampul
+                  </button>
+                </div>
+                <p id="cover-upload-progress" class="upload-progress-text"></p>
+              </form>
+            </div>
+
+            <div class="cover-tip-box">
+              <i class="fas fa-lightbulb"></i>
+              <div>
+                <strong>Tips Memilih Sampul:</strong>
+                <p>Selain mengunggah file di atas, Anda juga bisa memilih foto yang sudah ada di daftar <b>"Foto di Album Ini"</b> di bawah dengan mengeklik tombol <b>"⭐ Jadikan Sampul"</b>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KARTU 2: FORM TAMBAH FOTO BARU -->
+      <div class="card album-upload-card">
+        <div class="card-header-flex">
+          <div>
+            <h2><i class="fas fa-images"></i> Tambah Foto Baru ke Album Ini</h2>
+            <p class="card-hint">Pilih foto dokumentasi yang ingin dimasukkan ke dalam album ini (bisa pilih banyak sekaligus).</p>
+          </div>
+        </div>
+
         <form id="add-photos-form">
-          <div class="form-group">
-            <label for="photo-files-input"
-              >Pilih File Gambar (Bisa lebih dari satu)</label
-            >
+          <div class="file-upload-dropzone" id="dropzone-area">
             <input
               type="file"
               id="photo-files-input"
@@ -59,19 +130,45 @@
               multiple
               required
             />
+            <div class="dropzone-content">
+              <i class="fas fa-cloud-upload-alt dropzone-icon"></i>
+              <span class="dropzone-title">Klik di sini untuk memilih foto</span>
+              <span class="dropzone-subtitle">Bisa memilih lebih dari satu foto sekaligus (JPG, PNG, WEBP)</span>
+            </div>
           </div>
-          <div id="preview-container"></div>
-          <button type="submit" class="submit-btn" id="upload-photos-btn">
-            Unggah Foto
-          </button>
-          <p id="upload-progress"></p>
+
+          <div id="preview-meta-bar" class="preview-meta-bar" style="display: none;">
+            <span id="preview-count-text">0 foto dipilih</span>
+            <button type="button" id="clear-selected-photos-btn" class="btn-link-danger">
+              <i class="fas fa-times-circle"></i> Batal Semua Pilihan
+            </button>
+          </div>
+
+          <div id="preview-container" class="preview-grid-wrapper"></div>
+
+          <!-- TOMBOL SIMPAN & UNGGAH YANG SANGAT JELAS -->
+          <div class="upload-form-actions">
+            <button type="submit" class="submit-btn btn-success btn-large" id="upload-photos-btn">
+              <i class="fas fa-cloud-upload-alt"></i> Simpan & Unggah Foto ke Album
+            </button>
+          </div>
+          <p id="upload-progress" class="upload-progress-text"></p>
         </form>
       </div>
 
-      <!-- Grid untuk menampilkan foto yang sudah ada -->
-      <h2>Foto di Album Ini</h2>
-      <div id="photo-grid" class="photo-grid">
-        <p>Memuat foto...</p>
+      <!-- KARTU 3: GRID FOTO DI DALAM ALBUM -->
+      <div class="card photo-list-card">
+        <div class="card-header-flex">
+          <div>
+            <h2><i class="fas fa-photo-video"></i> Foto di Album Ini</h2>
+            <p class="card-hint">Klik tombol <b>"⭐ Jadikan Sampul"</b> pada foto mana pun untuk menjadikannya cover album.</p>
+          </div>
+          <span id="photo-total-count" class="badge-counter">0 Foto</span>
+        </div>
+
+        <div id="photo-grid" class="admin-photo-grid">
+          <p>Memuat foto...</p>
+        </div>
       </div>
     </main>
 

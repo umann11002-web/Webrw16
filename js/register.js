@@ -32,11 +32,22 @@ const registerForm = document.getElementById("register-form");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const errorMessage = document.getElementById("error-message");
+const submitBtn = document.getElementById("register-submit-btn");
 
 registerForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = emailInput.value;
+  const email = emailInput.value.trim();
   const password = passwordInput.value;
+
+  if (errorMessage) {
+    errorMessage.style.display = "none";
+    errorMessage.textContent = "";
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+  }
 
   try {
     // 1. Buat user di Authentication
@@ -59,13 +70,23 @@ registerForm.addEventListener("submit", async (e) => {
     window.location.href = "../admin/login.html?registered=true";
   } catch (error) {
     console.error("Registrasi Gagal:", error.message);
+    let msg = "Terjadi kesalahan. Silakan coba lagi.";
     if (error.code === "auth/email-already-in-use") {
-      errorMessage.textContent = "Email ini sudah terdaftar. Silakan login.";
+      msg = "Email ini sudah terdaftar. Silakan login.";
     } else if (error.code === "auth/weak-password") {
-      errorMessage.textContent =
-        "Password terlalu lemah. Gunakan minimal 6 karakter.";
-    } else {
-      errorMessage.textContent = "Terjadi kesalahan. Silakan coba lagi.";
+      msg = "Password terlalu lemah. Gunakan minimal 6 karakter.";
+    } else if (error.code === "auth/invalid-email") {
+      msg = "Format email tidak valid.";
+    }
+    
+    if (errorMessage) {
+      errorMessage.textContent = msg;
+      errorMessage.style.display = "block";
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Daftar';
     }
   }
 });
