@@ -59,22 +59,113 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Logika untuk Hero Slider (hanya di index.html) ---
   if (document.querySelector(".heroSwiper")) {
-    new Swiper(".heroSwiper", {
-      slidesPerView: 1,
-      loop: true,
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-      },
-      pagination: {
-        el: ".heroSwiper .swiper-pagination",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: ".heroSwiper .swiper-button-next",
-        prevEl: ".heroSwiper .swiper-button-prev",
-      },
-    });
+    const heroWrapper = document.getElementById("hero-swiper-wrapper");
+
+    // Load slides from Firestore
+    async function loadHeroSlides() {
+      try {
+        const heroDocRef = doc(db, "struktur_organisasi", "hero_carousel");
+        const docSnap = await getDoc(heroDocRef);
+
+        let slides = [];
+        if (docSnap.exists() && docSnap.data().slides && docSnap.data().slides.length > 0) {
+          slides = docSnap.data().slides;
+        }
+
+        if (slides.length === 0) {
+          // Fallback: tampilkan placeholder
+          heroWrapper.innerHTML = `
+            <div class="swiper-slide" style="background-color: #1e293b; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 600;">
+              <div style="text-align: center;">
+                <i class="fas fa-images" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.5;"></i>
+                Banner / Hero Carousel
+              </div>
+            </div>
+          `;
+        } else {
+          // Render slides
+          heroWrapper.innerHTML = slides.map((slide) => {
+            if (slide.type === "video") {
+              return `
+                <div class="swiper-slide hero-video-slide">
+                  <video src="${slide.url}" muted playsinline loop preload="metadata"
+                    style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                </div>
+              `;
+            } else {
+              return `
+                <div class="swiper-slide">
+                  <img src="${slide.url}" alt="Hero Banner" style="width:100%;height:100%;object-fit:cover;display:block;" />
+                </div>
+              `;
+            }
+          }).join("");
+        }
+
+        // Initialize Swiper AFTER slides are loaded
+        const heroSwiper = new Swiper(".heroSwiper", {
+          slidesPerView: 1,
+          loop: slides.length > 1,
+          autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+          },
+          pagination: {
+            el: ".heroSwiper .swiper-pagination",
+            clickable: true,
+          },
+          navigation: {
+            nextEl: ".heroSwiper .swiper-button-next",
+            prevEl: ".heroSwiper .swiper-button-prev",
+          },
+          on: {
+            // Handle video autoplay on slide change
+            slideChangeTransitionEnd: function () {
+              // Pause all videos
+              document.querySelectorAll(".heroSwiper video").forEach(v => {
+                v.pause();
+                v.currentTime = 0;
+              });
+              // Play video on active slide
+              const activeSlide = this.slides[this.activeIndex];
+              if (activeSlide) {
+                const video = activeSlide.querySelector("video");
+                if (video) {
+                  video.play().catch(() => {});
+                  // Extend autoplay delay for video slides
+                  this.params.autoplay.delay = Math.max(video.duration * 1000 || 8000, 5000);
+                } else {
+                  this.params.autoplay.delay = 5000;
+                }
+              }
+            },
+            init: function () {
+              // Auto-play video on first slide if it's a video
+              const firstSlide = this.slides[this.activeIndex];
+              if (firstSlide) {
+                const video = firstSlide.querySelector("video");
+                if (video) {
+                  video.play().catch(() => {});
+                }
+              }
+            },
+          },
+        });
+      } catch (error) {
+        console.error("Error loading hero slides:", error);
+        heroWrapper.innerHTML = `
+          <div class="swiper-slide" style="background-color: #1e293b; display: flex; align-items: center; justify-content: center; color: white;">
+            <div style="text-align: center;">
+              <i class="fas fa-images" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.5;"></i>
+              Hero Carousel
+            </div>
+          </div>
+        `;
+        new Swiper(".heroSwiper", { slidesPerView: 1 });
+      }
+    }
+
+    loadHeroSlides();
 
     // --- Logika untuk Transparent Header on Scroll ---
     const header = document.querySelector("header");
