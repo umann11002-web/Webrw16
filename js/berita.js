@@ -144,11 +144,32 @@ async function fetchAndRenderNews() {
 }
 
 // Event Listeners
+
+// Mobile Filter Toggle
+const filterToggleBtn = document.getElementById('filter-toggle-btn');
+const filterToggleLabel = document.getElementById('filter-toggle-label');
+const filterWrapper = document.querySelector('.category-filter-wrapper');
+
+if (filterToggleBtn && filterWrapper) {
+  filterToggleBtn.addEventListener('click', () => {
+    filterWrapper.classList.toggle('filter-open');
+  });
+}
+
 categoryFilters.forEach(btn => {
   btn.addEventListener('click', (e) => {
     categoryFilters.forEach(b => b.classList.remove('active'));
     e.target.classList.add('active');
     currentCategory = e.target.getAttribute('data-category');
+
+    // Update toggle label & close dropdown on mobile
+    if (filterToggleLabel) {
+      filterToggleLabel.textContent = currentCategory;
+    }
+    if (filterWrapper && window.innerWidth <= 767) {
+      filterWrapper.classList.remove('filter-open');
+    }
+
     renderNews();
   });
 });

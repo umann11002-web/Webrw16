@@ -61,12 +61,19 @@
         </div>
 
         <section class="news-controls">
-          <div class="category-filters" id="category-filters">
-            <button class="filter-pill active" data-category="Semua">Semua</button>
-            <button class="filter-pill" data-category="Pengumuman">Pengumuman</button>
-            <button class="filter-pill" data-category="Kegiatan">Kegiatan</button>
-            <button class="filter-pill" data-category="Kesehatan">Kesehatan</button>
-            <button class="filter-pill" data-category="Pembangunan">Pembangunan</button>
+          <div class="category-filter-wrapper">
+            <button class="filter-toggle-btn" id="filter-toggle-btn">
+              <i class="fas fa-filter"></i>
+              <span id="filter-toggle-label">Semua</span>
+              <i class="fas fa-chevron-down filter-chevron"></i>
+            </button>
+            <div class="category-filters" id="category-filters">
+              <button class="filter-pill active" data-category="Semua">Semua</button>
+              <button class="filter-pill" data-category="Pengumuman">Pengumuman</button>
+              <button class="filter-pill" data-category="Kegiatan">Kegiatan</button>
+              <button class="filter-pill" data-category="Kesehatan">Kesehatan</button>
+              <button class="filter-pill" data-category="Pembangunan">Pembangunan</button>
+            </div>
           </div>
           
           <div class="search-sort-bar">
