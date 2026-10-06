@@ -189,12 +189,21 @@
       </div>
 
       <div class="struktur-image-container">
+        <div id="struktur-loading" style="text-align: center; padding: 3rem; color: #64748b;">
+          <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
+          <span>Memuat gambar struktur organisasi...</span>
+        </div>
         <img
           id="struktur-img"
-          src="https://placehold.co/1200x800/f0f4f8/2c3e50?text=Struktur+Organisasi+RW+16%0A%0A(Ganti+dengan+gambar+asli)"
+          src=""
           alt="Bagan Struktur Organisasi RW 16 Kelurahan Cibabat"
           loading="lazy"
+          style="display: none;"
         />
+        <div id="struktur-empty" style="display: none; text-align: center; padding: 3rem; color: #999;">
+          <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.4;"></i>
+          <p style="font-size: 1rem;">Gambar bagan struktur organisasi belum tersedia.</p>
+        </div>
       </div>
       <p class="image-hint">
         <i class="fas fa-search-plus"></i>
@@ -317,19 +326,57 @@
     </div> <!-- Penutup .page-wrapper -->
 
     <script src="js/script.js" type="module"></script>
-    <script>
-      // Lightbox zoom functionality
-      document.addEventListener('DOMContentLoaded', () => {
+    <script type="module">
+      // Load bagan image from Firestore
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+      import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBD4ypi0bq71tJfDdyqgdLL3A_RSye9Q7I",
+        authDomain: "rw16cibabat-dbf87.firebaseapp.com",
+        projectId: "rw16cibabat-dbf87",
+        storageBucket: "rw16cibabat-dbf87.appspot.com",
+        messagingSenderId: "744879659808",
+        appId: "1:744879659808:web:9d91c4bd2068260e189545",
+      };
+
+      const app = initializeApp(firebaseConfig, "struktur-app");
+      const db = getFirestore(app);
+
+      document.addEventListener('DOMContentLoaded', async () => {
         const img = document.getElementById('struktur-img');
         const lightbox = document.getElementById('img-lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const closeBtn = document.getElementById('lightbox-close');
+        const loading = document.getElementById('struktur-loading');
+        const empty = document.getElementById('struktur-empty');
 
+        try {
+          const settingsRef = doc(db, "struktur_organisasi", "settings");
+          const docSnap = await getDoc(settingsRef);
+          
+          if (docSnap.exists() && docSnap.data().baganUrl) {
+            img.src = docSnap.data().baganUrl;
+            img.style.display = "block";
+            loading.style.display = "none";
+          } else {
+            loading.style.display = "none";
+            empty.style.display = "block";
+          }
+        } catch (error) {
+          console.error("Error loading bagan:", error);
+          loading.style.display = "none";
+          empty.style.display = "block";
+        }
+
+        // Lightbox zoom functionality
         if (img && lightbox) {
           img.addEventListener('click', () => {
-            lightboxImg.src = img.src;
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            if (img.src && img.style.display !== 'none') {
+              lightboxImg.src = img.src;
+              lightbox.classList.add('active');
+              document.body.style.overflow = 'hidden';
+            }
           });
 
           const closeLightbox = () => {
@@ -349,3 +396,4 @@
     </script>
   </body>
 </html>
+

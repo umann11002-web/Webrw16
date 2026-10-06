@@ -697,16 +697,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 0.8rem;
   }
-  .info-btn {
-    flex-direction: row;
-    justify-content: flex-start;
-    padding: 1rem;
-    gap: 1rem;
-    box-shadow: var(--card-shadow);
-  }
-  .info-btn i {
-    font-size: 1.5rem;
-  }
+  /* .info-btn styles moved to home.css to avoid override conflicts */
   .stats-grid {
     grid-template-columns: 1fr;
     gap: 0.8rem;
