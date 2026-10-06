@@ -442,44 +442,7 @@
   font-weight: 500;
 }
 
-/* --- Responsive Media Queries --- */
-@media (max-width: 768px) {
-  .layanan-container {
-    padding: 1.5rem 1rem 3.5rem;
-  }
-
-  .layanan-header-portal {
-    padding: 1.5rem 1.25rem;
-    gap: 1.25rem;
-    border-radius: 10px;
-  }
-
-  .layanan-header-portal h1 {
-    font-size: 1.6rem;
-  }
-
-  .layanan-header-desc {
-    font-size: 0.95rem;
-  }
-
-  .layanan-header-actions {
-    width: 100%;
-  }
-
-  .btn-riwayat-portal {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .layanan-grid {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-
-  .kartu-layanan {
-    padding: 1.35rem;
-  }
-}
+/* Layanan responsive styles moved to css/pages/layanan.css */
 
 /* ================================================= */
 /* === [REVISI] STYLE UNTUK HALAMAN DETAIL RT === */
@@ -709,12 +672,26 @@
   .sambutan-ketua {
     flex-direction: column;
     text-align: center;
-    padding: 2rem 1.5rem;
-    gap: 1.5rem;
+    padding: 0;
+    gap: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .sambutan-foto {
+    flex: none;
+    width: 100%;
+    min-height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2.5rem 0 0;
   }
   .sambutan-foto img {
-    width: 150px;
-    height: 150px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   }
   .info-buttons {
     grid-template-columns: 1fr 1fr;
@@ -827,41 +804,7 @@
     font-size: 0.8em;
   }
 
-  .admin-nav {
-    flex-wrap: wrap;
-  }
-  .admin-nav .hamburger-btn {
-    display: block;
-  }
-  .admin-nav .nav-links {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    align-items: stretch;
-    margin-top: 1rem;
-    gap: 0;
-  }
-  .admin-nav .nav-links.active {
-    display: flex;
-  }
-  .admin-nav .nav-links a {
-    padding: 1.2rem 1rem;
-    text-align: left;
-    border-top: 1px solid #eee;
-  }
-  .admin-nav .nav-links .logout-btn {
-    margin-top: 0.5rem;
-  }
-  .admin-nav .dropdown {
-    width: 100%;
-  }
-  .admin-nav .dropdown-menu {
-    position: static;
-    box-shadow: none;
-    border-top: 1px dashed #ccc;
-    padding-left: 1rem;
-    background-color: #f8f9fa;
-  }
+  /* Admin nav styles moved to admin.css */
 
   .bottom-nav {
     display: flex;

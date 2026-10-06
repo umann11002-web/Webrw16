@@ -353,10 +353,83 @@
 
   .layanan-grid {
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: 0.85rem;
   }
 
+  /* === Accordion Mobile Layout === */
   .kartu-layanan {
-    padding: 1.35rem;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .kartu-layanan-header {
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 0;
+    padding-bottom: 1.1rem;
+    border-bottom: none;
+    position: relative;
+    padding-right: 2.5rem;
+  }
+
+  /* Chevron icon indicator */
+  .kartu-layanan-header::after {
+    content: '\f078';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.8rem;
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+
+  .kartu-layanan.expanded .kartu-layanan-header::after {
+    transform: translateY(-50%) rotate(180deg);
+    color: var(--primary-color);
+  }
+
+  .kartu-layanan.expanded .kartu-layanan-header {
+    border-bottom: 1px solid #f1f5f9;
+    margin-bottom: 0;
+    padding-bottom: 1.1rem;
+  }
+
+  /* Collapse body and footer by default */
+  .kartu-layanan-body {
+    max-height: 0;
+    overflow: hidden;
+    margin-bottom: 0;
+    padding: 0 1.25rem;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.35s ease;
+  }
+
+  .kartu-layanan-footer {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 1.25rem;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.35s ease;
+  }
+
+  /* Expanded state */
+  .kartu-layanan.expanded .kartu-layanan-body {
+    max-height: 600px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0;
+  }
+
+  .kartu-layanan.expanded .kartu-layanan-footer {
+    max-height: 120px;
+    padding: 0 1.25rem 1.25rem;
+  }
+
+  /* Active card highlight */
+  .kartu-layanan.expanded {
+    border-color: rgba(44, 62, 80, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   }
 }

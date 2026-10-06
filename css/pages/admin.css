@@ -1037,9 +1037,17 @@ th select {
   .admin-nav {
     flex-wrap: wrap;
     padding: 0.8rem 4%;
+    position: relative;
+  }
+  .admin-nav .nav-title {
+    flex: 1;
   }
   .admin-nav .hamburger-btn {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
   }
   .admin-nav .nav-links {
     display: none;
@@ -1049,37 +1057,71 @@ th select {
     margin-top: 0.8rem;
     gap: 0;
     background: #0f172a;
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
+    padding: 0.25rem 0;
   }
   .admin-nav .nav-links.active {
     display: flex;
   }
-  .admin-nav .nav-links a {
-    padding: 1rem 1.2rem;
+  .admin-nav .nav-links > a,
+  .admin-nav .nav-links > .dropdown > .dropdown-toggle {
+    padding: 0.9rem 1.25rem;
     text-align: left;
     border-radius: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.85) !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .admin-nav .nav-links > a:hover,
+  .admin-nav .nav-links > .dropdown > .dropdown-toggle:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: white !important;
   }
   .admin-nav .nav-links .logout-btn {
-    margin: 0.5rem 1rem;
+    margin: 0.6rem 0.8rem;
     text-align: center;
-    border-radius: 6px;
+    border-radius: 8px;
+    border-bottom: none !important;
+    padding: 0.8rem 1rem !important;
+    justify-content: center;
   }
   .admin-nav .dropdown {
     width: 100%;
+  }
+  .admin-nav .dropdown-toggle {
+    width: 100%;
+  }
+  .admin-nav .dropdown-toggle i.fa-chevron-down {
+    margin-left: auto;
   }
   .admin-nav .dropdown-menu {
     position: static;
     box-shadow: none;
     border: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 0;
     padding-left: 0;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.25) !important;
+    margin-top: 0;
   }
   .admin-nav .dropdown-menu a {
-    padding-left: 2rem;
+    padding: 0.8rem 1.25rem 0.8rem 2.8rem !important;
+    font-size: 0.88rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-top: none !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+  }
+  .admin-nav .dropdown-menu a:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: white !important;
+  }
+  .admin-nav .dropdown-menu a:last-child {
+    border-bottom: none !important;
   }
 
   /* Welcome Banner Mobile */

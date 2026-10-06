@@ -246,6 +246,21 @@ document.addEventListener("DOMContentLoaded", () => {
             targetHref
           );
         }
+        return; // Don't toggle accordion when clicking the button
+      }
+
+      // Accordion toggle for mobile
+      if (window.innerWidth <= 768) {
+        const card = e.target.closest(".kartu-layanan");
+        if (card) {
+          // Close other open cards
+          const allCards = layananContainer.querySelectorAll(".kartu-layanan.expanded");
+          allCards.forEach((c) => {
+            if (c !== card) c.classList.remove("expanded");
+          });
+          // Toggle current card
+          card.classList.toggle("expanded");
+        }
       }
     });
   }
