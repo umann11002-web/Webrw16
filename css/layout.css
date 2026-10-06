@@ -222,18 +222,7 @@ footer {
   text-shadow: none;
 }
 
-/* Gradient overlay di atas hero carousel supaya header text selalu terbaca */
+/* Header readability handled by hero-gradient-overlay in home.css */
 .hero-carousel-section {
   position: relative;
-}
-.hero-carousel-section::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 120px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.15) 60%, transparent 100%);
-  z-index: 10;
-  pointer-events: none;
 }

@@ -7,18 +7,43 @@ main,
   padding: 3rem 5%;
 }
 
-/* [BARU] Gaya untuk Hero Carousel */
+/* ========================================= */
+/* === HERO SECTION DENGAN VIDEO & OVERLAY === */
+/* ========================================= */
 .hero-carousel-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #0b1120;
   margin-bottom: 0;
 }
 
+/* 1. Media Container & Swiper (Background Video) */
+.hero-media-container,
 .heroSwiper {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  z-index: 1;
+}
+
+.heroSwiper .swiper-slide {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #0b1120;
 }
 
 .heroSwiper .swiper-slide img,
-.heroSwiper .swiper-slide video {
+.heroSwiper .swiper-slide video,
+.hero-bg-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -26,16 +51,512 @@ main,
   display: block;
 }
 
-/* Hero Carousel Mobile - kurangi tinggi biar video gak terlalu ke-crop */
-@media (max-width: 768px) {
-  .heroSwiper {
-    height: 55vh;
+.hero-loading-slate {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #1e293b 0%, #0b1120 100%);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 2.2rem;
+}
+
+/* 2. Dark Gradient Overlay */
+.hero-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    /* Layer A: Radial Vignette - lebih gelap di belakang teks untuk kontras */
+    radial-gradient(
+      ellipse 85% 65% at 50% 50%,
+      rgba(15, 23, 42, 0.48) 0%,
+      rgba(15, 23, 42, 0.72) 75%,
+      rgba(11, 17, 32, 0.9) 100%
+    ),
+    /* Layer B: Vertical Gradient - gelap di atas untuk navbar, transparan di tengah, gelap di transisi bawah */
+    linear-gradient(
+      180deg,
+      rgba(11, 17, 32, 0.82) 0%,
+      rgba(15, 23, 42, 0.38) 25%,
+      rgba(15, 23, 42, 0.32) 65%,
+      rgba(11, 17, 32, 0.85) 92%,
+      rgba(11, 17, 32, 0.98) 100%
+    );
+}
+
+/* 3. Halftone Dot Overlay (Pure CSS Radial-Gradient Staggered Pattern) */
+.hero-halftone-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+  /* Pola titik-titik halus selang-seling ala halftone screen print */
+  background-image:
+    radial-gradient(circle at 1.5px 1.5px, rgba(255, 255, 255, 0.22) 1px, transparent 0),
+    radial-gradient(circle at 4.5px 4.5px, rgba(255, 255, 255, 0.22) 1px, transparent 0);
+  background-size: 6px 6px;
+  background-position: 0 0, 3px 3px;
+  opacity: 0.48;
+  mix-blend-mode: overlay;
+  /* Masking halus agar efek memudar alami ke pinggir & tidak menutupi teks */
+  -webkit-mask-image: radial-gradient(
+    ellipse 85% 75% at 50% 50%,
+    black 40%,
+    rgba(0, 0, 0, 0.75) 75%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 85% 75% at 50% 50%,
+    black 40%,
+    rgba(0, 0, 0, 0.75) 75%,
+    transparent 100%
+  );
+}
+
+/* 4. Content / Typography HTML */
+.hero-content {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(90px, 13vh, 125px) clamp(1.25rem, 5vw, 3rem) clamp(75px, 10vh, 95px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: auto;
+}
+
+.hero-content-inner {
+  max-width: clamp(320px, 92vw, 880px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: heroEntrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes heroEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+/* Badge */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: clamp(0.35rem, 0.8vw, 0.48rem) clamp(0.9rem, 2vw, 1.3rem);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 9999px;
+  color: #f8fafc;
+  font-size: clamp(0.72rem, 1.2vw, 0.84rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: clamp(1rem, 2.5vh, 1.5rem);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+}
+
+.hero-badge-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: heroDotPulse 2s infinite;
+}
+
+@keyframes heroDotPulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+/* Heading H1 */
+.hero-title {
+  font-size: clamp(2rem, 4.4vw + 0.5rem, 3.8rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-bottom: clamp(0.5rem, 1.4vh, 0.75rem);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.7);
+  word-break: break-word;
+}
+
+.hero-title-accent {
+  background: linear-gradient(135deg, #ffffff 25%, #a7f3d0 70%, #34d399 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 14px rgba(0, 0, 0, 0.5));
+}
+
+/* Subtitle / Lokasi */
+.hero-subtitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: clamp(0.85rem, 1.4vw, 1.08rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #cbd5e1;
+  margin-bottom: clamp(0.85rem, 2vh, 1.3rem);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+}
+
+.hero-subtitle i {
+  color: #34d399;
+  font-size: 0.9em;
+}
+
+/* Paragraph Description */
+.hero-description {
+  font-size: clamp(0.9rem, 1.4vw, 1.12rem);
+  font-weight: 400;
+  line-height: 1.68;
+  color: rgba(241, 245, 249, 0.94);
+  max-width: clamp(280px, 90%, 680px);
+  margin: 0 auto clamp(1.5rem, 3.2vh, 2.2rem);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.65);
+}
+
+/* Action Buttons */
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: clamp(1.4rem, 2.8vh, 2rem);
+}
+
+.hero-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: clamp(0.75rem, 1.4vw, 0.95rem) clamp(1.4rem, 2.8vw, 2.2rem);
+  font-size: clamp(0.88rem, 1.2vw, 1.02rem);
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.hero-btn-primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-btn-primary:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.6);
+  color: #ffffff;
+}
+
+.hero-btn-secondary {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.hero-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.65);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+}
+
+/* Feature Highlight Pills */
+.hero-highlights {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.45rem, 1.2vw, 0.85rem);
+  flex-wrap: wrap;
+  margin-bottom: clamp(1rem, 2.5vh, 1.8rem);
+}
+
+.hero-highlight-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.38rem 0.95rem;
+  background: rgba(15, 23, 42, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 9999px;
+  font-size: clamp(0.74rem, 1vw, 0.84rem);
+  color: rgba(241, 245, 249, 0.88);
+  transition: all 0.25s ease;
+}
+
+.hero-highlight-pill i {
+  color: #34d399;
+  font-size: 0.82em;
+}
+
+.hero-highlight-pill:hover {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(52, 211, 153, 0.45);
+  color: #ffffff;
+}
+
+/* Scroll Down Indicator */
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: clamp(0.85rem, 2vh, 1.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.72);
+  transition: all 0.3s ease;
+}
+
+.hero-scroll-indicator:hover {
+  color: #ffffff;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.scroll-mouse {
+  width: 22px;
+  height: 36px;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  border-radius: 12px;
+  position: relative;
+}
+
+.scroll-wheel {
+  width: 3px;
+  height: 7px;
+  background-color: #34d399;
+  border-radius: 2px;
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: heroMouseWheel 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes heroMouseWheel {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 14px);
+  }
+}
+
+.scroll-text {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+/* Swiper Navigation Custom Styles (jika ada lebih dari 1 slide) */
+.heroSwiper .swiper-button-next,
+.heroSwiper .swiper-button-prev {
+  color: rgba(255, 255, 255, 0.8);
+  width: 44px;
+  height: 44px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 50%;
+  transition: all 0.25s ease;
+  z-index: 5;
+}
+
+.heroSwiper .swiper-button-next:after,
+.heroSwiper .swiper-button-prev:after {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.heroSwiper .swiper-button-next:hover,
+.heroSwiper .swiper-button-prev:hover {
+  background: rgba(15, 23, 42, 0.8);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.heroSwiper .swiper-pagination {
+  bottom: clamp(1rem, 2.5vh, 2rem);
+  z-index: 5;
+}
+
+.heroSwiper .swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.5);
+  width: 8px;
+  height: 8px;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.heroSwiper .swiper-pagination-bullet-active {
+  background: #34d399;
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* ========================================= */
+/* === RESPONSIVE BREAKPOINTS UNTUK HERO === */
+/* ========================================= */
+
+/* Tablet (<= 768px) */
+@media (max-width: 768px) {
+  .hero-content {
+    padding-top: clamp(5.5rem, 14vh, 7rem);
+    padding-bottom: clamp(4.5rem, 12vh, 6rem);
+  }
+
+  .heroSwiper .swiper-button-next,
+  .heroSwiper .swiper-button-prev {
+    display: none; /* Sembunyikan panah di tablet & mobile agar tidak menghalangi teks */
+  }
+}
+
+/* Mobile Portrait (<= 480px, e.g. 390x844) */
 @media (max-width: 480px) {
-  .heroSwiper {
-    height: 45vh;
+  .hero-carousel-section {
+    min-height: 100svh;
+  }
+
+  .hero-content {
+    /* Safe zones: header atas transparan (~70px) dan bottom nav bawah (~65px) */
+    padding-top: 80px;
+    padding-bottom: 85px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .hero-badge {
+    margin-bottom: 0.85rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-btn {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .hero-scroll-indicator {
+    display: none; /* Sembunyikan scroll indicator di mobile kecil agar area teks lega */
+  }
+
+  .hero-highlights {
+    gap: 0.35rem;
+  }
+
+  .hero-highlight-pill {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.72rem;
+  }
+}
+
+/* Mobile Landscape (tinggi layar sempit, e.g. orientasi landscape di HP) */
+@media (max-height: 550px) and (orientation: landscape) {
+  .hero-carousel-section {
+    min-height: auto;
+    padding-top: 75px;
+    padding-bottom: 45px;
+  }
+
+  .hero-content {
+    padding: 1rem 1.5rem;
+  }
+
+  .hero-badge {
+    margin-bottom: 0.4rem;
+  }
+
+  .hero-title {
+    font-size: clamp(1.4rem, 4.5vw, 2.2rem);
+    margin-bottom: 0.3rem;
+  }
+
+  .hero-description {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    margin-bottom: 0.85rem;
+    /* Batasi baris agar tidak meluap di landscape */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .hero-actions {
+    margin-bottom: 0.5rem;
+    flex-direction: row;
+  }
+
+  .hero-btn {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.82rem;
+  }
+
+  .hero-highlights,
+  .hero-scroll-indicator {
+    display: none;
   }
 }
 

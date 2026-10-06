@@ -51,28 +51,92 @@
       </div>
     </header>
 
-    <!-- Hero Carousel Section -->
-    <section class="hero-carousel-section">
-      <div class="swiper heroSwiper">
-        <div class="swiper-wrapper" id="hero-swiper-wrapper">
-          <!-- Loading placeholder - will be replaced by JS -->
-          <div class="swiper-slide"
-            style="background-color: #1e293b; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
-            <div style="text-align: center;">
-              <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
-              Memuat carousel...
+    <!-- Hero Section / Video Background -->
+    <section class="hero-carousel-section" id="hero-section">
+      <!-- 1. Video Background / Swiper Media Container -->
+      <div class="hero-media-container">
+        <div class="swiper heroSwiper">
+          <div class="swiper-wrapper" id="hero-swiper-wrapper">
+            <!-- Loading placeholder - dynamically updated by JS -->
+            <div class="swiper-slide hero-video-slide">
+              <div class="hero-loading-slate">
+                <i class="fas fa-spinner fa-spin"></i>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+
+      <!-- 2. Dark Gradient Overlay -->
+      <div class="hero-gradient-overlay" aria-hidden="true"></div>
+
+      <!-- 3. Halftone Dot Overlay (CSS radial-gradient) -->
+      <div class="hero-halftone-overlay" aria-hidden="true"></div>
+
+      <!-- 4. Content / Text HTML (Responsive, Clamped, Semantic) -->
+      <div class="hero-content">
+        <div class="hero-content-inner">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            <span>Portal Resmi Warga RW 16</span>
+          </div>
+
+          <h1 class="hero-title">
+            RUKUN WARGA 16<br />
+            <span class="hero-title-accent">KELURAHAN CIBABAT</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            <i class="fas fa-map-marker-alt"></i> Kecamatan Cimahi Utara &bull; Kota Cimahi
+          </p>
+
+          <p class="hero-description">
+            Mewujudkan lingkungan rukun warga yang aman, asri, guyub, dan transparan melalui kemudahan pelayanan administrasi serta keterbukaan informasi publik berbasis digital.
+          </p>
+
+          <div class="hero-actions">
+            <a href="layanan.html" class="hero-btn hero-btn-primary">
+              <i class="fas fa-hand-holding-heart"></i>
+              <span>Layanan Warga</span>
+            </a>
+            <a href="informasi.html" class="hero-btn hero-btn-secondary">
+              <i class="fas fa-info-circle"></i>
+              <span>Informasi & Berita</span>
+            </a>
+          </div>
+
+          <div class="hero-highlights">
+            <div class="hero-highlight-pill">
+              <i class="fas fa-shield-alt"></i>
+              <span>Aman & Tertib</span>
+            </div>
+            <div class="hero-highlight-pill">
+              <i class="fas fa-users"></i>
+              <span>Guyub Rukun</span>
+            </div>
+            <div class="hero-highlight-pill">
+              <i class="fas fa-laptop-code"></i>
+              <span>Pelayanan Digital</span>
             </div>
           </div>
         </div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-pagination"></div>
       </div>
+
+      <!-- Scroll Indicator -->
+      <a href="#sambutan-section" class="hero-scroll-indicator" aria-label="Gulir ke konten">
+        <span class="scroll-mouse">
+          <span class="scroll-wheel"></span>
+        </span>
+        <span class="scroll-text">Gulir ke Bawah</span>
+      </a>
     </section>
 
     <main>
 
-      <section class="sambutan-ketua reveal">
+      <section class="sambutan-ketua reveal" id="sambutan-section">
         <div class="sambutan-foto">
           <img id="ketua-foto" src="https://placehold.co/200x200/eee/ccc?text=Foto" alt="Foto Ketua RW" />
         </div>

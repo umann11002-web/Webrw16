@@ -73,43 +73,54 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (slides.length === 0) {
-          // Fallback: tampilkan placeholder
+          // Fallback: Tampilkan background slate bersih
           heroWrapper.innerHTML = `
-            <div class="swiper-slide" style="background-color: #1e293b; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 600;">
-              <div style="text-align: center;">
-                <i class="fas fa-images" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.5;"></i>
-                Banner / Hero Carousel
+            <div class="swiper-slide hero-video-slide">
+              <div class="hero-loading-slate">
+                <div style="text-align: center; color: rgba(255,255,255,0.6);">
+                  <i class="fas fa-city" style="font-size: 2.5rem; margin-bottom: 0.8rem; display: block; opacity: 0.4;"></i>
+                  <span style="font-size: 0.9rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;">Portal RW 16 Kelurahan Cibabat</span>
+                </div>
               </div>
             </div>
           `;
         } else {
-          // Render slides
+          // Render slides dengan atribut video lengkap (autoplay muted loop playsinline)
           heroWrapper.innerHTML = slides.map((slide) => {
             if (slide.type === "video") {
               return `
                 <div class="swiper-slide hero-video-slide">
-                  <video src="${slide.url}" muted playsinline loop preload="metadata"
-                    style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                  <video src="${slide.url}" autoplay muted loop playsinline preload="auto" class="hero-bg-video"></video>
                 </div>
               `;
             } else {
               return `
                 <div class="swiper-slide">
-                  <img src="${slide.url}" alt="Hero Banner" style="width:100%;height:100%;object-fit:cover;display:block;" />
+                  <img src="${slide.url}" alt="Hero Banner RW 16" class="hero-bg-video" />
                 </div>
               `;
             }
           }).join("");
         }
 
+        // Tampilkan tombol navigasi & pagination hanya jika ada lebih dari 1 slide
+        const nextBtn = document.querySelector(".heroSwiper .swiper-button-next");
+        const prevBtn = document.querySelector(".heroSwiper .swiper-button-prev");
+        const pagEl = document.querySelector(".heroSwiper .swiper-pagination");
+        const hasMultipleSlides = slides.length > 1;
+
+        if (nextBtn) nextBtn.style.display = hasMultipleSlides ? "" : "none";
+        if (prevBtn) prevBtn.style.display = hasMultipleSlides ? "" : "none";
+        if (pagEl) pagEl.style.display = hasMultipleSlides ? "" : "none";
+
         // Initialize Swiper AFTER slides are loaded
         const heroSwiper = new Swiper(".heroSwiper", {
           slidesPerView: 1,
-          loop: slides.length > 1,
-          autoplay: {
+          loop: hasMultipleSlides,
+          autoplay: hasMultipleSlides ? {
             delay: 5000,
             disableOnInteraction: false,
-          },
+          } : false,
           pagination: {
             el: ".heroSwiper .swiper-pagination",
             clickable: true,
@@ -132,15 +143,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 const video = activeSlide.querySelector("video");
                 if (video) {
                   video.play().catch(() => {});
-                  // Extend autoplay delay for video slides
-                  this.params.autoplay.delay = Math.max(video.duration * 1000 || 8000, 5000);
-                } else {
+                  if (hasMultipleSlides) {
+                    this.params.autoplay.delay = Math.max(video.duration * 1000 || 8000, 5000);
+                  }
+                } else if (hasMultipleSlides) {
                   this.params.autoplay.delay = 5000;
                 }
               }
             },
             init: function () {
-              // Auto-play video on first slide if it's a video
+              // Auto-play video on first slide
               const firstSlide = this.slides[this.activeIndex];
               if (firstSlide) {
                 const video = firstSlide.querySelector("video");
@@ -154,10 +166,12 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (error) {
         console.error("Error loading hero slides:", error);
         heroWrapper.innerHTML = `
-          <div class="swiper-slide" style="background-color: #1e293b; display: flex; align-items: center; justify-content: center; color: white;">
-            <div style="text-align: center;">
-              <i class="fas fa-images" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.5;"></i>
-              Hero Carousel
+          <div class="swiper-slide hero-video-slide">
+            <div class="hero-loading-slate">
+              <div style="text-align: center; color: rgba(255,255,255,0.6);">
+                <i class="fas fa-city" style="font-size: 2.5rem; margin-bottom: 0.8rem; display: block; opacity: 0.4;"></i>
+                <span style="font-size: 0.9rem; font-weight: 500;">Portal RW 16 Kelurahan Cibabat</span>
+              </div>
             </div>
           </div>
         `;
