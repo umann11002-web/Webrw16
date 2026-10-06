@@ -17,11 +17,26 @@ main,
   height: 100vh;
 }
 
-.heroSwiper .swiper-slide img {
+.heroSwiper .swiper-slide img,
+.heroSwiper .swiper-slide video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
+}
+
+/* Hero Carousel Mobile - kurangi tinggi biar video gak terlalu ke-crop */
+@media (max-width: 768px) {
+  .heroSwiper {
+    height: 55vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSwiper {
+    height: 45vh;
+  }
 }
 
 /* [BARU] Gaya untuk Sambutan Ketua RW */
