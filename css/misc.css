@@ -866,9 +866,12 @@
   .footer-column h4 {
     border-bottom: none;
   }
+  .footer-column h4::after {
+    display: none;
+  }
   .kontak-item,
   .sosmed {
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   /* === [REVISI FINAL] CSS UNTUK TAMPILAN MOBILE DETAIL RT === */

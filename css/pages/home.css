@@ -72,21 +72,17 @@ main,
   pointer-events: none;
   background:
     /* Layer A: Radial Vignette - lebih gelap di belakang teks untuk kontras */
-    radial-gradient(
-      ellipse 85% 65% at 50% 50%,
+    radial-gradient(ellipse 85% 65% at 50% 50%,
       rgba(15, 23, 42, 0.48) 0%,
       rgba(15, 23, 42, 0.72) 75%,
-      rgba(11, 17, 32, 0.9) 100%
-    ),
+      rgba(11, 17, 32, 0.9) 100%),
     /* Layer B: Vertical Gradient - gelap di atas untuk navbar, transparan di tengah, gelap di transisi bawah */
-    linear-gradient(
-      180deg,
+    linear-gradient(180deg,
       rgba(11, 17, 32, 0.82) 0%,
       rgba(15, 23, 42, 0.38) 25%,
       rgba(15, 23, 42, 0.32) 65%,
       rgba(11, 17, 32, 0.85) 92%,
-      rgba(11, 17, 32, 0.98) 100%
-    );
+      rgba(11, 17, 32, 0.98) 100%);
 }
 
 /* 3. Halftone Dot Overlay (Pure CSS Radial-Gradient Staggered Pattern) */
@@ -106,18 +102,14 @@ main,
   opacity: 0.48;
   mix-blend-mode: overlay;
   /* Masking halus agar efek memudar alami ke pinggir & tidak menutupi teks */
-  -webkit-mask-image: radial-gradient(
-    ellipse 85% 75% at 50% 50%,
-    black 40%,
-    rgba(0, 0, 0, 0.75) 75%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    ellipse 85% 75% at 50% 50%,
-    black 40%,
-    rgba(0, 0, 0, 0.75) 75%,
-    transparent 100%
-  );
+  -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 50%,
+      black 40%,
+      rgba(0, 0, 0, 0.75) 75%,
+      transparent 100%);
+  mask-image: radial-gradient(ellipse 85% 75% at 50% 50%,
+      black 40%,
+      rgba(0, 0, 0, 0.75) 75%,
+      transparent 100%);
 }
 
 /* 4. Content / Typography HTML */
@@ -150,6 +142,7 @@ main,
     opacity: 0;
     transform: translateY(24px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -190,10 +183,12 @@ main,
     transform: scale(0.95);
     box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
   }
+
   70% {
     transform: scale(1);
     box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
   }
+
   100% {
     transform: scale(0.95);
     box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
@@ -390,6 +385,7 @@ main,
     opacity: 1;
     transform: translate(-50%, 0);
   }
+
   100% {
     opacity: 0;
     transform: translate(-50%, 14px);
@@ -464,7 +460,8 @@ main,
 
   .heroSwiper .swiper-button-next,
   .heroSwiper .swiper-button-prev {
-    display: none; /* Sembunyikan panah di tablet & mobile agar tidak menghalangi teks */
+    display: none;
+    /* Sembunyikan panah di tablet & mobile agar tidak menghalangi teks */
   }
 }
 
@@ -499,7 +496,8 @@ main,
   }
 
   .hero-scroll-indicator {
-    display: none; /* Sembunyikan scroll indicator di mobile kecil agar area teks lega */
+    display: none;
+    /* Sembunyikan scroll indicator di mobile kecil agar area teks lega */
   }
 
   .hero-highlights {
@@ -749,7 +747,7 @@ main,
   }
 
   /* When card has no image child (fallback) */
-  .info-btn > i {
+  .info-btn>i {
     font-size: 2rem;
   }
 
