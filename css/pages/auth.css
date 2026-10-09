@@ -1,0 +1,482 @@
+/* ========================================================= */
+/* === STYLING SISTEM AUTENTIKASI (LOGIN & REGISTER) RW 16 === */
+/* ========================================================= */
+
+.auth-page {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: #f8fafc;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1e293b;
+  overflow-x: hidden;
+}
+
+/* Wrapper Utama: Split-Screen Dua Kolom */
+.auth-wrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* ========================================================= */
+/* --- 1. KOLOM KIRI: HERO & BRAND SHOWCASE --- */
+/* ========================================================= */
+.auth-hero-side {
+  flex: 1.1;
+  position: relative;
+  background-image: url('../../images/auth-bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem 4rem;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+/* Overlay Gradien Sinematik */
+.auth-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.45) 0%,
+    rgba(15, 23, 42, 0.25) 35%,
+    rgba(15, 23, 42, 0.85) 75%,
+    rgba(15, 23, 42, 0.96) 100%
+  );
+  z-index: 1;
+}
+
+/* Brand Logo di Pojok Kiri Atas */
+.auth-brand {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  color: #ffffff;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  width: fit-content;
+}
+
+.auth-brand:hover {
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+
+.auth-brand-logo {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  flex-shrink: 0;
+}
+
+.auth-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.auth-brand-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.auth-brand-sub {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  font-weight: 400;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Konten Teks Hero di Bawah */
+.auth-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 520px;
+  padding-bottom: 1rem;
+}
+
+/* Bar Aksen Emas / Hijau */
+.auth-accent-bar {
+  width: 44px;
+  height: 4px;
+  background: #10b981;
+  border-radius: 4px;
+  margin-bottom: 1.25rem;
+}
+
+.auth-hero-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.auth-hero-desc {
+  font-size: 1.05rem;
+  color: #e2e8f0;
+  line-height: 1.6;
+  margin-bottom: 1.75rem;
+  font-weight: 400;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Badge Keamanan / Resmi */
+.auth-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.9rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.auth-verified-badge i {
+  color: #34d399;
+  font-size: 0.9rem;
+}
+
+/* ========================================================= */
+/* --- 2. KOLOM KANAN: FORM CARD --- */
+/* ========================================================= */
+.auth-form-side {
+  flex: 0.9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2.5rem;
+  background-color: #f8fafc;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  padding: 2.75rem 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 45px -15px rgba(15, 23, 42, 0.08), 0 0 1px 1px rgba(15, 23, 42, 0.04);
+  border: 1px solid #f1f5f9;
+}
+
+.auth-card-header {
+  margin-bottom: 2rem;
+}
+
+.auth-card-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.auth-card-header p {
+  font-size: 0.92rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Form Groups & Inputs */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.auth-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.auth-form .form-group label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Input dengan Ikon di Kiri */
+.input-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-icon-wrapper .input-icon {
+  position: absolute;
+  left: 14px;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.input-icon-wrapper input {
+  width: 100%;
+  padding: 0.85rem 2.75rem 0.85rem 2.75rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  color: #0f172a;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.input-icon-wrapper input::placeholder {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.input-icon-wrapper input:focus {
+  outline: none;
+  border-color: #0f172a;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+}
+
+.input-icon-wrapper input:focus ~ .input-icon {
+  color: #0f172a;
+}
+
+/* Tombol Toggle Password (Mata) */
+.password-toggle-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  padding: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.password-toggle-btn:hover {
+  color: #0f172a;
+}
+
+/* Baris Lupa Kata Sandi */
+.forgot-password-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.25rem;
+}
+
+.forgot-link {
+  font-size: 0.82rem;
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.forgot-link:hover {
+  color: #0f172a;
+  text-decoration: underline;
+}
+
+/* Remember Me Checkbox */
+.remember-me-container {
+  display: flex;
+  align-items: center;
+  margin-top: -0.25rem;
+}
+
+.remember-me-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: #475569;
+  user-select: none;
+}
+
+.remember-me-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: #0f172a;
+  border-radius: 4px;
+}
+
+/* Tombol Submit Utama */
+.auth-submit-btn {
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  background-color: #0f172a;
+  color: #ffffff;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.96rem;
+  font-weight: 600;
+  font-family: inherit;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+  background-color: #1e293b;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.2);
+}
+
+.auth-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.auth-submit-btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+/* Alert Error & Success */
+.auth-alert {
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.auth-alert.error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+  animation: authShake 0.35s ease;
+}
+
+.auth-alert.success {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+@keyframes authShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+/* Footer Card (Switch Link) */
+.auth-card-footer {
+  margin-top: 1.75rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.auth-card-footer a {
+  color: #0f172a;
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 0.35rem;
+  transition: color 0.2s ease;
+}
+
+.auth-card-footer a:hover {
+  color: #059669;
+  text-decoration: underline;
+}
+
+/* ========================================================= */
+/* --- 3. ATURAN RESPONSIF (TABLET & MOBILE) --- */
+/* ========================================================= */
+@media (max-width: 991px) {
+  .auth-wrapper {
+    flex-direction: column;
+  }
+
+  .auth-hero-side {
+    min-height: 280px;
+    padding: 2.25rem 2rem;
+    justify-content: flex-start;
+    gap: 2rem;
+  }
+
+  .auth-hero-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .auth-hero-desc {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .auth-form-side {
+    padding: 2rem 1.5rem;
+    margin-top: -30px;
+    position: relative;
+    z-index: 5;
+    background: transparent;
+  }
+
+  .auth-card {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-hero-side {
+    padding: 1.75rem 1.25rem 2.5rem;
+    min-height: 240px;
+  }
+
+  .auth-hero-title {
+    font-size: 1.65rem;
+  }
+
+  .auth-hero-desc {
+    display: none; /* Sembunyikan deskripsi panjang di layar super kecil */
+  }
+
+  .auth-verified-badge {
+    display: none;
+  }
+
+  .auth-form-side {
+    padding: 0 1rem 2rem;
+    margin-top: -20px;
+  }
+
+  .auth-card {
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+  }
+
+  .auth-card-header h2 {
+    font-size: 1.5rem;
+  }
+}

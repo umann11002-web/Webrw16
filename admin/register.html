@@ -5,115 +5,124 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Daftar Akun Warga - RW 16</title>
     <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../css/pages/auth.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
-    <style>
-      /* CSS khusus untuk halaman registrasi */
-      .login-container {
-        max-width: 420px;
-        margin: 4.5rem auto;
-        padding: 2.5rem;
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        text-align: center;
-      }
-      .login-container h1 {
-        margin-bottom: 1.5rem;
-        border-left: none;
-        padding-left: 0;
-        font-size: 1.8rem;
-        color: #0f172a;
-      }
-      .login-container input {
-        width: 100%;
-        padding: 0.85rem 1rem;
-        margin-bottom: 1rem;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        font-size: 0.95rem;
-        transition: border-color 0.2s, box-shadow 0.2s;
-        box-sizing: border-box;
-      }
-      .login-container input:focus {
-        outline: none;
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
-      }
-      .login-container button {
-        width: 100%;
-        padding: 0.85rem;
-        border: none;
-        background-color: var(--primary-color);
-        color: white;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 1rem;
-        font-weight: 600;
-        margin-top: 0.5rem;
-        transition: background-color 0.2s, transform 0.2s, opacity 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-      }
-      .login-container button:hover:not(:disabled) {
-        background-color: #1a252f;
-        transform: translateY(-1px);
-      }
-      .login-container button:disabled {
-        opacity: 0.75;
-        cursor: not-allowed;
-      }
-      #error-message {
-        display: none;
-        background-color: #fee2e2;
-        color: #b91c1c;
-        padding: 0.75rem 1rem;
-        border-radius: 8px;
-        margin-top: 1.25rem;
-        font-size: 0.88rem;
-        text-align: left;
-        border: 1px solid #fca5a5;
-        animation: shake 0.3s ease;
-      }
-      @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-6px); }
-        75% { transform: translateX(6px); }
-      }
-    </style>
   </head>
-  <body>
-    <main>
-      <div class="login-container">
-        <h1>Daftar Akun Baru</h1>
-        <form id="register-form">
-          <input type="email" id="email" placeholder="Email" required />
-          <input
-            type="password"
-            id="password"
-            placeholder="Password (minimal 6 karakter)"
-            required
+  <body class="auth-page">
+    <div class="auth-wrapper">
+      <!-- Kolom Kiri: Visual & Branding Warga -->
+      <div class="auth-hero-side">
+        <div class="auth-hero-overlay"></div>
+
+        <!-- Top Brand Header -->
+        <a href="../index.html" class="auth-brand" title="Kembali ke Beranda">
+          <img
+            src="../images/Logoerwe.png"
+            alt="Logo RW 16"
+            class="auth-brand-logo"
           />
-          <button type="submit" id="register-submit-btn">
-            <i class="fas fa-user-plus"></i> Daftar
-          </button>
-        </form>
-        <div id="error-message"></div>
-        <p style="margin-top: 1.5rem; font-size: 0.92rem; color: #64748b;">
-          Sudah punya akun?
-          <a
-            href="login.html"
-            style="color: var(--primary-color); font-weight: 600; text-decoration: none;"
-            >Login di sini</a
-          >
-        </p>
+          <div class="auth-brand-text">
+            <span class="auth-brand-title">RW 16 Cibabat</span>
+            <span class="auth-brand-sub">Kota Cimahi</span>
+          </div>
+        </a>
+
+        <!-- Bottom Headline & Info -->
+        <div class="auth-hero-content">
+          <div class="auth-accent-bar"></div>
+          <h1 class="auth-hero-title">
+            Pelayanan Warga,<br />Lebih Mudah.
+          </h1>
+          <p class="auth-hero-desc">
+            Akses layanan administrasi RW 16 Cibabat dalam satu tempat.
+          </p>
+          <div class="auth-verified-badge">
+            <i class="fas fa-shield-alt"></i>
+            <span>Portal Resmi Pelayanan RW 16 Cibabat</span>
+          </div>
+        </div>
       </div>
-    </main>
+
+      <!-- Kolom Kanan: Card Form -->
+      <div class="auth-form-side">
+        <div class="auth-card">
+          <div class="auth-card-header">
+            <h2>Daftar Akun Warga</h2>
+            <p>Lengkapi data Anda untuk mendaftar akun layanan digital RW 16.</p>
+          </div>
+
+          <div id="error-message" class="auth-alert error" style="display: none;"></div>
+
+          <form id="register-form" class="auth-form">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <div class="input-icon-wrapper">
+                <i class="fas fa-envelope input-icon"></i>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Masukkan email Anda"
+                  required
+                  autocomplete="email"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="password">Kata Sandi</label>
+              <div class="input-icon-wrapper">
+                <i class="fas fa-lock input-icon"></i>
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Minimal 6 karakter"
+                  required
+                  autocomplete="new-password"
+                />
+                <button
+                  type="button"
+                  class="password-toggle-btn"
+                  id="toggle-register-password"
+                  aria-label="Tampilkan kata sandi"
+                >
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" id="register-submit-btn" class="auth-submit-btn">
+              <i class="fas fa-user-plus"></i>
+              <span>Daftar Sekarang</span>
+            </button>
+          </form>
+
+          <div class="auth-card-footer">
+            <span>Sudah punya akun?</span>
+            <a href="login.html">Masuk di sini</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="../js/register.js" type="module"></script>
+    <script>
+      // Toggle visibilitas password
+      const toggleBtn = document.getElementById("toggle-register-password");
+      const passwordInput = document.getElementById("password");
+      if (toggleBtn && passwordInput) {
+        toggleBtn.addEventListener("click", () => {
+          const isPassword = passwordInput.type === "password";
+          passwordInput.type = isPassword ? "text" : "password";
+          const icon = toggleBtn.querySelector("i");
+          if (icon) {
+            icon.classList.toggle("fa-eye", !isPassword);
+            icon.classList.toggle("fa-eye-slash", isPassword);
+          }
+        });
+      }
+    </script>
   </body>
 </html>
