@@ -21,6 +21,11 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let myChart = null;
+let cacheLabels = [];
+let cacheDataPria = [];
+let cacheDataWanita = [];
+let chartRendered = false;
+let animFrameId = null;
 
 async function loadStatistik() {
   try {
@@ -47,10 +52,13 @@ async function loadStatistik() {
       const labels = Object.keys(kelompokUmur).sort(
         (a, b) => parseInt(a.split("-")[0]) - parseInt(b.split("-")[0])
       );
-      const dataPria = labels.map((label) => kelompokUmur[label].pria);
-      const dataWanita = labels.map((label) => kelompokUmur[label].wanita);
+      const dataPria = labels.map((label) => kelompokUmur[label].pria || 0);
+      const dataWanita = labels.map((label) => kelompokUmur[label].wanita || 0);
 
-      gambarDiagramResponsif(labels, dataPria, dataWanita);
+      cacheLabels = labels;
+      cacheDataPria = dataPria;
+      cacheDataWanita = dataWanita;
+
       tampilkanAnalisisData(
         labels,
         dataPria,
@@ -59,15 +67,45 @@ async function loadStatistik() {
         totalWanita
       );
 
-      window.addEventListener("resize", () => {
-        gambarDiagramResponsif(labels, dataPria, dataWanita);
-      });
+      // Inisialisasi IntersectionObserver agar animasi grafik aktif saat digulir ke layar
+      initScrollObserver();
     } else {
       console.log("Dokumen statistik tidak ditemukan!");
     }
   } catch (error) {
     console.error("Error mengambil data statistik: ", error);
   }
+}
+
+// Inisialisasi pengamatan viewport scroll untuk memulai animasi grafik
+function initScrollObserver() {
+  const chartContainer = document.querySelector(".chart-container");
+  if (!chartContainer) {
+    gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita);
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !chartRendered) {
+          chartRendered = true;
+          gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  observer.observe(chartContainer);
+
+  // Fallback cadangan jika container sudah berada di layar sejak awal
+  setTimeout(() => {
+    if (!chartRendered && cacheLabels.length > 0) {
+      chartRendered = true;
+      gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita);
+    }
+  }, 700);
 }
 
 function tampilkanAnalisisData(
@@ -77,10 +115,10 @@ function tampilkanAnalisisData(
   totalPria,
   totalWanita
 ) {
-  if (totalPria === 0 || totalWanita === 0) return;
+  if (totalPria === 0 || totalWanita === 0 || labels.length === 0) return;
 
   const maxPria = Math.max(...dataPria);
-  const minPria = Math.min(...dataPria.filter((p) => p > 0));
+  const minPria = Math.min(...dataPria.filter((p) => p > 0)) || 0;
   const indexMaxPria = dataPria.indexOf(maxPria);
   const indexMinPria = dataPria.indexOf(minPria);
 
@@ -93,7 +131,7 @@ function tampilkanAnalisisData(
   document.getElementById("analisis-pria").innerHTML = teksAnalisisPria;
 
   const maxWanita = Math.max(...dataWanita);
-  const minWanita = Math.min(...dataWanita.filter((w) => w > 0));
+  const minWanita = Math.min(...dataWanita.filter((w) => w > 0)) || 0;
   const indexMaxWanita = dataWanita.indexOf(maxWanita);
   const indexMinWanita = dataWanita.indexOf(minWanita);
 
@@ -106,10 +144,11 @@ function tampilkanAnalisisData(
   document.getElementById("analisis-wanita").innerHTML = teksAnalisisWanita;
 }
 
+// Fungsi utama membuat canvas chart piramida penduduk
 function gambarDiagramResponsif(labels, dataPria, dataWanita) {
-  const ctx = document
-    .getElementById("piramida-penduduk-chart")
-    .getContext("2d");
+  const canvasEl = document.getElementById("piramida-penduduk-chart");
+  if (!canvasEl) return;
+  const ctx = canvasEl.getContext("2d");
 
   if (myChart) {
     myChart.destroy();
@@ -126,17 +165,21 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
         datasets: [
           {
             label: "Laki-Laki",
-            data: dataPria,
-            backgroundColor: "rgba(54, 162, 235, 0.6)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            borderWidth: 1,
+            data: labels.map(() => 0), // Mulai dari 0
+            backgroundColor: "rgba(59, 130, 246, 0.75)",
+            borderColor: "rgba(37, 99, 235, 1)",
+            borderWidth: 1.5,
+            borderRadius: 4,
+            hoverBackgroundColor: "rgba(37, 99, 235, 0.95)",
           },
           {
             label: "Perempuan",
-            data: dataWanita,
-            backgroundColor: "rgba(255, 99, 132, 0.6)",
-            borderColor: "rgba(255, 99, 132, 1)",
-            borderWidth: 1,
+            data: labels.map(() => 0), // Mulai dari 0
+            backgroundColor: "rgba(244, 63, 94, 0.75)",
+            borderColor: "rgba(225, 29, 72, 1)",
+            borderWidth: 1.5,
+            borderRadius: 4,
+            hoverBackgroundColor: "rgba(225, 29, 72, 0.95)",
           },
         ],
       },
@@ -145,23 +188,36 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
         responsive: true,
         maintainAspectRatio: true,
         aspectRatio: 0.5,
+        animation: false, // Animasi dikontrol penuh oleh loop requestAnimationFrame kami
         scales: {
-          x: { beginAtZero: true },
-          y: { ticks: { autoSkip: false, font: { size: 9 } } },
+          x: {
+            beginAtZero: true,
+            grid: { color: "rgba(0, 0, 0, 0.05)" },
+          },
+          y: {
+            ticks: { autoSkip: false, font: { size: 9.5 } },
+            grid: { display: false },
+          },
         },
         plugins: {
           datalabels: {
-            color: "#333",
-            anchor: "end",
-            align: "end",
-            font: { size: 9, weight: "bold" },
-            formatter: (value) => (value > 0 ? value : ""),
+            color: "#ffffff",
+            anchor: "center",
+            align: "center",
+            font: { size: 9.5, weight: "bold", family: "'Poppins', sans-serif" },
+            formatter: (value) => {
+              const num = Math.abs(value);
+              return num > 0 ? num : "";
+            },
           },
         },
       },
     });
   } else {
-    // --- KONFIGURASI DESKTOP ---
+    // --- KONFIGURASI DESKTOP (PIRAMIDA DUA ARAH) ---
+    const maxDataVal = Math.max(...dataPria, ...dataWanita, 10);
+    const limitX = Math.ceil((maxDataVal * 1.15) / 5) * 5;
+
     myChart = new Chart(ctx, {
       type: "bar",
       data: {
@@ -169,56 +225,194 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
         datasets: [
           {
             label: "Laki-Laki",
-            data: dataPria.map((num) => -num),
-            backgroundColor: "rgba(54, 162, 235, 0.6)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            borderWidth: 1,
+            data: labels.map(() => 0), // Mulai dari 0
+            backgroundColor: "rgba(59, 130, 246, 0.75)",
+            borderColor: "rgba(37, 99, 235, 1)",
+            borderWidth: 1.5,
+            borderRadius: {
+              topLeft: 4,
+              bottomLeft: 4,
+              topRight: 0,
+              bottomRight: 0,
+            },
+            hoverBackgroundColor: "rgba(37, 99, 235, 0.95)",
           },
           {
             label: "Perempuan",
-            data: dataWanita,
-            backgroundColor: "rgba(255, 99, 132, 0.6)",
-            borderColor: "rgba(255, 99, 132, 1)",
-            borderWidth: 1,
+            data: labels.map(() => 0), // Mulai dari 0
+            backgroundColor: "rgba(244, 63, 94, 0.75)",
+            borderColor: "rgba(225, 29, 72, 1)",
+            borderWidth: 1.5,
+            borderRadius: {
+              topRight: 4,
+              bottomRight: 4,
+              topLeft: 0,
+              bottomLeft: 0,
+            },
+            hoverBackgroundColor: "rgba(225, 29, 72, 0.95)",
           },
         ],
       },
       options: {
         indexAxis: "y",
         responsive: true,
+        animation: false, // Animasi dikontrol penuh oleh loop requestAnimationFrame kami
         scales: {
           x: {
             stacked: true,
-            min: -100,
-            max: 100,
-            ticks: { callback: (value) => Math.abs(value) },
+            min: -limitX,
+            max: limitX,
+            ticks: {
+              stepSize: limitX > 60 ? 10 : 5,
+              callback: (value) => Math.abs(value),
+              font: { family: "'Poppins', sans-serif" },
+            },
+            grid: {
+              color: (ctx) =>
+                ctx.tick && ctx.tick.value === 0
+                  ? "rgba(15, 23, 42, 0.45)"
+                  : "rgba(0, 0, 0, 0.06)",
+              lineWidth: (ctx) => (ctx.tick && ctx.tick.value === 0 ? 2 : 1),
+            },
           },
-          y: { stacked: true },
+          y: {
+            stacked: true,
+            grid: { display: false },
+            ticks: {
+              font: { weight: "600", family: "'Poppins', sans-serif" },
+            },
+          },
         },
         plugins: {
           tooltip: {
             callbacks: {
               label: (context) =>
-                `${context.dataset.label || ""}: ${Math.abs(context.raw)}`,
+                `${context.dataset.label || ""}: ${Math.abs(context.raw)} Orang`,
             },
           },
           datalabels: {
-            color: "#070000ff",
-            font: { weight: "bold", size: 10 },
-            formatter: (value) => (Math.abs(value) > 0 ? Math.abs(value) : ""),
-            align: (context) =>
-              context.dataset.data[context.dataIndex] < 0 ? "start" : "end",
+            color: "#ffffff",
+            anchor: "center",
+            align: "center",
+            font: { weight: "bold", size: 10.5, family: "'Poppins', sans-serif" },
+            formatter: (value) => {
+              const num = Math.abs(value);
+              return num > 0 ? num : "";
+            },
           },
         },
       },
     });
   }
+
+  // Jalankan animasi pertambahan batang dari 0 ke angka tujuan
+  animateChartGrowth(dataPria, dataWanita, isMobile);
 }
 
-document.addEventListener("DOMContentLoaded", loadStatistik);
+// Fungsi animasi pertambahan batang grafik dan angka secara live dari 0 ke target
+function animateChartGrowth(dataPria, dataWanita, isMobile) {
+  if (animFrameId) {
+    cancelAnimationFrame(animFrameId);
+    animFrameId = null;
+  }
 
-// --- FUNGSI ANIMASI ANGKA ---
+  // Durasi animasi: 1800ms (1.8 detik), tidak terlalu cepat sehingga pertumbuhan batang terlihat jelas
+  const duration = 1800;
+  const staggerMax = 280; // Efek gelombang dari kelompok umur termuda ke tertua
+  const startTime = performance.now();
+  const len = dataPria.length;
+
+  function frame(now) {
+    const elapsed = now - startTime;
+    const overallProgress = Math.min(1, elapsed / duration);
+
+    const currentPria = [];
+    const currentWanita = [];
+
+    for (let i = 0; i < len; i++) {
+      // Delay bertingkat per bar agar tampak mengalir dari atas ke bawah
+      const staggerDelay = (i / len) * staggerMax;
+      const barElapsed = Math.max(0, elapsed - staggerDelay);
+      const barDuration = duration - staggerMax;
+      const barProgress = Math.min(1, barElapsed / barDuration);
+
+      // Easing cubic ease-out: mulai dari 0, melesat stabil, lalu melambat halus saat tiba di angka target
+      const ease = 1 - Math.pow(1 - barProgress, 3);
+
+      const targetPria = dataPria[i] || 0;
+      const targetWanita = dataWanita[i] || 0;
+
+      const valPria = Math.round(targetPria * ease);
+      const valWanita = Math.round(targetWanita * ease);
+
+      currentPria.push(valPria);
+      currentWanita.push(valWanita);
+    }
+
+    if (myChart) {
+      if (isMobile) {
+        myChart.data.datasets[0].data = currentPria;
+        myChart.data.datasets[1].data = currentWanita;
+      } else {
+        myChart.data.datasets[0].data = currentPria.map((v) => -v);
+        myChart.data.datasets[1].data = currentWanita;
+      }
+      myChart.update("none"); // Update instan frame-by-frame 60 FPS tanpa animasi bentrok
+    }
+
+    if (overallProgress < 1) {
+      animFrameId = requestAnimationFrame(frame);
+    } else {
+      // Frame akhir: pastikan 100% tepat angka target akhir
+      if (myChart) {
+        if (isMobile) {
+          myChart.data.datasets[0].data = [...dataPria];
+          myChart.data.datasets[1].data = [...dataWanita];
+        } else {
+          myChart.data.datasets[0].data = dataPria.map((v) => -v);
+          myChart.data.datasets[1].data = [...dataWanita];
+        }
+        myChart.update("none");
+      }
+      animFrameId = null;
+    }
+  }
+
+  animFrameId = requestAnimationFrame(frame);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadStatistik();
+
+  const replayBtn = document.getElementById("replay-chart-btn");
+  if (replayBtn) {
+    replayBtn.addEventListener("click", () => {
+      const icon = replayBtn.querySelector("i");
+      if (icon) {
+        icon.classList.add("fa-spin");
+        setTimeout(() => icon.classList.remove("fa-spin"), 900);
+      }
+      if (cacheLabels.length > 0) {
+        gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita);
+      }
+    });
+  }
+});
+
+// Resize handler dengan debouncing agar tetap responsif
+let resizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (cacheLabels.length > 0) {
+      gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita);
+    }
+  }, 250);
+});
+
+// --- FUNGSI ANIMASI ANGKA STAT CARD ---
 function animateValue(obj, start, end, duration, suffix = "") {
+  if (!obj) return;
   let startTimestamp = null;
   const step = (timestamp) => {
     if (!startTimestamp) startTimestamp = timestamp;

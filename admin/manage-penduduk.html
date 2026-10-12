@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kelola Statistik Penduduk - Admin</title>
-    <!-- Sekarang semua style dipanggil dari satu file -->
+    <title>Kelola Statistik Penduduk - RW 16</title>
+    <!-- Stylesheet Utama & FontAwesome -->
     <link rel="stylesheet" href="../style.css" />
     <link
       rel="stylesheet"
@@ -12,58 +12,227 @@
     />
   </head>
   <body>
+    <!-- Header Admin Navigation -->
     <header class="admin-nav">
       <div class="nav-title">
+        <i class="fas fa-shield-halved"></i>
         <strong>RW 16 Admin Panel</strong>
       </div>
-      <button class="hamburger-btn" id="admin-hamburger-btn">
+      <button class="hamburger-btn" id="admin-hamburger-btn" aria-label="Menu Navigasi">
         <i class="fas fa-bars"></i>
       </button>
       <div class="nav-links" id="admin-nav-links">
-        <a href="admin.html">Dashboard</a>
+        <a href="admin.html" class="nav-link-item">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
         <div class="dropdown">
-          <a href="#" class="dropdown-toggle"
-            >Kelola Data <i class="fas fa-chevron-down"></i
-          ></a>
+          <a href="#" class="dropdown-toggle nav-link-item active">
+            <i class="fas fa-database"></i> Kelola Data
+            <i class="fas fa-chevron-down"></i>
+          </a>
           <div class="dropdown-menu">
             <a href="manage-layanan.html">Layanan</a>
             <a href="manage-galeri.html">Galeri</a>
-            <a href="manage-penduduk.html">Statistik</a>
+            <a href="manage-penduduk.html" class="active">Statistik</a>
             <a href="manage-berita.html">Berita</a>
             <a href="manage-struktur.html">Struktur Organisasi</a>
             <a href="manage-hero.html">Hero Carousel</a>
           </div>
         </div>
-        <a href="#" id="admin-logout-btn" class="logout-btn">Logout</a>
+        <a href="#" id="admin-logout-btn" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
       </div>
     </header>
 
+    <!-- Main Content -->
     <main class="manage-main">
-      <div class="form-card">
-        <h1>Update Statistik Penduduk</h1>
-        <p>
-          Data yang diubah di sini akan secara otomatis memperbarui halaman
-          Informasi untuk publik.
-        </p>
-        <form id="statistik-form">
-          <div class="form-group">
-            <label for="kepala-keluarga">Jumlah Kepala Keluarga</label>
-            <input type="number" id="kepala-keluarga" required />
+      <!-- Breadcrumb & Header Title -->
+      <div class="manage-header-block">
+        <a href="admin.html" class="back-link">
+          <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
+        </a>
+        <div class="header-title-wrap">
+          <div class="header-icon-badge">
+            <i class="fas fa-chart-pie"></i>
           </div>
-
-          <hr style="margin: 2rem 0" />
-
-          <h2>Data Piramida Penduduk</h2>
-          <div id="kelompok-umur-container">
-            <p>Memuat data kelompok umur...</p>
+          <div>
+            <h1>Kelola Statistik Penduduk</h1>
+            <p class="manage-subtitle">
+              Perbarui data demografi piramida usia penduduk dan jumlah kepala keluarga (KK) RW 16.
+            </p>
           </div>
-
-          <button type="submit" class="submit-btn" id="save-btn">
-            Simpan Semua Perubahan
-          </button>
-        </form>
-        <p id="status-message" style="margin-top: 1rem; font-weight: 600"></p>
+        </div>
       </div>
+
+      <!-- Real-time Summary Cards -->
+      <div class="admin-summary-cards">
+        <div class="summary-stat-card card-stat-total">
+          <div class="summary-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="summary-info">
+            <span class="summary-count" id="summary-total">0</span>
+            <span class="summary-label">Total Jiwa Terdata</span>
+          </div>
+        </div>
+        <div class="summary-stat-card card-stat-male">
+          <div class="summary-icon">
+            <i class="fas fa-mars"></i>
+          </div>
+          <div class="summary-info">
+            <span class="summary-count" id="summary-male">0</span>
+            <span class="summary-label">Warga Laki-laki (Pria)</span>
+          </div>
+        </div>
+        <div class="summary-stat-card card-stat-female">
+          <div class="summary-icon">
+            <i class="fas fa-venus"></i>
+          </div>
+          <div class="summary-info">
+            <span class="summary-count" id="summary-female">0</span>
+            <span class="summary-label">Warga Perempuan (Wanita)</span>
+          </div>
+        </div>
+        <div class="summary-stat-card card-stat-kk">
+          <div class="summary-icon">
+            <i class="fas fa-house-user"></i>
+          </div>
+          <div class="summary-info">
+            <span class="summary-count" id="summary-kk">0</span>
+            <span class="summary-label">Kepala Keluarga (KK)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Form -->
+      <form id="statistik-form">
+        <!-- Card 1: Data Kepala Keluarga -->
+        <div class="card admin-card stat-card-section">
+          <div class="card-header-flex">
+            <div>
+              <h2><i class="fas fa-house-chimney-user"></i> Data Kepala Keluarga</h2>
+              <p class="card-hint">
+                Jumlah kepala keluarga yang terdaftar aktif di lingkungan RW 16 Cibabat.
+              </p>
+            </div>
+            <span class="badge-status-pill badge-kk-info">
+              <i class="fas fa-id-card"></i> Data Pokok
+            </span>
+          </div>
+
+          <div class="kk-input-wrapper">
+            <label for="kepala-keluarga" class="stat-label">
+              Jumlah Kepala Keluarga (KK)
+            </label>
+            <div class="stat-input-group">
+              <span class="input-icon-prefix"><i class="fas fa-users-rectangle"></i></span>
+              <input
+                type="number"
+                id="kepala-keluarga"
+                class="form-control-stat kk-input"
+                placeholder="Contoh: 304"
+                min="0"
+                required
+              />
+              <span class="input-suffix">KK / Keluarga</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Piramida Penduduk -->
+        <div class="card admin-card stat-card-section">
+          <div class="card-header-flex">
+            <div>
+              <h2><i class="fas fa-people-roof"></i> Data Piramida Rentang Usia Penduduk</h2>
+              <p class="card-hint">
+                Lengkapi jumlah warga laki-laki dan perempuan berdasarkan rentang usia. Subtotal kelompok usia dan total keseluruhan dihitung otomatis secara langsung.
+              </p>
+            </div>
+            <span class="badge-counter">
+              <i class="fas fa-layer-group"></i> 16 Kelompok Usia
+            </span>
+          </div>
+
+          <!-- Petunjuk Visual Kolom -->
+          <div class="stat-guide-bar">
+            <div class="guide-item guide-male">
+              <span class="guide-dot male-dot"><i class="fas fa-mars"></i></span>
+              <span>Kolom Biru: <strong>Laki-laki (Pria)</strong></span>
+            </div>
+            <div class="guide-item guide-female">
+              <span class="guide-dot female-dot"><i class="fas fa-venus"></i></span>
+              <span>Kolom Pink: <strong>Perempuan (Wanita)</strong></span>
+            </div>
+            <div class="guide-item guide-subtotal">
+              <span class="guide-dot subtotal-dot"><i class="fas fa-calculator"></i></span>
+              <span>Subtotal: <strong>Jumlah Jiwa per Kelompok Usia</strong></span>
+            </div>
+          </div>
+
+          <!-- Tabel / Grid Piramida -->
+          <div class="pyramid-table-container">
+            <div class="pyramid-grid-header">
+              <div class="p-col col-age-hdr">
+                <i class="fas fa-calendar-alt"></i> Rentang Usia
+              </div>
+              <div class="p-col col-male-hdr">
+                <i class="fas fa-mars"></i> Laki-laki (Pria)
+              </div>
+              <div class="p-col col-female-hdr">
+                <i class="fas fa-venus"></i> Perempuan (Wanita)
+              </div>
+              <div class="p-col col-subtotal-hdr">
+                <i class="fas fa-calculator"></i> Subtotal
+              </div>
+            </div>
+
+            <!-- Dynamic Rows Kontainer -->
+            <div id="kelompok-umur-container" class="pyramid-rows-container">
+              <div class="pyramid-loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <span>Memuat data kelompok umur...</span>
+              </div>
+            </div>
+
+            <!-- Ringkasan Total Footer -->
+            <div class="pyramid-grid-footer">
+              <div class="p-col col-age-ftr">
+                <strong><i class="fas fa-chart-line"></i> Total Jiwa</strong>
+              </div>
+              <div class="p-col col-male-ftr">
+                <div class="footer-total-pill male-total-pill">
+                  <i class="fas fa-mars"></i>
+                  <span id="foot-total-male">0</span>
+                  <small>Jiwa</small>
+                </div>
+              </div>
+              <div class="p-col col-female-ftr">
+                <div class="footer-total-pill female-total-pill">
+                  <i class="fas fa-venus"></i>
+                  <span id="foot-total-female">0</span>
+                  <small>Jiwa</small>
+                </div>
+              </div>
+              <div class="p-col col-subtotal-ftr">
+                <div class="footer-total-pill grand-total-pill">
+                  <i class="fas fa-users"></i>
+                  <span id="foot-total-grand">0</span>
+                  <small>Jiwa</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Action Area -->
+          <div class="stat-submit-wrapper">
+            <button type="submit" class="submit-btn btn-success btn-large" id="save-btn">
+              <i class="fas fa-save"></i> Simpan Semua Perubahan
+            </button>
+            <div id="status-message" class="admin-status-toast" style="display: none;"></div>
+          </div>
+        </div>
+      </form>
     </main>
 
     <script src="../js/manage-penduduk.js" type="module"></script>

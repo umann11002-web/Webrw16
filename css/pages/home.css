@@ -1115,14 +1115,50 @@ main,
 .chart-container {
   background: white;
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
 }
 
-.chart-container h2 {
+.chart-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.chart-container h2,
+.chart-header-row h2 {
   border-left: 5px solid var(--primary-color);
   padding-left: 10px;
-  margin-top: 0;
+  margin: 0;
+  font-size: 1.35rem;
+  color: var(--dark-text);
+}
+
+.chart-replay-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.1rem;
+  background: #f8fafc;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.chart-replay-btn:hover {
+  background: var(--primary-color, #2c3e50);
+  color: white;
+  border-color: var(--primary-color, #2c3e50);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.18);
 }
 
 .analisis-container {

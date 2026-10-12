@@ -420,9 +420,19 @@
 
   .auth-hero-side {
     min-height: 280px;
-    padding: 2.25rem 2rem;
+    padding: 2.25rem 2rem 3.5rem 2rem;
     justify-content: flex-start;
-    gap: 2rem;
+    gap: 1.5rem;
+  }
+
+  .auth-hero-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(15, 23, 42, 0.5) 0%,
+      rgba(15, 23, 42, 0.3) 30%,
+      rgba(15, 23, 42, 0.8) 70%,
+      rgba(248, 250, 252, 1) 100%
+    );
   }
 
   .auth-hero-title {
