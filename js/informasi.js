@@ -81,7 +81,10 @@ async function loadStatistik() {
 function initScrollObserver() {
   const chartContainer = document.querySelector(".chart-container");
   if (!chartContainer) {
-    gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita);
+    if (!chartRendered) {
+      chartRendered = true;
+      gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita, true);
+    }
     return;
   }
 
@@ -90,7 +93,9 @@ function initScrollObserver() {
       entries.forEach((entry) => {
         if (entry.isIntersecting && !chartRendered) {
           chartRendered = true;
-          gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita);
+          observer.unobserve(entry.target);
+          observer.disconnect();
+          gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita, true);
         }
       });
     },
@@ -103,7 +108,8 @@ function initScrollObserver() {
   setTimeout(() => {
     if (!chartRendered && cacheLabels.length > 0) {
       chartRendered = true;
-      gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita);
+      observer.disconnect();
+      gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita, true);
     }
   }, 700);
 }
@@ -145,7 +151,7 @@ function tampilkanAnalisisData(
 }
 
 // Fungsi utama membuat canvas chart piramida penduduk
-function gambarDiagramResponsif(labels, dataPria, dataWanita) {
+function gambarDiagramResponsif(labels, dataPria, dataWanita, withAnimation = true) {
   const canvasEl = document.getElementById("piramida-penduduk-chart");
   if (!canvasEl) return;
   const ctx = canvasEl.getContext("2d");
@@ -305,8 +311,19 @@ function gambarDiagramResponsif(labels, dataPria, dataWanita) {
     });
   }
 
-  // Jalankan animasi pertambahan batang dari 0 ke angka tujuan
-  animateChartGrowth(dataPria, dataWanita, isMobile);
+  // Jalankan animasi pertambahan batang dari 0 ke angka tujuan (atau instan jika withAnimation == false)
+  if (withAnimation) {
+    animateChartGrowth(dataPria, dataWanita, isMobile);
+  } else {
+    if (isMobile) {
+      myChart.data.datasets[0].data = [...dataPria];
+      myChart.data.datasets[1].data = [...dataWanita];
+    } else {
+      myChart.data.datasets[0].data = dataPria.map((v) => -v);
+      myChart.data.datasets[1].data = [...dataWanita];
+    }
+    myChart.update("none");
+  }
 }
 
 // Fungsi animasi pertambahan batang grafik dan angka secara live dari 0 ke target
@@ -393,19 +410,30 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => icon.classList.remove("fa-spin"), 900);
       }
       if (cacheLabels.length > 0) {
-        gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita);
+        gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita, true);
       }
     });
   }
 });
 
-// Resize handler dengan debouncing agar tetap responsif
+// Resize handler dengan filter lebar (agar tidak terpancing oleh scroll di HP saat address bar muncul/hilang)
+let lastWindowWidth = window.innerWidth;
 let resizeTimer;
+
 window.addEventListener("resize", () => {
+  // PENTING: Di browser HP (Android Chrome, iOS Safari), saat user scroll, address bar URL
+  // otomatis muncul/mengecil dan memicu event 'resize' karena innerHeight berubah.
+  // Kita HANYA boleh merespons jika innerWidth (lebar layar) benar-benar berubah (misal: rotasi layar / resize desktop).
+  if (window.innerWidth === lastWindowWidth) {
+    return;
+  }
+  lastWindowWidth = window.innerWidth;
+
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
-    if (cacheLabels.length > 0) {
-      gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita);
+    if (cacheLabels.length > 0 && chartRendered) {
+      // Saat orientasi berubah atau layar desktop di-resize, perbarui chart secara langsung tanpa memicu animasi 0-100% lagi
+      gambarDiagramResponsif(cacheLabels, cacheDataPria, cacheDataWanita, false);
     }
   }, 250);
 });
