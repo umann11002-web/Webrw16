@@ -249,31 +249,47 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Logika untuk Hamburger Menu ---
   const hamburgerMenu = document.getElementById("hamburger-menu");
   const navbar = document.querySelector(".navbar");
-  if (hamburgerMenu) {
-    // Buat elemen overlay
-    const overlay = document.createElement("div");
-    overlay.className = "nav-overlay";
-    document.body.appendChild(overlay);
+  if (hamburgerMenu && navbar) {
+    // Buat elemen overlay jika belum ada
+    let overlay = document.querySelector(".nav-overlay");
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.className = "nav-overlay";
+      document.body.appendChild(overlay);
+    }
 
-    // Buat tombol close
-    const closeBtn = document.createElement("button");
-    closeBtn.className = "nav-close-btn";
-    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
-    navbar.insertBefore(closeBtn, navbar.firstChild);
+    // Buat tombol close jika belum ada
+    let closeBtn = navbar.querySelector(".nav-close-btn");
+    if (!closeBtn) {
+      closeBtn = document.createElement("button");
+      closeBtn.className = "nav-close-btn";
+      closeBtn.setAttribute("aria-label", "Tutup Navigasi");
+      closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+      navbar.insertBefore(closeBtn, navbar.firstChild);
+    }
 
-    hamburgerMenu.addEventListener("click", () => {
+    const openNavbar = () => {
       navbar.classList.add("active");
       overlay.classList.add("active");
-    });
+      document.body.style.overflow = "hidden";
+    };
 
-    closeBtn.addEventListener("click", () => {
+    const closeNavbar = () => {
       navbar.classList.remove("active");
       overlay.classList.remove("active");
-    });
+      document.body.style.overflow = "";
+      closeAllDropdowns();
+    };
 
-    overlay.addEventListener("click", () => {
-      navbar.classList.remove("active");
-      overlay.classList.remove("active");
+    hamburgerMenu.addEventListener("click", openNavbar);
+    closeBtn.addEventListener("click", closeNavbar);
+    overlay.addEventListener("click", closeNavbar);
+
+    // Otomatis tutup drawer jika link diklik (selain dropdown toggle)
+    navbar.querySelectorAll("a:not(.dropdown-toggle)").forEach((link) => {
+      link.addEventListener("click", () => {
+        closeNavbar();
+      });
     });
   }
 
@@ -292,9 +308,9 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       e.stopPropagation();
       const menu = toggle.nextElementSibling;
-      const isActive = menu.classList.contains("active");
+      const isActive = menu && menu.classList.contains("active");
       closeAllDropdowns();
-      if (!isActive) {
+      if (menu && !isActive) {
         menu.classList.add("active");
         toggle.classList.add("active");
       }

@@ -351,11 +351,17 @@ footer {
 /* === ATURAN RESPONSIF LOGO HEADER/FOOTER == */
 /* ========================================= */
 @media (max-width: 768px) {
+  .home-page header {
+    padding: 0.85rem 4%;
+  }
+  .home-page header.scrolled {
+    padding: 0.75rem 4%;
+  }
   .logo {
-    font-size: 1.05rem;
+    font-size: 1rem;
   }
   .logo img {
-    width: 78px;
+    width: 50px;
     margin-right: 6px;
   }
   .info-rw img {
@@ -364,12 +370,18 @@ footer {
 }
 
 @media (max-width: 480px) {
+  .home-page header {
+    padding: 0.7rem 4%;
+  }
+  .home-page header.scrolled {
+    padding: 0.65rem 4%;
+  }
   .logo {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
   }
   .logo img {
-    width: 66px;
-    margin-right: 4px;
+    width: 42px;
+    margin-right: 6px;
   }
   .info-rw img {
     width: 75px;
